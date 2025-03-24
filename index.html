@@ -3,63 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } 
-        from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-
-    // 🔥 替換這裡的 Firebase 設定（從 Firebase 控制台複製）
-    const firebaseConfig = {
-        apiKey: "你的API金鑰",
-        authDomain: "你的專案ID.firebaseapp.com",
-        projectId: "你的專案ID",
-        storageBucket: "你的專案ID.appspot.com",
-        messagingSenderId: "你的訊息發送ID",
-        appId: "你的應用程式ID"
-    };
-
-    // ✅ 初始化 Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // ✅ 註冊新用戶
-    window.register = function () {
-        let email = document.getElementById("register-email").value;
-        let password = document.getElementById("register-password").value;
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                alert("註冊成功！用戶：" + userCredential.user.email);
-            })
-            .catch((error) => {
-                alert("錯誤：" + error.message);
-            });
-    }
-
-    // ✅ 用戶登入
-    window.login = function () {
-        let email = document.getElementById("login-email").value;
-        let password = document.getElementById("login-password").value;
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                alert("登入成功！用戶：" + userCredential.user.email);
-            })
-            .catch((error) => {
-                alert("錯誤：" + error.message);
-            });
-    }
-
-    // ✅ 登出用戶
-    window.logout = function () {
-        signOut(auth)
-            .then(() => {
-                alert("已登出！");
-            })
-            .catch((error) => {
-                alert("錯誤：" + error.message);
-            });
-    }
-</script>
-
     <title>資訊安全知識中心</title>
     <style>
         body {
@@ -154,21 +97,93 @@
             border-radius: 4px;
             margin-bottom: 20px;
         }
+        /* 登入表單樣式 */
+        .auth-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .auth-form h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .auth-form input {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .auth-form button {
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .auth-form button:hover {
+            background-color: #2980b9;
+        }
+        .auth-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .auth-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+        .auth-tab.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .auth-tab:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+        .auth-tab:last-child {
+            border-radius: 0 4px 4px 0;
+        }
+        .auth-content {
+            display: none;
+        }
+        .auth-content.active {
+            display: block;
+        }
+        .logout-btn {
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .user-info {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #2c3e50;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h2>註冊</h2>
-<input type="email" id="register-email" placeholder="輸入 Email">
-<input type="password" id="register-password" placeholder="輸入密碼">
-<button onclick="register()">註冊</button>
-
-<h2>登入</h2>
-<input type="email" id="login-email" placeholder="輸入 Email">
-<input type="password" id="login-password" placeholder="輸入密碼">
-<button onclick="login()">登入</button>
-
-<button onclick="logout()">登出</button>
-
     <header>
         <h1>資訊安全知識中心</h1>
         <p>保護您的數位生活，從這裡開始</p>
@@ -181,6 +196,7 @@
             <li><a href="#threats">常見威脅</a></li>
             <li><a href="#protection">防護措施</a></li>
             <li><a href="#resources">資源中心</a></li>
+            <li><a href="#auth">會員登入</a></li>
         </ul>
     </nav>
 
@@ -191,6 +207,31 @@
             <div class="alert">
                 <strong>警告：</strong> 根據統計，全球每39秒就會發生一次網路攻擊，超過60%的小型企業在遭受網路攻擊後6個月內倒閉。
             </div>
+        </section>
+
+        <section id="auth" class="auth-container">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">登入</div>
+                <div class="auth-tab" onclick="switchTab('register')">註冊</div>
+            </div>
+            
+            <div id="user-status" class="user-info">您尚未登入</div>
+            
+            <div id="login-form" class="auth-content auth-form active">
+                <h2>會員登入</h2>
+                <input type="email" id="login-email" placeholder="輸入 Email">
+                <input type="password" id="login-password" placeholder="輸入密碼">
+                <button onclick="login()">登入</button>
+            </div>
+            
+            <div id="register-form" class="auth-content auth-form">
+                <h2>會員註冊</h2>
+                <input type="email" id="register-email" placeholder="輸入 Email">
+                <input type="password" id="register-password" placeholder="輸入密碼">
+                <button onclick="register()">註冊</button>
+            </div>
+            
+            <button id="logout-btn" class="logout-btn" onclick="logout()">登出</button>
         </section>
 
         <section id="basics" class="content-section">
@@ -303,5 +344,161 @@
         <p>© 2025 資訊安全知識中心 | 關於我們 | 隱私權政策 | 聯絡我們</p>
         <p>此網站資訊僅供教育和參考使用。面對特定資安問題，請尋求專業建議。</p>
     </footer>
+
+    <script type="module">
+        // ✅ 1. 引入 Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+            from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        
+        // ✅ 2. 替換這裡的 Firebase 設定（從 Firebase 控制台複製）
+        const firebaseConfig = {
+            apiKey: "你的API金鑰",
+            authDomain: "你的專案ID.firebaseapp.com",
+            projectId: "你的專案ID",
+            storageBucket: "你的專案ID.appspot.com",
+            messagingSenderId: "你的訊息發送ID",
+            appId: "你的應用程式ID"
+        };
+        
+        // ✅ 3. 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // 監聽用戶登入狀態
+        onAuthStateChanged(auth, (user) => {
+            const userStatus = document.getElementById("user-status");
+            const logoutBtn = document.getElementById("logout-btn");
+            const loginForm = document.getElementById("login-form");
+            const registerForm = document.getElementById("register-form");
+            const authTabs = document.querySelector(".auth-tabs");
+            
+            if (user) {
+                // 用戶已登入
+                userStatus.textContent = `您好 ${user.email}！已成功登入`;
+                userStatus.style.display = "block";
+                logoutBtn.style.display = "block";
+                loginForm.style.display = "none";
+                registerForm.style.display = "none";
+                authTabs.style.display = "none";
+            } else {
+                // 用戶未登入
+                userStatus.textContent = "您尚未登入";
+                userStatus.style.display = "block";
+                logoutBtn.style.display = "none";
+                authTabs.style.display = "flex";
+                
+                // 顯示默認的登入表單
+                document.querySelectorAll(".auth-tab")[0].classList.add("active");
+                document.querySelectorAll(".auth-tab")[1].classList.remove("active");
+                loginForm.classList.add("active");
+                registerForm.classList.remove("active");
+            }
+        });
+        
+        // 註冊新用戶
+        window.register = function() {
+            let email = document.getElementById("register-email").value;
+            let password = document.getElementById("register-password").value;
+            
+            if (!email || !password) {
+                alert("請輸入 Email 和密碼");
+                return;
+            }
+            
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("註冊成功！用戶：" + userCredential.user.email);
+                })
+                .catch((error) => {
+                    let errorMessage;
+                    
+                    switch(error.code) {
+                        case "auth/email-already-in-use":
+                            errorMessage = "此 Email 已被使用";
+                            break;
+                        case "auth/invalid-email":
+                            errorMessage = "Email 格式不正確";
+                            break;
+                        case "auth/weak-password":
+                            errorMessage = "密碼強度不足";
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    alert("錯誤：" + errorMessage);
+                });
+        };
+        
+        // 用戶登入
+        window.login = function() {
+            let email = document.getElementById("login-email").value;
+            let password = document.getElementById("login-password").value;
+            
+            if (!email || !password) {
+                alert("請輸入 Email 和密碼");
+                return;
+            }
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // 登入成功，狀態會由 onAuthStateChanged 處理
+                })
+                .catch((error) => {
+                    let errorMessage;
+                    
+                    switch(error.code) {
+                        case "auth/invalid-email":
+                            errorMessage = "Email 格式不正確";
+                            break;
+                        case "auth/user-not-found":
+                        case "auth/wrong-password":
+                            errorMessage = "Email 或密碼不正確";
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    alert("錯誤：" + errorMessage);
+                });
+        };
+        
+        // 登出用戶
+        window.logout = function() {
+            signOut(auth)
+                .then(() => {
+                    // 登出成功，狀態會由 onAuthStateChanged 處理
+                })
+                .catch((error) => {
+                    alert("登出錯誤：" + error.message);
+                });
+        };
+    </script>
+    
+    <script>
+        // 切換登入/註冊頁籤
+        function switchTab(tab) {
+            // 移除所有活動狀態
+            document.querySelectorAll(".auth-tab").forEach(item => {
+                item.classList.remove("active");
+            });
+            document.querySelectorAll(".auth-content").forEach(item => {
+                item.classList.remove("active");
+            });
+            
+            // 根據選擇的頁籤設置活動狀態
+            if (tab === "login") {
+                document.querySelectorAll(".auth-tab")[0].classList.add("active");
+                document.getElementById("login-form").classList.add("active");
+            } else {
+                document.querySelectorAll(".auth-tab")[1].classList.add("active");
+                document.getElementById("register-form").classList.add("active");
+            }
+        }
+        
+        // 導出切換頁籤函數到全局
+        window.switchTab = switchTab;
+    </script>
 </body>
 </html>
