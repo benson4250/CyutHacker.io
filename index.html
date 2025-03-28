@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kali Linux 網路安全工具箱</title>
+    <title>Kali Linux 網路安全工具指南</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
@@ -47,16 +47,74 @@
             opacity: 1;
             border-bottom: 2px solid #00ffff;
         }
+        /* 移動端響應式調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            #category-filters {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            .category-filter {
+                margin-bottom: 0.5rem;
+            }
+            #tools {
+                grid-template-columns: 1fr;
+            }
+            .tool-modal {
+                width: 95%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="digital-rain"></canvas>
     <div class="container mx-auto px-4 content">
-        <div class="flex justify-between items-center my-8">
-            <h1 class="text-4xl font-bold text-cyan-300 flex items-center">
+        <!-- Kali Linux 介紹部分 -->
+        <section id="kali-intro" class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-cyan-300 mb-6 flex items-center justify-center">
                 <i class="ri-shield-flash-line mr-3"></i>
-                Kali Linux 網路安全工具箱
+                Kali Linux 網路安全作業系統
             </h1>
+            
+            <div class="max-w-3xl mx-auto bg-gray-900 bg-opacity-50 p-6 rounded-lg">
+                <p class="text-lg mb-4">
+                    Kali Linux 是一個基於 Debian 的 Linux 發行版，專門為網路安全專業人士和道德黑客設計。
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <i class="ri-tools-line text-3xl text-cyan-300 mb-2"></i>
+                        <h3 class="font-semibold mb-2">預裝安全工具</h3>
+                        <p>超過600種網路安全和滲透測試工具</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <i class="ri-secure-payment-line text-3xl text-cyan-300 mb-2"></i>
+                        <h3 class="font-semibold mb-2">開源安全</h3>
+                        <p>所有工具完全開源，可自由使用和修改</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <i class="ri-code-line text-3xl text-cyan-300 mb-2"></i>
+                        <h3 class="font-semibold mb-2">持續更新</h3>
+                        <p>定期更新，與最新安全技術同步</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具搜尋和篩選區域 (原本的程式碼) -->
+        <div class="flex justify-between items-center my-8">
+            <h2 class="text-3xl font-bold text-cyan-300 flex items-center">
+                <i class="ri-search-line mr-3"></i>
+                網路安全工具
+            </h2>
             <div class="flex items-center">
                 <input 
                     type="text" 
@@ -64,13 +122,10 @@
                     placeholder="搜尋工具..." 
                     class="mr-4 bg-gray-800 text-white px-4 py-2 rounded-lg"
                 >
-                <button id="theme-toggle" class="text-2xl hover:text-cyan-300">
-                    <i class="ri-moon-line"></i>
-                </button>
             </div>
         </div>
 
-        <div class="flex justify-center mb-6 space-x-4">
+        <div class="flex justify-center mb-6 space-x-4 flex-wrap">
             <div id="category-filters" class="flex space-x-4">
                 <span class="category-filter active" data-category="all">全部工具</span>
                 <span class="category-filter" data-category="網路掃描">網路掃描</span>
@@ -87,7 +142,7 @@
 
         <!-- 工具詳細彈窗 -->
         <div id="tool-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
-            <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full relative border border-cyan-600">
+            <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full relative border border-cyan-600 tool-modal">
                 <button id="close-modal" class="absolute top-4 right-4 text-white text-3xl hover:text-cyan-300">&times;</button>
                 <div class="flex items-center mb-6">
                     <i id="modal-icon" class="text-4xl mr-4 text-cyan-300"></i>
