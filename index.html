@@ -109,6 +109,70 @@
             </div>
         </section>
 
+        <section id="ethical-guidelines" class="mb-12 text-center">
+            <h2 class="text-3xl font-bold text-orange-400 mb-6 flex items-center justify-center">
+                <i class="ri-scales-line mr-3"></i>
+                道德黑客倫理指南
+            </h2>
+            
+            <div class="max-w-4xl mx-auto ethical-guidelines p-8 rounded-lg">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <i class="ri-shield-check-line text-3xl text-orange-300 mb-4"></i>
+                        <h3 class="font-semibold mb-3 text-xl text-orange-300">授權原則</h3>
+                        <p>
+                            僅在獲得明確書面授權的系統或網路上進行安全測試。未經授權的滲透測試是非法的。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <i class="ri-error-warning-line text-3xl text-orange-300 mb-4"></i>
+                        <h3 class="font-semibold mb-3 text-xl text-orange-300">法律邊界</h3>
+                        <p>
+                            嚴格遵守當地法律法規。違反法律可能導致民事或刑事責任。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <i class="ri-hand-heart-line text-3xl text-orange-300 mb-4"></i>
+                        <h3 class="font-semibold mb-3 text-xl text-orange-300">職業道德</h3>
+                        <p>
+                            始終保護個人隱私，不洩露未經授權的敏感資訊。尊重數位倫理。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gray-900 p-6 rounded-lg">
+                    <h4 class="text-2xl font-bold text-orange-300 mb-4">
+                        <i class="ri-lightbulb-flash-line mr-2"></i>
+                        關鍵行為準則
+                    </h4>
+                    <ul class="space-y-3 text-left">
+                        <li class="flex items-center">
+                            <i class="ri-check-line text-orange-300 mr-2"></i>
+                            僅在獲得明確授權的環境中使用安全工具
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-check-line text-orange-300 mr-2"></i>
+                            始終記錄和報告發現的安全漏洞
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-check-line text-orange-300 mr-2"></i>
+                            優先考慮系統和數據的安全與完整性
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-check-line text-orange-300 mr-2"></i>
+                            持續學習並遵守最新的職業道德準則
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-6 text-gray-400 italic">
+                    🚨 違反這些準則可能導致嚴重的法律後果和職業生涯風險。
+                </div>
+            </div>
+        </section>
+
         <!-- 工具搜尋和篩選區域 (原本的程式碼) -->
         <div class="flex justify-between items-center my-8">
             <h2 class="text-3xl font-bold text-cyan-300 flex items-center">
@@ -211,6 +275,261 @@
 
         // 安全工具數據
 const securityTools = [
+{ 
+    name: 'Netcat', 
+    icon: 'ri-terminal-line',
+    category: '網路掃描',
+    difficulty: 'medium',
+    description: '功能強大的網路工具，可進行端口掃描、監聽和數據傳輸',
+    features: [
+        '支援TCP和UDP協議',
+        '可建立端口監聽',
+        '實現網路通信和數據傳輸',
+        '滲透測試和網路調試'
+    ],
+    resources: [
+        { name: 'Netcat教學', url: 'https://www.computerhope.com/unix/nc.htm' },
+        { name: '網路工具實戰', url: 'https://example.com/network-tools' }
+    ]
+},
+{ 
+    name: 'Masscan', 
+    icon: 'ri-search-eye-line',
+    category: '網路掃描',
+    difficulty: 'hard',
+    description: '高速大規模IP端口掃描工具，可快速探測大型網路',
+    features: [
+        '每秒可掃描數百萬個IP',
+        '支援多種掃描技術',
+        '可自定義掃描範圍',
+        '輸出多種格式報告'
+    ],
+    resources: [
+        { name: 'Masscan官方文檔', url: 'https://github.com/robertdavidgraham/masscan' },
+        { name: '大規模網路掃描課程', url: 'https://example.com/massive-scanning' }
+    ]
+},
+{ 
+    name: 'Nessus', 
+    icon: 'ri-radar-line',
+    category: '網路掃描',
+    difficulty: 'medium',
+    description: '世界最廣泛使用的漏洞掃描與評估工具',
+    features: [
+        '全面的漏洞掃描',
+        '支援多種作業系統',
+        '生成詳細安全報告',
+        '可自訂掃描策略'
+    ],
+    resources: [
+        { name: 'Nessus官網', url: 'https://www.tenable.com/products/nessus' },
+        { name: '漏洞評估實務', url: 'https://example.com/vulnerability-assessment' }
+    ]
+},
+{ 
+    name: 'Ettercap', 
+    icon: 'ri-group-2-line',
+    category: '封包分析',
+    difficulty: 'hard',
+    description: '綜合的中間人攻擊和網路嗅探工具',
+    features: [
+        '即時網路流量攔截',
+        '支援多種協議',
+        '密碼嗅探和重放攻擊',
+        '圖形化和命令行介面'
+    ],
+    resources: [
+        { name: 'Ettercap官方文檔', url: 'https://www.ettercap-project.org/' },
+        { name: '網路攻擊技術', url: 'https://example.com/network-attack-techniques' }
+    ]
+},
+{ 
+    name: 'Scapy', 
+    icon: 'ri-code-line',
+    category: '封包分析',
+    difficulty: 'hard',
+    description: '強大的Python數據包處理庫，用於網路掃描和數據包操作',
+    features: [
+        '數據包製作和發送',
+        '支援複雜的網路協議',
+        '可進行數據包嗅探',
+        '自定義封包行為'
+    ],
+    resources: [
+        { name: 'Scapy官方文檔', url: 'https://scapy.net/' },
+        { name: 'Python網路編程', url: 'https://example.com/python-network-programming' }
+    ]
+},
+{ 
+    name: 'Cain & Abel', 
+    icon: 'ri-window-line',
+    category: '封包分析',
+    difficulty: 'medium',
+    description: 'Windows平台上著名的網路嗅探和密碼破解工具',
+    features: [
+        '密碼恢復',
+        '網路嗅探',
+        '路由協議分析',
+        '應用層密碼破解'
+    ],
+    resources: [
+        { name: 'Cain & Abel教學', url: 'https://sectools.org/tool/cain/' },
+        { name: '密碼安全課程', url: 'https://example.com/password-security' }
+    ]
+},
+{ 
+    name: 'Social-Engineer Toolkit', 
+    icon: 'ri-user-voice-line',
+    category: '滲透測試',
+    difficulty: 'hard',
+    description: '社交工程攻擊框架，模擬真實社交工程滲透',
+    features: [
+        '網路釣魚頁面生成',
+        '偽造網站攻擊',
+        '多種社交工程模式',
+        '跨平台支持'
+    ],
+    resources: [
+        { name: 'SET官方文檔', url: 'https://github.com/trustedsec/social-engineer-toolkit' },
+        { name: '社交工程實戰', url: 'https://example.com/social-engineering' }
+    ]
+},
+{ 
+    name: 'BeEF', 
+    icon: 'ri-browser-line',
+    category: '滲透測試',
+    difficulty: 'hard',
+    description: '瀏覽器滲透框架，用於測試瀏覽器安全',
+    features: [
+        '跨瀏覽器攻擊',
+        '模組化攻擊框架',
+        '客戶端側滲透',
+        'JavaScript攻擊向量'
+    ],
+    resources: [
+        { name: 'BeEF官方文檔', url: 'https://beefproject.com/' },
+        { name: '瀏覽器安全測試', url: 'https://example.com/browser-security' }
+    ]
+},
+{ 
+    name: 'Powersploit', 
+    icon: 'ri-command-line',
+    category: '滲透測試',
+    difficulty: 'hard',
+    description: 'PowerShell滲透測試框架，用於Windows環境',
+    features: [
+        'Windows滲透模組',
+        '繞過安全防護',
+        '遠程命令執行',
+        '滲透後利用'
+    ],
+    resources: [
+        { name: 'Powersploit文檔', url: 'https://github.com/PowerShellMafia/PowerSploit' },
+        { name: 'Windows安全測試', url: 'https://example.com/windows-security' }
+    ]
+},
+{ 
+    name: 'Wifite', 
+    icon: 'ri-wifi-line',
+    category: '無線攻擊',
+    difficulty: 'medium',
+    description: '自動化無線網路破解工具，簡化WiFi安全測試',
+    features: [
+        '自動破解WEP/WPA',
+        '支援多種無線攻擊',
+        '篩選和排序網路',
+        '多線程破解'
+    ],
+    resources: [
+        { name: 'Wifite文檔', url: 'https://github.com/derv82/wifite2' },
+        { name: '無線網路安全', url: 'https://example.com/wireless-security' }
+    ]
+},
+{ 
+    name: 'WiFi-Pumpkin', 
+    icon: 'ri-wifi-fill',
+    category: '無線攻擊',
+    difficulty: 'hard',
+    description: '無線攻擊和社交工程框架，模擬惡意熱點',
+    features: [
+        '建立惡意熱點',
+        '流量攔截',
+        '憑證竊取',
+        '遠程控制'
+    ],
+    resources: [
+        { name: 'WiFi-Pumpkin項目', url: 'https://github.com/P0cL4bs/WiFi-Pumpkin' },
+        { name: '無線攻擊技術', url: 'https://example.com/wireless-attack' }
+    ]
+},
+{ 
+    name: 'Reaver', 
+    icon: 'ri-lock-unlock-line',
+    category: '無線攻擊',
+    difficulty: 'medium',
+    description: 'WPS PIN暴力破解工具，針對無線路由器安全',
+    features: [
+        'WPS破解',
+        '暴力破解PIN碼',
+        '支援多種無線協議',
+        '詳細破解日誌'
+    ],
+    resources: [
+        { name: 'Reaver文檔', url: 'https://github.com/t6x/reaver-wps-fork-t6x' },
+        { name: '無線安全實踐', url: 'https://example.com/wireless-practice' }
+    ]
+},
+{ 
+    name: 'John the Ripper', 
+    icon: 'ri-key-2-line',
+    category: '密碼破解',
+    difficulty: 'hard',
+    description: '開源密碼破解工具，支持多種加密算法',
+    features: [
+        '多種密碼破解模式',
+        '支援多種加密類型',
+        '高性能破解引擎',
+        '自定義破解規則'
+    ],
+    resources: [
+        { name: 'John官方文檔', url: 'https://www.openwall.com/john/' },
+        { name: '密碼安全實戰', url: 'https://example.com/password-cracking' }
+    ]
+},
+{ 
+    name: 'Hashcat', 
+    icon: 'ri-lock-password-line',
+    category: '密碼破解',
+    difficulty: 'hard',
+    description: '世界上最快的密碼破解工具，支持GPU加速',
+    features: [
+        '支援600多種雜湊類型',
+        'GPU/CPU並行破解',
+        '高度可定製',
+        '大規模破解'
+    ],
+    resources: [
+        { name: 'Hashcat官網', url: 'https://hashcat.net/hashcat/' },
+        { name: '密碼安全課程', url: 'https://example.com/password-security' }
+    ]
+},
+{ 
+    name: 'Hydra', 
+    icon: 'ri-skull-line',
+    category: '密碼破解',
+    difficulty: 'hard',
+    description: '支持多協議的網路登錄破解工具',
+    features: [
+        '支援多種協議',
+        '並行登錄嘗試',
+        '可自定義攻擊模式',
+        '豐富的驗證模組'
+    ],
+    resources: [
+        { name: 'Hydra文檔', url: 'https://github.com/vanhauser-thc/thc-hydra' },
+        { name: '網路安全滲透', url: 'https://example.com/network-penetration' }
+    ]
+},
     { 
         name: 'Nmap', 
         icon: 'ri-search-line',
@@ -574,5 +893,23 @@ const securityTools = [
             renderTools(securityTools);
         });
     </script>
+
+<footer class="text-center py-6 text-gray-400">
+    <div class="container mx-auto px-4">
+        <div class="mb-4">
+            <p class="text-cyan-300 font-bold">
+                <i class="ri-shield-star-line mr-2"></i>
+                Kali Linux 網路安全工具指南
+            </p>
+        </div>
+        <div class="mb-4">
+            © 2025 網路安全技術專題 | 指導教授：王德譽 | 學生：陳家茂、劉億鈞
+        </div>
+        <div class="text-sm">
+            本專題致力於推廣網路安全教育與道德黑客精神
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
