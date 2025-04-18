@@ -43,9 +43,38 @@
             cursor: pointer;
             opacity: 0.6;
         }
+        .teach-btn.pulse {
+            animation: pulse 2s infinite;
+        }
         .category-filter.active {
             opacity: 1;
             border-bottom: 2px solid #00ffff;
+        }
+        .teach-btn {
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .teach-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .tool-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(15, 25, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            overflow: hidden; /* 確保按鈕不會超出卡片 */
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+        }
+        .teach-btn.pulse {
+            animation: pulse 2s infinite;
         }
         /* 移動端響應式調整 */
         @media (max-width: 768px) {
@@ -281,6 +310,7 @@ const securityTools = [
     category: '網路掃描',
     difficulty: 'medium',
     description: '功能強大的網路工具，可進行端口掃描、監聽和數據傳輸',
+    teachable: true,
     features: [
         '支援TCP和UDP協議',
         '可建立端口監聽',
@@ -298,6 +328,7 @@ const securityTools = [
     category: '網路掃描',
     difficulty: 'hard',
     description: '高速大規模IP端口掃描工具，可快速探測大型網路',
+    teachable: false,
     features: [
         '每秒可掃描數百萬個IP',
         '支援多種掃描技術',
@@ -315,6 +346,7 @@ const securityTools = [
     category: '網路掃描',
     difficulty: 'medium',
     description: '世界最廣泛使用的漏洞掃描與評估工具',
+    teachable: false,
     features: [
         '全面的漏洞掃描',
         '支援多種作業系統',
@@ -332,6 +364,7 @@ const securityTools = [
     category: '封包分析',
     difficulty: 'hard',
     description: '綜合的中間人攻擊和網路嗅探工具',
+    teachable: false,
     features: [
         '即時網路流量攔截',
         '支援多種協議',
@@ -349,6 +382,7 @@ const securityTools = [
     category: '封包分析',
     difficulty: 'hard',
     description: '強大的Python數據包處理庫，用於網路掃描和數據包操作',
+    teachable: false,
     features: [
         '數據包製作和發送',
         '支援複雜的網路協議',
@@ -366,6 +400,7 @@ const securityTools = [
     category: '封包分析',
     difficulty: 'medium',
     description: 'Windows平台上著名的網路嗅探和密碼破解工具',
+    teachable: false,
     features: [
         '密碼恢復',
         '網路嗅探',
@@ -383,6 +418,7 @@ const securityTools = [
     category: '滲透測試',
     difficulty: 'hard',
     description: '社交工程攻擊框架，模擬真實社交工程滲透',
+    teachable: false,
     features: [
         '網路釣魚頁面生成',
         '偽造網站攻擊',
@@ -400,6 +436,7 @@ const securityTools = [
     category: '滲透測試',
     difficulty: 'hard',
     description: '瀏覽器滲透框架，用於測試瀏覽器安全',
+    teachable: false,
     features: [
         '跨瀏覽器攻擊',
         '模組化攻擊框架',
@@ -417,6 +454,7 @@ const securityTools = [
     category: '滲透測試',
     difficulty: 'hard',
     description: 'PowerShell滲透測試框架，用於Windows環境',
+    teachable: false,
     features: [
         'Windows滲透模組',
         '繞過安全防護',
@@ -434,6 +472,7 @@ const securityTools = [
     category: '無線攻擊',
     difficulty: 'medium',
     description: '自動化無線網路破解工具，簡化WiFi安全測試',
+    teachable: false,
     features: [
         '自動破解WEP/WPA',
         '支援多種無線攻擊',
@@ -451,6 +490,7 @@ const securityTools = [
     category: '無線攻擊',
     difficulty: 'hard',
     description: '無線攻擊和社交工程框架，模擬惡意熱點',
+    teachable: false,
     features: [
         '建立惡意熱點',
         '流量攔截',
@@ -468,6 +508,7 @@ const securityTools = [
     category: '無線攻擊',
     difficulty: 'medium',
     description: 'WPS PIN暴力破解工具，針對無線路由器安全',
+    teachable: false,
     features: [
         'WPS破解',
         '暴力破解PIN碼',
@@ -485,6 +526,7 @@ const securityTools = [
     category: '密碼破解',
     difficulty: 'hard',
     description: '開源密碼破解工具，支持多種加密算法',
+    teachable: false,
     features: [
         '多種密碼破解模式',
         '支援多種加密類型',
@@ -502,6 +544,7 @@ const securityTools = [
     category: '密碼破解',
     difficulty: 'hard',
     description: '世界上最快的密碼破解工具，支持GPU加速',
+    teachable: false,
     features: [
         '支援600多種雜湊類型',
         'GPU/CPU並行破解',
@@ -519,6 +562,7 @@ const securityTools = [
     category: '密碼破解',
     difficulty: 'hard',
     description: '支持多協議的網路登錄破解工具',
+    teachable: false,
     features: [
         '支援多種協議',
         '並行登錄嘗試',
@@ -536,6 +580,7 @@ const securityTools = [
         category: '網路掃描',
         difficulty: 'medium',
         description: '全球最著名的網路掃描和偵測工具，用於識別網路架構和安全評估',
+        teachable: false,
         features: [
             '識別網路上的主機和開放端埠',
             '偵測作業系統類型',
@@ -553,6 +598,7 @@ const securityTools = [
         category: '封包分析',
         difficulty: 'hard',
         description: '全球最廣泛使用的網路協定分析器，提供深入的網路流量洞察',
+        teachable: false,
         features: [
             '即時封包擷取和分析',
             '支援超過2,000種協定',
@@ -570,6 +616,7 @@ const securityTools = [
         category: '滲透測試',
         difficulty: 'hard',
         description: '最強大的滲透測試框架，協助安全專業人員評估系統弱點',
+        teachable: false,
         features: [
             '包含大量滲透利用模組',
             '可自動化滲透測試流程',
@@ -587,6 +634,7 @@ const securityTools = [
         category: '無線攻擊',
         difficulty: 'medium',
         description: '無線網路安全評估套件，專門用於測試無線網路安全性',
+        teachable: false,
         features: [
             '破解WEP/WPA無線加密',
             '執行無線網路封包擷取',
@@ -604,6 +652,7 @@ const securityTools = [
         category: '資料庫滲透',
         difficulty: 'medium',
         description: '自動化SQL注入工具，幫助發現和利用資料庫安全弱點',
+        teachable: false,
         features: [
             '偵測SQL注入弱點',
             '支援多種資料庫管理系統',
@@ -622,6 +671,7 @@ const securityTools = [
         category: '網路掃描',
         difficulty: 'easy',
         description: 'Nmap的官方圖形化介面，簡化網路探測和安全掃描',
+        teachable: false,
         features: [
             '直觀的圖形使用者介面',
             '支援複雜的網路拓撲掃描',
@@ -639,6 +689,7 @@ const securityTools = [
         category: '網路掃描',
         difficulty: 'easy',
         description: '快速、輕量的IP和端口掃描工具，支持多平台',
+        teachable: false,
         features: [
             '快速掃描大型網段',
             '多線程掃描技術',
@@ -656,6 +707,7 @@ const securityTools = [
         category: '封包分析',
         difficulty: 'hard',
         description: '功能強大的命令行網路封包分析工具，用於網路除錯和安全分析',
+        teachable: false,
         features: [
             '即時封包擷取',
             '支援複雜的封包過濾規則',
@@ -673,6 +725,7 @@ const securityTools = [
         category: '封包分析',
         difficulty: 'medium',
         description: '網路取證分析工具，提供圖形化介面的網路流量解析',
+        teachable: false,
         features: [
             '自動解析網路會話',
             '提取檔案和憑證',
@@ -690,6 +743,7 @@ const securityTools = [
         category: '滲透測試',
         difficulty: 'hard',
         description: 'Web應用安全測試的專業工具，被安全研究者廣泛使用',
+        teachable: false,
         features: [
             '攔截和修改HTTP/HTTPS請求',
             '自動化漏洞掃描',
@@ -707,6 +761,7 @@ const securityTools = [
         category: '滲透測試',
         difficulty: 'medium',
         description: '開源的Web應用安全掃描器，由OWASP社群維護',
+        teachable: false,
         features: [
             '自動化安全漏洞掃描',
             '支援爬蟲和被動掃描',
@@ -724,6 +779,7 @@ const securityTools = [
         category: '無線攻擊',
         difficulty: 'medium',
         description: '無線網路監控和偵測工具，可識別隱藏網路',
+        teachable: false,
         features: [
             '即時無線網路偵測',
             'GPS定位無線設備',
@@ -741,6 +797,7 @@ const securityTools = [
         category: '無線攻擊',
         difficulty: 'hard',
         description: '專業的無線審計和社交工程滲透測試平台',
+        teachable: false,
         features: [
             '輕鬆建立惡意熱點',
             '攔截和分析無線流量',
@@ -758,6 +815,7 @@ const securityTools = [
         category: '資料庫滲透',
         difficulty: 'hard',
         description: '專門針對Microsoft SQL Server的滲透測試工具',
+        teachable: false,
         features: [
             '自動SQL伺服器滲透',
             '支援命令執行',
@@ -775,6 +833,7 @@ const securityTools = [
         category: '資料庫滲透',
         difficulty: 'medium',
         description: '專門針對NoSQL資料庫的自動化滲透測試工具',
+        teachable: false,
         features: [
             '支援多種NoSQL資料庫',
             '自動化漏洞掃描',
@@ -798,56 +857,79 @@ const securityTools = [
             const searchInput = document.getElementById('tool-search');
             const categoryFilters = document.getElementById('category-filters');
 
+            // 新增的教學功能函數
+            function startTutorial(tool) {
+                // 這裡可以替換成實際的教學頁面跳轉或彈窗教學
+                alert(`即將開始 ${tool.name} 工具的教學流程\n\n（這裡可以跳轉到教學頁面或開啟教學模式）`);
+            }
+
             // 渲染工具卡片
             function renderTools(tools) {
-                toolContainer.innerHTML = '';
-                tools.forEach(tool => {
-                    const toolCard = document.createElement('div');
-                    toolCard.classList.add('tool-card', 'p-6', 'rounded-lg', 'text-center', 'group');
-                    
-                    toolCard.innerHTML = `
-                        <i class="${tool.icon} text-4xl mb-4 text-cyan-300 group-hover:text-white transition"></i>
-                        <h3 class="text-xl font-semibold text-cyan-300 mb-2">${tool.name}</h3>
-                        <p class="text-gray-400 mb-2">${tool.category}</p>
-                        <span class="difficulty-badge">
-                            ${tool.difficulty === 'easy' ? '簡單' : 
-                               tool.difficulty === 'medium' ? '中等' : '困難'}
-                        </span>
-                    `;
+    toolContainer.innerHTML = '';
+    tools.forEach(tool => {
+        const toolCard = document.createElement('div');
+        toolCard.classList.add('tool-card', 'p-6', 'rounded-lg', 'text-center', 'group', 'relative');
+        
+        // 判斷是否顯示教學按鈕
+        const teachButton = tool.teachable 
+            ? `<button class="teach-btn absolute top-2 right-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs px-2 py-1 rounded transition opacity-0 group-hover:opacity-100 pulse">
+                  開始教學
+               </button>`
+            : '';
 
-                    // 點擊卡片顯示詳細資訊
-                    toolCard.addEventListener('click', () => {
-                        document.getElementById('modal-title').textContent = tool.name;
-                        document.getElementById('modal-description').textContent = tool.description;
-                        document.getElementById('modal-icon').className = `${tool.icon} text-4xl text-cyan-300`;
-                        
-                        const modalDifficulty = document.getElementById('modal-difficulty');
-                        modalDifficulty.innerHTML = `
-                            <span class="difficulty-badge">
-                                ${tool.difficulty === 'easy' ? '簡單' : 
-                                   tool.difficulty === 'medium' ? '中等' : '困難'}
-                            </span>
-                        `;
+        toolCard.innerHTML = `
+            ${teachButton}
+            <i class="${tool.icon} text-4xl mb-4 text-cyan-300 group-hover:text-white transition"></i>
+            <h3 class="text-xl font-semibold text-cyan-300 mb-2">${tool.name}</h3>
+            <p class="text-gray-400 mb-2">${tool.category}</p>
+            <span class="difficulty-badge">
+                ${tool.difficulty === 'easy' ? '簡單' : 
+                   tool.difficulty === 'medium' ? '中等' : '困難'}
+            </span>
+        `;
 
-                        const modalResources = document.getElementById('modal-resources');
-                        modalResources.innerHTML = tool.resources.map(resource => 
-                            `<a href="${resource.url}" target="_blank" class="text-cyan-300 hover:underline block">${resource.name}</a>`
-                        ).join('');
+        // 教學按鈕點擊事件
+        if (tool.teachable) {
+            const btn = toolCard.querySelector('.teach-btn');
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startTutorial(tool);
+            });
+        }
 
-                        const featuresList = document.getElementById('modal-features');
-                        featuresList.innerHTML = tool.features.map(feature => 
-                            `<li class="flex items-center">
-                                <i class="ri-check-line text-cyan-300 mr-2"></i>
-                                ${feature}
-                            </li>`
-                        ).join('');
+        // 卡片點擊事件
+        toolCard.addEventListener('click', () => {
+            document.getElementById('modal-title').textContent = tool.name;
+            document.getElementById('modal-description').textContent = tool.description;
+            document.getElementById('modal-icon').className = `${tool.icon} text-4xl text-cyan-300`;
+            
+            const modalDifficulty = document.getElementById('modal-difficulty');
+            modalDifficulty.innerHTML = `
+                <span class="difficulty-badge">
+                    ${tool.difficulty === 'easy' ? '簡單' : 
+                       tool.difficulty === 'medium' ? '中等' : '困難'}
+                </span>
+            `;
 
-                        modal.classList.remove('hidden');
-                    });
+            const modalResources = document.getElementById('modal-resources');
+            modalResources.innerHTML = tool.resources.map(resource => 
+                `<a href="${resource.url}" target="_blank" class="text-cyan-300 hover:underline block">${resource.name}</a>`
+            ).join('');
 
-                    toolContainer.appendChild(toolCard);
-                });
-            }
+            const featuresList = document.getElementById('modal-features');
+            featuresList.innerHTML = tool.features.map(feature => 
+                `<li class="flex items-center">
+                    <i class="ri-check-line text-cyan-300 mr-2"></i>
+                    ${feature}
+                </li>`
+            ).join('');
+
+            modal.classList.remove('hidden');
+        });
+
+        toolContainer.appendChild(toolCard);
+    });
+}
 
             // 搜尋功能
             searchInput.addEventListener('input', (e) => {
