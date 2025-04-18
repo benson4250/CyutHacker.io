@@ -14,6 +14,29 @@
             margin: 0;
             overflow-x: hidden;
         }
+        /* 正當用途 - 綠色樣式 */
+        .purpose-item.legitimate {
+        padding: 0.75rem;
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 3px solid #10B981;
+        border-radius: 0 4px 4px 0;
+        }
+
+        /* 潛在濫用 - 紅色樣式 */
+        .purpose-item.abuse {
+        padding: 0.75rem;
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 3px solid #EF4444;
+        border-radius: 0 4px 4px 0;
+        }
+
+        /* 標題文字顏色 */
+        .purpose-item.legitimate strong {
+        color: #10B981;
+        }
+        .purpose-item.abuse strong {
+        color: #EF4444;
+        }
         #digital-rain {
             position: fixed;
             top: 0;
@@ -234,6 +257,7 @@
         </div>
 
         <!-- 工具詳細彈窗 -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
         <div id="tool-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
             <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full relative border border-cyan-600 tool-modal">
                 <button id="close-modal" class="absolute top-4 right-4 text-white text-3xl hover:text-cyan-300">&times;</button>
@@ -252,6 +276,13 @@
                         <div id="modal-resources" class="text-gray-300"></div>
                     </div>
                 </div>
+                <h3 class="font-semibold text-xl mb-2 text-cyan-300">使用目的</h3>
+                <div class="space-y-3 mb-4">
+                <div id="legitimate-purpose" class="purpose-item legitimate"></div>
+                <div id="abuse-purpose" class="purpose-item abuse"></div>
+                </div>
+                <p id="modal-purpose" class="text-gray-300 mb-4"></p> <!-- 新增這行 -->
+                
                 <h3 class="font-semibold text-xl mb-3 text-cyan-300">主要功能</h3>
                 <ul id="modal-features" class="space-y-2 text-gray-300"></ul>
             </div>
@@ -267,7 +298,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロワゴゾドボポ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const chars = 'h4ck3r3xp10i7s3cur1typ4$$w0rd4dm1nr00tacc355d3n13dgr4n73dcyb3rpwn3d';
             const fontSize = 10;
             const columns = canvas.width / fontSize;
             const drops = [];
@@ -302,7 +333,6 @@
             });
         }
 
-        // 安全工具數據
 const securityTools = [
 { 
     name: 'Netcat', 
@@ -310,6 +340,10 @@ const securityTools = [
     category: '網路掃描',
     difficulty: 'medium',
     description: '功能強大的網路工具，可進行端口掃描、監聽和數據傳輸',
+    purposes: {
+    legitimate: '網路偵錯 · 端口掃描 · 傳輸測試 · 簡易伺服器模擬',
+    abuse: '建立反向 Shell · 構建後門 · 靜默資料滲出',
+    },
     teachable: true,
     tutorialUrl: 'https://blog.gtwang.org/linux/nmap-command-examples-tutorials/', // 教學連結
     features: [
@@ -329,6 +363,10 @@ const securityTools = [
     category: '網路掃描',
     difficulty: 'hard',
     description: '高速大規模IP端口掃描工具，可快速探測大型網路',
+    purposes: {
+    legitimate: '大規模資產掃描 · 快速網段分析 · 安全檢測自動化',
+    abuse: '大規模端口偵查 · 構建目標清單 · DDoS 攻擊前期準備',
+    },
     teachable: false,
     features: [
         '每秒可掃描數百萬個IP',
@@ -348,6 +386,10 @@ const securityTools = [
     difficulty: 'medium',
     description: '世界最廣泛使用的漏洞掃描與評估工具',
     teachable: false,
+    purposes: {
+    legitimate: '漏洞掃描 · 安全稽核 · 弱點評估',
+    abuse: '分析系統漏洞用於滲透攻擊 · 漏洞資訊外洩',
+    },
     features: [
         '全面的漏洞掃描',
         '支援多種作業系統',
@@ -366,6 +408,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '綜合的中間人攻擊和網路嗅探工具',
     teachable: false,
+    purposes: {
+    legitimate: '中間人攻擊模擬 · 網路封包分析 · 網路安全教育',
+    abuse: '密碼竊取 · 封包竄改 · 會話劫持',
+    },
     features: [
         '即時網路流量攔截',
         '支援多種協議',
@@ -384,6 +430,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '強大的Python數據包處理庫，用於網路掃描和數據包操作',
     teachable: false,
+    purposes: {
+    legitimate: '封包製作與解析 · 協定測試 · 網路模擬',
+    abuse: '製作惡意封包 · 發動 DoS 攻擊 · 偽裝流量',
+    },
     features: [
         '數據包製作和發送',
         '支援複雜的網路協議',
@@ -402,6 +452,10 @@ const securityTools = [
     difficulty: 'medium',
     description: 'Windows平台上著名的網路嗅探和密碼破解工具',
     teachable: false,
+    purposes: {
+    legitimate: '密碼恢復 · 加密分析 · 安全教育示範',
+    abuse: '憑證破解 · ARP 欺騙 · 嗅探使用者資訊',
+    },
     features: [
         '密碼恢復',
         '網路嗅探',
@@ -419,6 +473,10 @@ const securityTools = [
     category: '滲透測試',
     difficulty: 'hard',
     description: '社交工程攻擊框架，模擬真實社交工程滲透',
+    purposes: {
+    legitimate: '社交工程模擬 · 安全意識訓練 · 駭客攻擊演練',
+    abuse: '釣魚網站製作 · 假冒郵件發送 · 操控目標行為',
+    },
     teachable: false,
     features: [
         '網路釣魚頁面生成',
@@ -433,11 +491,15 @@ const securityTools = [
 },
 { 
     name: 'BeEF', 
-    icon: 'ri-browser-line',
+    icon: 'ri-skull-2-line',
     category: '滲透測試',
     difficulty: 'hard',
     description: '瀏覽器滲透框架，用於測試瀏覽器安全',
     teachable: false,
+    purposes: {
+    legitimate: 'Web 客戶端弱點分析 · 瀏覽器安全測試',
+    abuse: '遠端瀏覽器控制 · 用戶操控與資料竊取',
+    },
     features: [
         '跨瀏覽器攻擊',
         '模組化攻擊框架',
@@ -456,6 +518,10 @@ const securityTools = [
     difficulty: 'hard',
     description: 'PowerShell滲透測試框架，用於Windows環境',
     teachable: false,
+    purposes: {
+    legitimate: 'Windows 安全測試 · 權限檢測 · 滲透模組研究',
+    abuse: '權限提升 · 系統植入後門 · 密碼竊取',
+    },
     features: [
         'Windows滲透模組',
         '繞過安全防護',
@@ -474,6 +540,10 @@ const securityTools = [
     difficulty: 'medium',
     description: '自動化無線網路破解工具，簡化WiFi安全測試',
     teachable: false,
+    purposes: {
+    legitimate: '無線網路弱點檢測 · 自動化 Wi-Fi 安全測試',
+    abuse: '非法破解 Wi-Fi 密碼 · 未授權網路入侵',
+    },
     features: [
         '自動破解WEP/WPA',
         '支援多種無線攻擊',
@@ -492,6 +562,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '無線攻擊和社交工程框架，模擬惡意熱點',
     teachable: false,
+    purposes: {
+    legitimate: '偽造 Wi-Fi 熱點測試 · 使用者行為分析',
+    abuse: '中間人釣魚攻擊 · 憑證攔截 · 欺騙使用者連線',
+    },
     features: [
         '建立惡意熱點',
         '流量攔截',
@@ -510,6 +584,10 @@ const securityTools = [
     difficulty: 'medium',
     description: 'WPS PIN暴力破解工具，針對無線路由器安全',
     teachable: false,
+    purposes: {
+    legitimate: 'WPS 安全測試 · 無線設備弱點檢查',
+    abuse: '利用 WPS 破解 Wi-Fi 密碼 · 未授權存取無線網路',
+    },
     features: [
         'WPS破解',
         '暴力破解PIN碼',
@@ -528,6 +606,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '開源密碼破解工具，支持多種加密算法',
     teachable: false,
+    purposes: {
+    legitimate: '密碼強度檢測 · 安全政策檢驗 · 雜湊演算法測試',
+    abuse: '暴力破解密碼 · 破解被竊取的密碼雜湊',
+    },
     features: [
         '多種密碼破解模式',
         '支援多種加密類型',
@@ -546,6 +628,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '世界上最快的密碼破解工具，支持GPU加速',
     teachable: false,
+    purposes: {
+    legitimate: '高效密碼分析 · 雜湊加密測試 · 安全審計',
+    abuse: '加速密碼破解 · 對已竊 hash 進行大規模還原',
+    },
     features: [
         '支援600多種雜湊類型',
         'GPU/CPU並行破解',
@@ -564,6 +650,10 @@ const securityTools = [
     difficulty: 'hard',
     description: '支持多協議的網路登錄破解工具',
     teachable: false,
+    purposes: {
+    legitimate: '登入驗證壓力測試 · 密碼強度評估 · 多協定驗證測試',
+    abuse: '暴力破解 SSH/FTP/HTTP 登入 · 密碼猜測攻擊',
+    },
     features: [
         '支援多種協議',
         '並行登錄嘗試',
@@ -582,6 +672,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '全球最著名的網路掃描和偵測工具，用於識別網路架構和安全評估',
         teachable: false,
+        purposes: {
+        legitimate: '網路資產盤點、安全評估、服務監控',
+        abuse: '未授權網路偵查、漏洞探測、踩點(Footprinting)'
+        },
         features: [
             '識別網路上的主機和開放端埠',
             '偵測作業系統類型',
@@ -600,6 +694,10 @@ const securityTools = [
         difficulty: 'hard',
         description: '全球最廣泛使用的網路協定分析器，提供深入的網路流量洞察',
         teachable: false,
+        purposes: {
+        legitimate: '封包分析 · 錯誤排查 · 協定教學 · 網路監控',
+        abuse: '攔截敏感資訊 · 瀏覽登入資料 · 分析私密通訊'
+        },
         features: [
             '即時封包擷取和分析',
             '支援超過2,000種協定',
@@ -618,6 +716,10 @@ const securityTools = [
         difficulty: 'hard',
         description: '最強大的滲透測試框架，協助安全專業人員評估系統弱點',
         teachable: false,
+        purposes: {
+        legitimate: '漏洞驗證 · 滲透測試框架 · 模擬攻擊演練',
+        abuse: '漏洞利用 · 控制遠端主機 · 系統滲透'
+        },
         features: [
             '包含大量滲透利用模組',
             '可自動化滲透測試流程',
@@ -636,6 +738,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '無線網路安全評估套件，專門用於測試無線網路安全性',
         teachable: false,
+        purposes: {
+        legitimate: '無線加密強度測試 · 無線網路弱點分析',
+        abuse: '破解 Wi-Fi 密碼 · 攔截封包後還原金鑰'
+        },
         features: [
             '破解WEP/WPA無線加密',
             '執行無線網路封包擷取',
@@ -654,6 +760,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '自動化SQL注入工具，幫助發現和利用資料庫安全弱點',
         teachable: false,
+        purposes: {
+        legitimate: 'SQL 注入測試 · 資料庫弱點分析 · 安全稽核',
+        abuse: '未授權資料查詢 · 資料外洩 · 控制資料庫伺服器'
+        },
         features: [
             '偵測SQL注入弱點',
             '支援多種資料庫管理系統',
@@ -673,6 +783,10 @@ const securityTools = [
         difficulty: 'easy',
         description: 'Nmap的官方圖形化介面，簡化網路探測和安全掃描',
         teachable: false,
+        purposes: {
+        legitimate: '圖形化網路掃描 · 可視化網路架構 · 初學者教學',
+        abuse: '協助入侵前資訊收集 · 自動化掃描漏洞'
+        },
         features: [
             '直觀的圖形使用者介面',
             '支援複雜的網路拓撲掃描',
@@ -691,6 +805,10 @@ const securityTools = [
         difficulty: 'easy',
         description: '快速、輕量的IP和端口掃描工具，支持多平台',
         teachable: false,
+        purposes: {
+        legitimate: 'IP 範圍掃描 · 網路設備存活檢查 · 網管工具',
+        abuse: '快速尋找可用目標 · 掃描非法設備'
+        },
         features: [
             '快速掃描大型網段',
             '多線程掃描技術',
@@ -709,6 +827,10 @@ const securityTools = [
         difficulty: 'hard',
         description: '功能強大的命令行網路封包分析工具，用於網路除錯和安全分析',
         teachable: false,
+        purposes: {
+        legitimate: '命令列封包擷取 · 即時流量監控 · 系統除錯',
+        abuse: '封包內容竊取 · 密碼與憑證監控'
+        },
         features: [
             '即時封包擷取',
             '支援複雜的封包過濾規則',
@@ -722,11 +844,15 @@ const securityTools = [
     },
     { 
         name: 'NetworkMiner', 
-        icon: 'ri-look-line',
+        icon: 'ri-file-warning-line',
         category: '封包分析',
         difficulty: 'medium',
         description: '網路取證分析工具，提供圖形化介面的網路流量解析',
         teachable: false,
+        purposes: {
+        legitimate: '數位鑑識 · 被動封包分析 · 檔案復原',
+        abuse: '還原憑證與檔案 · 檢視使用者活動紀錄'
+        },
         features: [
             '自動解析網路會話',
             '提取檔案和憑證',
@@ -745,6 +871,10 @@ const securityTools = [
         difficulty: 'hard',
         description: 'Web應用安全測試的專業工具，被安全研究者廣泛使用',
         teachable: false,
+        purposes: {
+        legitimate: 'Web 應用漏洞掃描 · API 測試 · 攔截封包分析',
+        abuse: '竄改封包 · 發動登入攻擊 · 試探系統弱點'
+        },
         features: [
             '攔截和修改HTTP/HTTPS請求',
             '自動化漏洞掃描',
@@ -763,6 +893,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '開源的Web應用安全掃描器，由OWASP社群維護',
         teachable: false,
+        purposes: {
+        legitimate: '網站自動化漏洞掃描 · 教學工具 · 安全測試入門',
+        abuse: '針對未授權網站進行注入測試與漏洞探勘'
+        },
         features: [
             '自動化安全漏洞掃描',
             '支援爬蟲和被動掃描',
@@ -781,6 +915,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '無線網路監控和偵測工具，可識別隱藏網路',
         teachable: false,
+        purposes: {
+        legitimate: '無線封包偵測 · 裝置追蹤 · 隱藏 SSID 分析',
+        abuse: '監控用戶行為 · 收集裝置信息 · 非法入侵前偵查'
+        },
         features: [
             '即時無線網路偵測',
             'GPS定位無線設備',
@@ -799,6 +937,10 @@ const securityTools = [
         difficulty: 'hard',
         description: '專業的無線審計和社交工程滲透測試平台',
         teachable: false,
+        purposes: {
+        legitimate: '無線測試平台 · 中間人攻擊教學模擬 · Wi-Fi 安全訓練',
+        abuse: '誘捕連線 · 憑證竊取 · 用戶追蹤'
+        },
         features: [
             '輕鬆建立惡意熱點',
             '攔截和分析無線流量',
@@ -817,6 +959,10 @@ const securityTools = [
         difficulty: 'hard',
         description: '專門針對Microsoft SQL Server的滲透測試工具',
         teachable: false,
+        purposes: {
+        legitimate: 'SQL 注入測試 · MSSQL 伺服器安全檢測',
+        abuse: '入侵資料庫 · 執行系統指令 · 權限提升'
+        },
         features: [
             '自動SQL伺服器滲透',
             '支援命令執行',
@@ -835,6 +981,10 @@ const securityTools = [
         difficulty: 'medium',
         description: '專門針對NoSQL資料庫的自動化滲透測試工具',
         teachable: false,
+        purposes: {
+        legitimate: 'NoSQL 資料庫安全測試 · 注入弱點分析',
+        abuse: '非結構化資料盜取 · 無授權存取資料庫'
+        },
         features: [
             '支援多種NoSQL資料庫',
             '自動化漏洞掃描',
@@ -910,7 +1060,16 @@ const securityTools = [
             document.getElementById('modal-title').textContent = tool.name;
             document.getElementById('modal-description').textContent = tool.description;
             document.getElementById('modal-icon').className = `${tool.icon} text-4xl text-cyan-300`;
-            
+            // 在工具卡片的點擊事件中新增：
+            document.getElementById('legitimate-purpose').innerHTML = `
+            <strong>正當用途：</strong>
+            ${tool.purposes.legitimate || '未提供資訊'}
+            `;
+
+            document.getElementById('abuse-purpose').innerHTML = `
+            <strong>潛在濫用：</strong>
+            ${tool.purposes.abuse || '未提供資訊'}
+            `;
             const modalDifficulty = document.getElementById('modal-difficulty');
             modalDifficulty.innerHTML = `
                 <span class="difficulty-badge">
