@@ -311,6 +311,7 @@ const securityTools = [
     difficulty: 'medium',
     description: '功能強大的網路工具，可進行端口掃描、監聽和數據傳輸',
     teachable: true,
+    tutorialUrl: 'https://blog.gtwang.org/linux/nmap-command-examples-tutorials/', // 教學連結
     features: [
         '支援TCP和UDP協議',
         '可建立端口監聽',
@@ -859,8 +860,15 @@ const securityTools = [
 
             // 新增的教學功能函數
             function startTutorial(tool) {
-                // 這裡可以替換成實際的教學頁面跳轉或彈窗教學
-                alert(`即將開始 ${tool.name} 工具的教學流程\n\n（這裡可以跳轉到教學頁面或開啟教學模式）`);
+                if (tool.tutorialUrl) {
+                    // 方法1：直接跳轉到教學頁面
+                    window.open(tool.tutorialUrl, '_blank');
+                    
+                    // 或方法2：在彈窗中顯示（需預先準備教學內容）
+                    // showCustomTutorialModal(tool);
+                } else {
+                    alert('此工具暫無教學內容');
+                }
             }
 
             // 渲染工具卡片
