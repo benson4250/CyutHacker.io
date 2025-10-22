@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP ZAP 新手完全指南 | 網站安全測試入門</title>
+    <style>
+        /* 基礎樣式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0d1117;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 資安風格動態背景 */
+        .cyber-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(41, 196, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 45, 85, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(76, 0, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(41, 196, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(41, 196, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+            50% { background-position: 100% 100%, 0% 0%, 80% 80%; }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* 掃描線效果 */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(41, 196, 255, 0.8), transparent);
+            animation: scan 3s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* 容器 */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 頁首 */
+        header {
+            background: rgba(13, 17, 23, 0.9);
+            color: #ffffff;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(41, 196, 255, 0.2), transparent);
+            animation: headerShine 3s infinite;
+        }
+
+        @keyframes headerShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #29c4ff, #ff2d55);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #8b949e;
+        }
+
+        /* 導覽列 */
+        nav {
+            background: rgba(13, 17, 23, 0.95);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin: 0 1rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #8b949e;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover {
+            background-color: #1c2128;
+            color: #29c4ff;
+            border-color: #29c4ff;
+        }
+
+        /* 主要內容區 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 文章區 */
+        article {
+            background: rgba(13, 17, 23, 0.9);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            color: #29c4ff;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #30363d;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #29c4ff, transparent);
+        }
+
+        h3 {
+            color: #ff2d55;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #e0e0e0;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        /* 圖片樣式 */
+        .img-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 4px;
+        }
+
+        .img-caption {
+            font-style: italic;
+            color: #8b949e;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* 程式碼區塊 */
+        pre {
+            background: #1c2128;
+            color: #e0e0e0;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            border: 1px solid #30363d;
+            border-left: 4px solid #29c4ff;
+        }
+
+        code {
+            background: #1c2128;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ff2d55;
+            border: 1px solid #30363d;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border: none;
+            color: inherit;
+        }
+
+        /* 側邊欄 */
+        aside {
+            background: rgba(13, 17, 23, 0.9);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-box {
+            background: rgba(41, 196, 255, 0.1);
+            border-left: 4px solid #29c4ff;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 171, 0, 0.1);
+            border-left: 4px solid #ffab00;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .danger-box {
+            background: rgba(255, 45, 85, 0.1);
+            border-left: 4px solid #ff2d55;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* 步驟樣式 */
+        .step {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #29c4ff;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #29c4ff, #ff2d55);
+            color: white;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* 漏洞展示區 */
+        .vulnerability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .vuln-card {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+
+        .vuln-card:hover {
+            border-color: #29c4ff;
+            transform: translateY(-2px);
+        }
+
+        .vuln-card.critical {
+            border-left: 4px solid #ff2d55;
+        }
+
+        .vuln-card.high {
+            border-left: 4px solid #ff6b35;
+        }
+
+        .vuln-card.medium {
+            border-left: 4px solid #ffab00;
+        }
+
+        .vuln-card.low {
+            border-left: 4px solid #29c4ff;
+        }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+        }
+
+        /* 互動元素 */
+        .interactive-demo {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #30363d;
+        }
+
+        .demo-btn {
+            background: linear-gradient(135deg, #29c4ff, #ff2d55);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 196, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 資安風格動態背景 -->
+    <div class="cyber-background"></div>
+    <div class="grid-lines"></div>
+    <div class="scan-line"></div>
+
+    <!-- 頁首 -->
+    <header>
+        <div class="container">
+            <h1>OWASP ZAP 新手完全指南</h1>
+            <p>學習使用全球最流行的開源網站安全測試工具，踏出成為白帽駭客的第一步</p>
+        </div>
+    </header>
+
+    <!-- 導覽列 -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#intro">ZAP 簡介</a></li>
+                <li><a href="#concepts">核心概念</a></li>
+                <li><a href="#setup">環境設定</a></li>
+                <li><a href="#passive-scan">被動掃描</a></li>
+                <li><a href="#active-scan">主動掃描</a></li>
+                <li><a href="#vulnerabilities">漏洞類型</a></li>
+                <li><a href="#results">解讀結果</a></li>
+                <li><a href="#advanced">進階技巧</a></li>
+                <li><a href="#next">下一步</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- 主要文章內容 -->
+            <article>
+                <!-- 簡介 -->
+                <section id="intro">
+                    <h2>什麼是 OWASP ZAP？</h2>
+                    <p><strong>OWASP ZAP (Zed Attack Proxy)</strong> 是一個由 OWASP (開放網路軟體安全計畫) 開發的、全球最受歡迎的開源網站應用程式安全掃描工具。無論您是開發人員、測試人員還是資安初學者，ZAP 都是開始學習網站安全測試的理想選擇。</p>
+                    
+                    <h3>為什麼要學習 ZAP？</h3>
+                    <ul>
+                        <li><strong>完全免費且開源</strong> - 不用擔心授權費用</li>
+                        <li><strong>功能強大</strong> - 提供從簡單掃描到進階測試的各種功能</li>
+                        <li><strong>易於使用</strong> - 提供友好的圖形化介面，適合初學者</li>
+                        <li><strong>業界標準</strong> - 被全球許多組織和專業人士使用</li>
+                        <li><strong>持續更新</strong> - 擁有活躍的社群支持和持續開發</li>
+                    </ul>
+
+                    <h3>ZAP 的歷史與發展</h3>
+                    <p>OWASP ZAP 項目始於 2010 年，由 Simon Bennetts 創建。最初是作為一個簡單的代理工具，如今已發展成為功能完整的網站安全測試平台。ZAP 現在是 OWASP 的旗艦項目之一，每月有數十萬次下載。</p>
+                </section>
+
+                <!-- 核心概念 -->
+                <section id="concepts">
+                    <h2>核心概念</h2>
+                    <p>在開始使用 ZAP 之前，了解幾個基本概念會讓學習過程更加順利。</p>
+                    
+                    <h3>什麼是「代理」？</h3>
+                    <p>ZAP 是一個「中繼代理」，意思是它位於您的瀏覽器和目標網站之間，可以攔截和檢查兩者之間的所有通訊。</p>
+                    
+                    <div class="img-container">
+                        <div style="background:#1c2128;height:150px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:1px solid #30363d;">
+                            [瀏覽器 &lt;-&gt; ZAP &lt;-&gt; 網站 示意圖]
+                        </div>
+                        <p class="img-caption">ZAP 作為瀏覽器與網站之間的中繼代理</p>
+                    </div>
+                    
+                    <h3>被動掃描 vs. 主動掃描</h3>
+                    <ul>
+                        <li><strong>被動掃描</strong>：ZAP 監聽瀏覽器與網站之間的通訊，但不主動發送任何請求。這就像「觀察者」模式，安全且不會對網站造成負擔。</li>
+                        <li><strong>主動掃描</strong>：ZAP 主動向網站發送專門設計的測試請求，試圖找出安全漏洞。這就像「測試員」模式，更深入但可能對網站造成較大負擔。</li>
+                    </ul>
+
+                    <h3>工作階段管理</h3>
+                    <p>ZAP 能夠管理網站會話，模擬真實用戶的行為。這對於測試需要登入的應用程式至關重要。</p>
+                </section>
+
+                <!-- 環境設定 -->
+                <section id="setup">
+                    <h2>環境設定</h2>
+                    <p>我們假設您已經有一個準備好的 Kali Linux 環境。讓我們開始設定 ZAP 進行第一次測試。</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>啟動 ZAP</h3>
+                        <p>在 Kali Linux 中，您可以通過以下方式啟動 ZAP：</p>
+                        <ul>
+                            <li>點擊左上角的「Applications」</li>
+                            <li>選擇「03 - Web Application Analysis」</li>
+                            <li>點擊「owasp-zap」</li>
+                            <li>或者，在終端機中輸入：<code>owasp-zap</code></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>初次設定</h3>
+                        <p>第一次啟動時，ZAP 可能會詢問您是否要保存工作階段。選擇「是，我想持續保存這個工作階段」或「不，我不想持續保存這個工作階段」都可以，對初學者影響不大。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>設定測試目標</h3>
+                        <p>為了合法且安全地練習，我們將使用 OWASP 專門為測試設計的網站：</p>
+                        <p><strong>測試網站：</strong> <code>https://juice-shop.herokuapp.com</code></p>
+                        <p>這個網站故意設計了各種安全漏洞，讓我們可以安全地練習掃描技術。</p>
+                    </div>
+
+                    <h3>瀏覽器設定</h3>
+                    <p>為了讓 ZAP 能夠攔截流量，您需要設定瀏覽器使用 ZAP 作為代理伺服器：</p>
+                    <pre><code>代理伺服器: 127.0.0.1
+連接埠: 8080</code></pre>
+                </section>
+
+                <!-- 被動掃描 -->
+                <section id="passive-scan">
+                    <h2>進行被動掃描</h2>
+                    <p>被動掃描是開始安全測試最簡單、最安全的方式。讓我們開始吧！</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>瀏覽網站</h3>
+                        <p>確保 ZAP 正在運行，然後打開 Kali 中的 Firefox 瀏覽器，訪問我們的測試網站：</p>
+                        <p><code>https://juice-shop.herokuapp.com</code></p>
+                        <p>在網站上隨意點擊幾個連結，嘗試登入（可以使用任意帳號密碼），瀏覽幾個頁面。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>觀察 ZAP 的變化</h3>
+                        <p>回到 ZAP 介面，注意左側的「Sites」視窗。您應該會看到 <code>juice-shop.herokuapp.com</code> 出現，下面有許多節點。這些是 ZAP 自動發現的網站結構。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>檢查被動掃描結果</h3>
+                        <p>點擊下方的「Alerts」標籤頁，您可能會看到一些初步的安全警告。這些是 ZAP 透過被動掃描發現的潛在問題。</p>
+                        <p>被動掃描不會對網站造成負擔，因為它只是分析正常的瀏覽流量。</p>
+                    </div>
+
+                    <h3>被動掃描的優點與限制</h3>
+                    <p><strong>優點：</strong></p>
+                    <ul>
+                        <li>不會對目標網站造成負擔</li>
+                        <li>幾乎沒有誤報</li>
+                        <li>可以發現資訊洩漏等問題</li>
+                    </ul>
+                    <p><strong>限制：</strong></p>
+                    <ul>
+                        <li>只能發現表面問題</li>
+                        <li>無法檢測深層漏洞</li>
+                        <li>依賴於用戶的瀏覽行為</li>
+                    </ul>
+                </section>
+
+                <!-- 主動掃描 -->
+                <section id="active-scan">
+                    <h2>進行主動掃描</h2>
+                    <p>現在讓我們進行更深入的主動掃描，這將幫助我們發現更多潛在的安全漏洞。</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>啟動主動掃描</h3>
+                        <p>在 ZAP 左側的「Sites」視窗中，在 <code>juice-shop.herokuapp.com</code> 上點擊右鍵，選擇「Attack」 → 「Active Scan」。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>監控掃描進度</h3>
+                        <p>點擊下方的「Active Scan」標籤頁，您可以看到掃描的進度。ZAP 正在向網站發送數千個測試請求，試圖找出安全漏洞。</p>
+                        <p>這可能需要幾分鐘時間，取決於網站的大小和複雜度。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>等待掃描完成</h3>
+                        <p>當進度條達到 100% 時，主動掃描就完成了。現在我們可以查看詳細的掃描結果。</p>
+                    </div>
+
+                    <h3>主動掃描策略</h3>
+                    <p>ZAP 提供多種掃描策略：</p>
+                    <ul>
+                        <li><strong>標準模式</strong> - 平衡測試深度和速度</li>
+                        <li><strong>快速掃描</strong> - 快速檢查常見漏洞</li>
+                        <li><strong>徹底掃描</strong> - 深度測試所有參數</li>
+                        <li><strong>攻擊模式</strong> - 最積極的測試方式</li>
+                    </ul>
+                </section>
+
+                <!-- 漏洞類型 -->
+                <section id="vulnerabilities">
+                    <h2>常見漏洞類型</h2>
+                    <p>了解 ZAP 能夠檢測的各種漏洞類型對於有效使用工具至關重要。</p>
+
+                    <div class="vulnerability-grid">
+                        <div class="vuln-card critical">
+                            <h3>SQL 注入</h3>
+                            <p><strong>風險等級：嚴重</strong></p>
+                            <p>攻擊者可以透過輸入特殊字元操縱資料庫查詢，竊取或修改資料。</p>
+                            <code>示例: ' OR '1'='1</code>
+                        </div>
+
+                        <div class="vuln-card high">
+                            <h3>跨站腳本 (XSS)</h3>
+                            <p><strong>風險等級：高</strong></p>
+                            <p>攻擊者可以在網站上執行惡意腳本，竊取用戶資料。</p>
+                            <code>示例: &lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+                        </div>
+
+                        <div class="vuln-card high">
+                            <h3>跨站請求偽造 (CSRF)</h3>
+                            <p><strong>風險等級：高</strong></p>
+                            <p>攻擊者誘使用戶在不知情的情況下執行非預期操作。</p>
+                        </div>
+
+                        <div class="vuln-card medium">
+                            <h3>安全設定錯誤</h3>
+                            <p><strong>風險等級：中</strong></p>
+                            <p>不安全的伺服器設定、權限問題等。</p>
+                        </div>
+
+                        <div class="vuln-card medium">
+                            <h3>敏感資訊洩漏</h3>
+                            <p><strong>風險等級：中</strong></p>
+                            <p>錯誤訊息、註解或回應中暴露敏感資訊。</p>
+                        </div>
+
+                        <div class="vuln-card low">
+                            <h3>點擊劫持</h3>
+                            <p><strong>風險等級：低</strong></p>
+                            <p>攻擊者使用透明層誘使用戶點擊惡意連結。</p>
+                        </div>
+                    </div>
+
+                    <h3>OWASP Top 10 對應</h3>
+                    <p>ZAP 能夠檢測 OWASP Top 10 中的大多數漏洞：</p>
+                    <ul>
+                        <li>A01:2021 - 存取控制破壞</li>
+                        <li>A02:2021 - 加密機制失效</li>
+                        <li>A03:2021 - 注入攻擊</li>
+                        <li>A05:2021 - 安全設定錯誤</li>
+                        <li>A07:2021 - 識別與認證失效</li>
+                    </ul>
+                </section>
+
+                <!-- 解讀結果 -->
+                <section id="results">
+                    <h2>解讀掃描結果</h2>
+                    <p>掃描完成後，最重要的部分是理解 ZAP 發現了什麼。讓我們來解讀「Alerts」標籤頁中的結果。</p>
+                    
+                    <h3>風險等級</h3>
+                    <p>ZAP 將發現的漏洞分為四個風險等級：</p>
+                    <ul>
+                        <li><strong style="color:#ff2d55;">高</strong> - 需要立即關注的嚴重漏洞</li>
+                        <li><strong style="color:#ff6b35;">中</strong> - 重要的安全問題，應該盡快修復</li>
+                        <li><strong style="color:#ffab00;">低</strong> - 潛在的安全問題，建議修復</li>
+                        <li><strong style="color:#29c4ff;">資訊</strong> - 僅供參考的資訊，不一定是安全問題</li>
+                    </ul>
+                    
+                    <h3>漏洞詳情解讀</h3>
+                    <p>點擊任一警報，您可以查看詳細資訊：</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>描述</h3>
+                        <p>漏洞的詳細說明，包括攻擊原理和潛在影響。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>解決方案</h3>
+                        <p>如何修復這個漏洞的具體建議。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>參考資料</h3>
+                        <p>相關的技術文件和參考連結。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h3>請求/回應</h3>
+                        <p>ZAP 用來發現漏洞的具體測試請求和網站回應。</p>
+                    </div>
+
+                    <h3>生成報告</h3>
+                    <p>ZAP 可以生成多種格式的報告：</p>
+                    <ul>
+                        <li>HTML 報告</li>
+                        <li>XML 報告</li>
+                        <li>JSON 報告</li>
+                        <li>Markdown 報告</li>
+                    </ul>
+                    <p>通過「Report」選單可以生成專業的安全評估報告。</p>
+                </section>
+
+                <!-- 進階技巧 -->
+                <section id="advanced">
+                    <h2>進階使用技巧</h2>
+                    
+                    <h3>身份驗證測試</h3>
+                    <p>ZAP 支援多種身份驗證方式：</p>
+                    <ul>
+                        <li>表單基礎驗證</li>
+                        <li>HTTP 認證</li>
+                        <li>Script-based 驗證</li>
+                        <li>OAuth/OpenID Connect</li>
+                    </ul>
+
+                    <h3>API 掃描</h3>
+                    <p>ZAP 可以掃描 REST API 和 GraphQL 端點：</p>
+                    <pre><code># 導入 OpenAPI 定義
+檔案 → 導入 OpenAPI 定義</code></pre>
+
+                    <h3>自動化掃描</h3>
+                    <p>使用 ZAP 的 API 進行自動化掃描：</p>
+                    <pre><code># 基礎掃描指令
+zap-baseline.py -t https://example.com</code></pre>
+
+                    <h3>外掛程式擴展</h3>
+                    <p>ZAP 擁有豐富的外掛程式生態系統：</p>
+                    <ul>
+                        <li>被動掃描規則</li>
+                        <li>主動掃描規則</li>
+                        <li>匯出工具</li>
+                        <li>身份驗證助手</li>
+                    </ul>
+                </section>
+
+                <!-- 下一步 -->
+                <section id="next">
+                    <h2>接下來做什麼？</h2>
+                    <p>恭喜！您已經完成了 OWASP ZAP 的基本使用教學。接下來可以：</p>
+                    
+                    <h3>進一步練習</h3>
+                    <ul>
+                        <li>嘗試其他測試網站，如 <code>http://www.itsecgames.com</code> (bWAPP)</li>
+                        <li>練習使用 ZAP 的「蜘蛛」功能來自動探索網站結構</li>
+                        <li>學習使用 ZAP 的「斷點」功能來手動測試特定請求</li>
+                        <li>嘗試使用 ZAP 的 API 進行自動化測試</li>
+                    </ul>
+                    
+                    <h3>學習資源</h3>
+                    <ul>
+                        <li><a href="https://www.zaproxy.org/docs/" target="_blank" style="color:#29c4ff;">OWASP ZAP 官方文件</a></li>
+                        <li><a href="https://www.owasp.org/index.php/OWASP_Juice_Shop_Project" target="_blank" style="color:#29c4ff;">OWASP Juice Shop 項目頁面</a></li>
+                        <li><a href="https://github.com/zaproxy/zaproxy" target="_blank" style="color:#29c4ff;">ZAP 原始碼 (GitHub)</a></li>
+                        <li><a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project" target="_blank" style="color:#29c4ff;">OWASP Top 10 項目</a></li>
+                    </ul>
+
+                    <h3>認證與職業發展</h3>
+                    <p>考慮追求相關的資安認證：</p>
+                    <ul>
+                        <li>CEH (Certified Ethical Hacker)</li>
+                        <li>OSCP (Offensive Security Certified Professional)</li>
+                        <li>GWAPT (GIAC Web Application Penetration Tester)</li>
+                    </ul>
+                    
+                    <div class="danger-box">
+                        <h3>重要提醒：道德使用</h3>
+                        <p>請僅在您擁有或已獲得明確授權的網站上使用 ZAP 進行測試。未經授權的掃描可能是違法行為。這些技能應該用於保護系統安全，而不是攻擊他人。</p>
+                        <p><strong>白帽駭客守則：</strong></p>
+                        <ul>
+                            <li>始終獲得適當的授權</li>
+                            <li>尊重隱私和資料保護</li>
+                            <li>負責任地披露發現的漏洞</li>
+                            <li>使用技能來改善安全性，而不是破壞它</li>
+                        </ul>
+                    </div>
+                    
+                    <p>祝您在網站安全測試的旅程中一切順利！</p>
+                </section>
+            </article>
+
+            <!-- 側邊欄 -->
+            <aside>
+                <div class="info-box">
+                    <h3>快速提醒</h3>
+                    <p>您正在使用預先配置的 Kali Linux 環境，這讓您可以跳過繁瑣的安裝步驟，直接開始學習。</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h3>測試目標</h3>
+                    <p>請使用提供的測試網站：</p>
+                    <p><code>https://juice-shop.herokuapp.com</code></p>
+                    <p>這是專門為安全測試設計的合法目標。</p>
+                </div>
+                
+                <div class="danger-box">
+                    <h3>法律須知</h3>
+                    <p>僅測試您擁有或已獲授權的網站。未經授權的掃描可能違法。</p>
+                </div>
+                
+                <h3>教學大綱</h3>
+                <ul>
+                    <li><a href="#intro" style="color:#29c4ff;">ZAP 簡介</a></li>
+                    <li><a href="#concepts" style="color:#29c4ff;">核心概念</a></li>
+                    <li><a href="#setup" style="color:#29c4ff;">環境設定</a></li>
+                    <li><a href="#passive-scan" style="color:#29c4ff;">被動掃描</a></li>
+                    <li><a href="#active-scan" style="color:#29c4ff;">主動掃描</a></li>
+                    <li><a href="#vulnerabilities" style="color:#29c4ff;">漏洞類型</a></li>
+                    <li><a href="#results" style="color:#29c4ff;">解讀結果</a></li>
+                    <li><a href="#advanced" style="color:#29c4ff;">進階技巧</a></li>
+                    <li><a href="#next" style="color:#29c4ff;">下一步</a></li>
+                </ul>
+                
+                <h3>風險等級說明</h3>
+                <ul>
+                    <li><strong style="color:#ff2d55;">高</strong> - 嚴重漏洞</li>
+                    <li><strong style="color:#ff6b35;">中</strong> - 重要問題</li>
+                    <li><strong style="color:#ffab00;">低</strong> - 潛在問題</li>
+                    <li><strong style="color:#29c4ff;">資訊</strong> - 參考資訊</li>
+                </ul>
+
+                <h3>快捷指令</h3>
+                <pre style="font-size:0.8rem;"><code>啟動 ZAP: owasp-zap
+快速掃描: zap-baseline.py
+API 掃描: zap-api-scan.py</code></pre>
+            </aside>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 網路安全技術專題 | 指導教授：王德譽 | 學生：陳家茂、劉昱均</p>
+            <p>本專題致力於推廣網路安全教育與道德黑客精神</p>
+        </div>
+    </footer>
+
+    <script>
+        // 簡單的滾動效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+
+            // 掃描線效果
+            const scanLine = document.querySelector('.scan-line');
+            setInterval(() => {
+                scanLine.style.animation = 'none';
+                setTimeout(() => {
+                    scanLine.style.animation = 'scan 3s linear infinite';
+                }, 10);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
