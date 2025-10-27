@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資安證照智庫</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #06d6a0;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --gradient-card: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            --gradient-accent: linear-gradient(90deg, #3b82f6 0%, #06d6a0 100%);
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 動態背景 */
+        #dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .cyber-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* 導航欄 */
+        .navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-primary) !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-primary);
+        }
+
+        /* 主標題區 */
+        .hero-section {
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .btn-hero {
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        /* 統計區 */
+        .stats-section {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 篩選區 */
+        .filter-section {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-label {
+            color: var(--accent-secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-select, .form-control {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus, .form-control:focus {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+            color: var(--text-primary);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .filter-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* 證照卡片 */
+        .cert-card {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .cert-header {
+            padding: 25px 25px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cert-icon {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-right: 15px;
+        }
+
+        .cert-basic-info {
+            flex: 1;
+        }
+
+        .cert-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 5px;
+            color: var(--text-primary);
+        }
+
+        .cert-org {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .cert-level {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .cert-body {
+            padding: 20px 25px;
+        }
+
+        .cert-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .skills-section h6 {
+            color: var(--accent-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .skill-tag {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--accent-secondary);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(6, 214, 160, 0.2);
+        }
+
+        .cert-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .meta-icon {
+            color: var(--accent-primary);
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .meta-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .cert-footer {
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cyber {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-cyber:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-secondary);
+            color: var(--bg-primary);
+        }
+
+        .compare-checkbox {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+
+        /* 比較按鈕 */
+        .compare-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compare-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.7);
+        }
+
+        .compare-btn:disabled {
+            background: var(--text-secondary);
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* 模態框 */
+        .modal-content {
+            background: var(--gradient-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 25px;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        /* 學習路徑 */
+        .learning-path {
+            padding: 80px 0;
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .path-container {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .path-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-primary);
+            z-index: 1;
+        }
+
+        .path-items {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .path-item {
+            text-align: center;
+            width: 20%;
+        }
+
+        .path-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2);
+        }
+
+        .path-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* 資源中心 */
+        .resources-section {
+            padding: 80px 0;
+        }
+
+        .resource-card {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-secondary);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            color: var(--accent-secondary);
+            margin-bottom: 15px;
+        }
+
+        .resource-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .resource-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* 頁腳 */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 40px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .cert-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .cert-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .action-buttons {
+                justify-content: space-between;
+            }
+            
+            .path-items {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .path-item {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                text-align: left;
+            }
+            
+            .path-dot {
+                margin: 0 15px 0 0;
+            }
+            
+            .path-line {
+                display: none;
+            }
+        }
+
+        /* 自定義滾動條 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        /* 工具提示 */
+        .tooltip-inner {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-arrow::before {
+            border-top-color: var(--bg-card) !important;
+        }
+
+        /* 動畫 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- 動態背景 -->
+    <canvas id="dynamic-bg"></canvas>
+
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand cyber-font" href="#">
+                <i class="fas fa-shield-alt me-2"></i>資安證照智庫
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#certifications">證照探索</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#learning-path">學習路徑</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#resources">資源中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#compare">證照比較</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主標題區 -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="hero-title cyber-font fade-in">打造你的<br>資安防禦之路</h1>
+                    <p class="hero-subtitle fade-in delay-1">探索最完整的網路安全認證指南，找到適合你的職業發展路徑，掌握未來關鍵技能</p>
+                    <div class="d-flex gap-3 flex-wrap fade-in delay-2">
+                        <button class="btn btn-hero" onclick="scrollToSection('certifications')">
+                            <i class="fas fa-rocket me-2"></i> 開始探索
+                        </button>
+                        <button class="btn btn-cyber" onclick="scrollToSection('learning-path')">
+                            <i class="fas fa-map me-2"></i> 查看學習路徑
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-none d-lg-block fade-in delay-3">
+                    <div class="text-center">
+                        <div class="position-relative">
+                            <div class="bg-primary rounded-circle position-absolute top-0 start-50 translate-middle" style="width: 200px; height: 200px; opacity: 0.1; filter: blur(40px);"></div>
+                            <i class="fas fa-user-shield text-primary" style="font-size: 8rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 統計區 -->
+    <section class="container mb-5">
+        <div class="stats-section">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">24+</div>
+                        <div class="stat-label">熱門證照</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">專業領域</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">發證機構</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">120+</div>
+                        <div class="stat-label">核心技能</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 篩選區 -->
+    <section class="container mb-5" id="certifications">
+        <div class="filter-section">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="domainFilter" class="form-label">專業領域</label>
+                    <select class="form-select" id="domainFilter">
+                        <option value="all">所有領域</option>
+                        <option value="pentest">滲透測試</option>
+                        <option value="audit">資安稽核</option>
+                        <option value="management">安全管理</option>
+                        <option value="incident">事件應變</option>
+                        <option value="cloud">雲端安全</option>
+                        <option value="forensics">數位鑑識</option>
+                        <option value="governance">治理與風險</option>
+                        <option value="architecture">安全架構</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="levelFilter" class="form-label">難度等級</label>
+                    <select class="form-select" id="levelFilter">
+                        <option value="all">所有等級</option>
+                        <option value="beginner">初學者</option>
+                        <option value="intermediate">中階</option>
+                        <option value="advanced">進階</option>
+                        <option value="expert">專家</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="orgFilter" class="form-label">發證機構</label>
+                    <select class="form-select" id="orgFilter">
+                        <option value="all">所有機構</option>
+                        <option value="isc2">(ISC)²</option>
+                        <option value="comptia">CompTIA</option>
+                        <option value="isaca">ISACA</option>
+                        <option value="ecouncil">EC-Council</option>
+                        <option value="sans">SANS</option>
+                        <option value="offsec">Offensive Security</option>
+                        <option value="microsoft">Microsoft</option>
+                        <option value="cisco">Cisco</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="google">Google</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="jobRoleFilter" class="form-label">目標職位</label>
+                    <select class="form-select" id="jobRoleFilter">
+                        <option value="all">所有職位</option>
+                        <option value="analyst">資安分析師</option>
+                        <option value="pentester">滲透測試員</option>
+                        <option value="auditor">資安稽核員</option>
+                        <option value="engineer">資安工程師</option>
+                        <option value="manager">資安經理</option>
+                        <option value="consultant">資安顧問</option>
+                        <option value="architect">資安架構師</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-tags mt-3">
+                <div class="filter-tag active" data-filter="all">所有證照</div>
+                <div class="filter-tag" data-filter="popular">熱門認證</div>
+                <div class="filter-tag" data-filter="enterprise">企業需求</div>
+                <div class="filter-tag" data-filter="government">政府認可</div>
+                <div class="filter-tag" data-filter="beginner">新手友善</div>
+                <div class="filter-tag" data-filter="international">國際認證</div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="text-accent">
+                <i class="fas fa-filter me-2"></i>找到 <span id="resultCount" class="fw-bold">12</span> 張符合條件的證照
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-cyber btn-sm" id="resetFilters">
+                    <i class="fas fa-sync-alt me-1"></i> 重設篩選
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 證照卡片區 -->
+    <section class="container mb-5">
+        <div class="row" id="certContainer">
+            <!-- 證照卡片會透過 JavaScript 動態生成 -->
+        </div>
+    </section>
+
+    <!-- 學習路徑 -->
+    <section class="learning-path" id="learning-path">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="cyber-font">資安認證學習路徑</h2>
+                    <p class="text-secondary">從初學者到專家，規劃你的職業發展藍圖</p>
+                </div>
+            </div>
+            
+            <div class="path-container">
+                <div class="path-line"></div>
+                <div class="path-items">
+                    <div class="path-item">
+                        <div class="path-dot">1</div>
+                        <div class="path-label">基礎知識</div>
+                    </div>
+                    <div class="path-item">
+                        <div class="path-dot">2</div>
+                        <div class="path-label">技術專精</div>
+                    </div>
+                    <div class="path-item">
+                        <div class="path-dot">3</div>
+                        <div class="path-label">專業領域</div>
+                    </div>
+                    <div class="path-item">
+                        <div class="path-dot">4</div>
+                        <div class="path-label">高級認證</div>
+                    </div>
+                    <div class="path-item">
+                        <div class="path-dot">5</div>
+                        <div class="path-label">專家級別</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="resource-card text-center">
+                        <div class="resource-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="resource-title">學習資源</h4>
+                        <p class="resource-desc">精選線上課程、書籍與學習指南，幫助你系統性準備認證考試。</p>
+                        <button class="btn btn-cyber mt-3">探索資源</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="resource-card text-center">
+                        <div class="resource-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h4 class="resource-title">實戰練習</h4>
+                        <p class="resource-desc">透過實驗室環境與模擬考試，強化實務技能與應試能力。</p>
+                        <button class="btn btn-cyber mt-3">開始練習</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="resource-card text-center">
+                        <div class="resource-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="resource-title">社群交流</h4>
+                        <p class="resource-desc">加入資安社群，與同好交流經驗，獲取最新考試資訊與技巧。</p>
+                        <button class="btn btn-cyber mt-3">加入社群</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 資源中心 -->
+    <section class="resources-section" id="resources">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="cyber-font">學習資源中心</h2>
+                    <p class="text-secondary">精選工具與資源，助你順利通過認證考試</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4 class="resource-title">官方教材</h4>
+                        <p class="resource-desc">各認證機構官方出版的學習指南與教材，確保內容準確性。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h4 class="resource-title">實驗室環境</h4>
+                        <p class="resource-desc">提供虛擬實驗室環境，進行實務操作與技能演練。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h4 class="resource-title">模擬試題</h4>
+                        <p class="resource-desc">大量模擬試題與詳解，幫助你熟悉考試形式與內容。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h4 class="resource-title">線上課程</h4>
+                        <p class="resource-desc">精選線上課程，由資安專家講解考試重點與實務應用。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 比較按鈕 -->
+    <button class="compare-btn" id="compareBtn" data-bs-toggle="modal" data-bs-target="#compareModal" disabled>
+        <i class="fas fa-balance-scale me-2"></i>比較證照 (<span id="compareCount">0</span>)
+    </button>
+
+    <!-- 證照詳細資訊 Modal -->
+    <div class="modal fade" id="certModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="certModalTitle">證照詳細資訊</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="certModalBody">
+                    <!-- 內容由 JavaScript 動態生成 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cyber" data-bs-dismiss="modal">關閉</button>
+                    <a href="#" class="btn btn-hero" id="officialLink" target="_blank">官方網站</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 比較 Modal -->
+    <div class="modal fade" id="compareModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">證照比較</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">項目</th>
+                                    <!-- 比較的證照名稱會由 JavaScript 動態生成 -->
+                                </tr>
+                            </thead>
+                            <tbody id="compareTableBody">
+                                <!-- 比較內容會由 JavaScript 動態生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cyber" data-bs-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-cyber" id="clearCompare">清空比較</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="footer-title cyber-font">資安證照智庫</h4>
+                    <p class="text-secondary">提供最完整的資安認證資訊，幫助你規劃職業發展路徑，掌握未來關鍵技能。</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="text-secondary"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-secondary"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-secondary"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-secondary"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="footer-title">快速連結</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">首頁</a></li>
+                        <li><a href="#certifications">證照探索</a></li>
+                        <li><a href="#learning-path">學習路徑</a></li>
+                        <li><a href="#resources">資源中心</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="footer-title">熱門證照</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">CISSP</a></li>
+                        <li><a href="#">CEH</a></li>
+                        <li><a href="#">Security+</a></li>
+                        <li><a href="#">CISM</a></li>
+                        <li><a href="#">OSCP</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="footer-title">聯絡我們</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope me-2"></i> contact@cybercerts.com</li>
+                        <li><i class="fas fa-phone me-2"></i> +886-2-1234-5678</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 台北市信義區信義路五段7號</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 資安證照智庫. 保留所有權利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 證照資料庫 - 擴充版本
+        const certifications = [
+            {
+                id: 1,
+                name: "CISSP",
+                org: "(ISC)²",
+                domain: "management",
+                level: "expert",
+                jobRoles: ["manager", "consultant", "architect"],
+                logo: "fa-shield-alt",
+                description: "針對資安領導者的頂級認證，涵蓋八個資安領域，是全球公認的資訊安全領導認證。",
+                skills: ["安全與風險管理", "資產安全", "安全架構與工程", "通訊與網路安全", "身份與存取管理", "安全評估與測試", "安全運營", "軟體開發安全"],
+                details: {
+                    cost: "約 $749 USD",
+                    duration: "3小時",
+                    questions: "100-150題",
+                    passingScore: "700/1000分",
+                    renewal: "每年需獲得120 CPE學分，每3年繳交維護費",
+                    officialLink: "https://www.isc2.org/Certifications/CISSP"
+                },
+                tags: ["管理", "CISM", "廣泛認可", "國際認證", "企業需求", "熱門認證"],
+                popularity: 5
+            },
+            {
+                id: 2,
+                name: "CEH",
+                org: "EC-Council",
+                domain: "pentest",
+                level: "intermediate",
+                jobRoles: ["pentester", "analyst", "engineer"],
+                logo: "fa-user-secret",
+                description: "道德駭客認證，教授駭客工具與技術以進行滲透測試，是進攻性安全領域的入門認證。",
+                skills: ["Footprinting 和偵察", "掃描網絡", "枚舉", "漏洞分析", "系統入侵", "惡意軟體威脅", "嗅探", "社交工程", "拒絕服務", "會期劫持", "繞過入侵檢測系統", "防火牆和蜜罐", "黑客網站服務器", "黑客網站應用程序", "SQL注入", "黑客無線網絡", "黑客移動平台", "雲計算", "加密"],
+                details: {
+                    cost: "約 $1,199 USD",
+                    duration: "4小時",
+                    questions: "125題",
+                    passingScore: "60%-85% (依考試版本)",
+                    renewal: "每年需獲得120 ECE學分",
+                    officialLink: "https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/"
+                },
+                tags: ["滲透測試", "駭客技術", "實務技能", "熱門認證", "企業需求"],
+                popularity: 4
+            },
+            {
+                id: 3,
+                name: "Security+",
+                org: "CompTIA",
+                domain: "management",
+                level: "beginner",
+                jobRoles: ["analyst", "engineer"],
+                logo: "fa-lock",
+                description: "入門級資安認證，涵蓋基礎安全概念與最佳實踐，是進入資安領域的基礎認證。",
+                skills: ["攻擊、威脅和漏洞", "架構和設計", "實施", "操作和事件響應", "治理、風險和合規"],
+                details: {
+                    cost: "約 $370 USD",
+                    duration: "90分鐘",
+                    questions: "最多90題",
+                    passingScore: "750/900分",
+                    renewal: "每3年需獲得50 CEU學分",
+                    officialLink: "https://www.comptia.org/certifications/security"
+                },
+                tags: ["入門", "基礎知識", "廣泛認可", "新手友善", "政府認可"],
+                popularity: 5
+            },
+            {
+                id: 4,
+                name: "CISM",
+                org: "ISACA",
+                domain: "management",
+                level: "advanced",
+                jobRoles: ["manager", "consultant", "auditor"],
+                logo: "fa-chart-line",
+                description: "針對資訊安全管理人員的認證，專注於治理與風險管理，適合資安管理職位的專業人士。",
+                skills: ["資訊安全治理", "資訊風險管理", "資訊安全計劃開發與管理", "資訊安全事件管理"],
+                details: {
+                    cost: "會員 $575 USD, 非會員 $760 USD",
+                    duration: "4小時",
+                    questions: "150題",
+                    passingScore: "450/800分",
+                    renewal: "每年需獲得20 CPE學分，每年繳交維護費",
+                    officialLink: "https://www.isaca.org/credentialing/cism"
+                },
+                tags: ["管理", "治理", "風險管理", "企業需求", "國際認證"],
+                popularity: 4
+            },
+            {
+                id: 5,
+                name: "GSEC",
+                org: "SANS",
+                domain: "incident",
+                level: "intermediate",
+                jobRoles: ["analyst", "engineer"],
+                logo: "fa-desktop",
+                description: "注重實務技能的資安認證，涵蓋廣泛的技術安全主題，適合需要技術深度的安全專業人員。",
+                skills: ["網絡協議", "網絡安全", "Linux安全", "Windows安全", "密碼學", "惡意軟體分析", "日誌管理", "漏洞管理", "事件處理"],
+                details: {
+                    cost: "約 $2,499 USD (含培訓)",
+                    duration: "5小時",
+                    questions: "106-180題",
+                    passingScore: "73%",
+                    renewal: "每4年需獲得36 CPE學分",
+                    officialLink: "https://www.giac.org/certifications/security-essentials-gsec/"
+                },
+                tags: ["技術", "實務技能", "廣泛主題", "企業需求"],
+                popularity: 4
+            },
+            {
+                id: 6,
+                name: "OSCP",
+                org: "Offensive Security",
+                domain: "pentest",
+                level: "advanced",
+                jobRoles: ["pentester", "engineer"],
+                logo: "fa-skull-crossbones",
+                description: "注重實戰能力的滲透測試認證，需要通過24小時的實際入侵考試，是進攻性安全領域的黃金標準。",
+                skills: ["Kali Linux工具使用", "被動偵察", "主動偵察", "漏洞掃描", "緩衝區溢出", "客戶端攻擊", "Web應用程序攻擊", "權限提升", "密碼攻擊", "隧道技術"],
+                details: {
+                    cost: "約 $1,499 USD (含培訓)",
+                    duration: "24小時實戰考試",
+                    questions: "實際入侵測試",
+                    passingScore: "成功入侵特定主機",
+                    renewal: "無需續證，但可通過獲得CPE學分維持活躍狀態",
+                    officialLink: "https://www.offensive-security.com/pwk-oscp/"
+                },
+                tags: ["滲透測試", "實戰技能", "進攻安全", "熱門認證"],
+                popularity: 5
+            },
+            {
+                id: 7,
+                name: "CISA",
+                org: "ISACA",
+                domain: "audit",
+                level: "intermediate",
+                jobRoles: ["auditor", "consultant"],
+                logo: "fa-search",
+                description: "資訊系統審計師認證，專注於資訊系統的審計、控制與安全，是全球公認的審計專業認證。",
+                skills: ["資訊系統審計流程", "IT治理與管理", "資訊系統獲取、開發與實施", "資訊系統運營與維護", "資訊資產保護"],
+                details: {
+                    cost: "會員 $575 USD, 非會員 $760 USD",
+                    duration: "4小時",
+                    questions: "150題",
+                    passingScore: "450/800分",
+                    renewal: "每年需獲得20 CPE學分，每年繳交維護費",
+                    officialLink: "https://www.isaca.org/credentialing/cisa"
+                },
+                tags: ["審計", "治理", "合規", "國際認證", "政府認可"],
+                popularity: 4
+            },
+            {
+                id: 8,
+                name: "CCSP",
+                org: "(ISC)²",
+                domain: "cloud",
+                level: "advanced",
+                jobRoles: ["architect", "engineer", "consultant"],
+                logo: "fa-cloud",
+                description: "雲端安全專家認證，專注於雲端運算環境的安全設計、實施與管理。",
+                skills: ["雲端概念、架構與設計", "雲端數據安全", "雲端平台與基礎設施安全", "雲端應用安全", "雲端安全運營", "法律、風險與合規"],
+                details: {
+                    cost: "約 $599 USD",
+                    duration: "4小時",
+                    questions: "125題",
+                    passingScore: "700/1000分",
+                    renewal: "每年需獲得90 CPE學分，每3年繳交維護費",
+                    officialLink: "https://www.isc2.org/Certifications/CCSP"
+                },
+                tags: ["雲端安全", "架構", "企業需求", "國際認證"],
+                popularity: 4
+            },
+                {
+        id: 9,
+        name: "SSCP",
+        org: "(ISC)²",
+        domain: "management",
+        level: "intermediate",
+        jobRoles: ["analyst", "engineer", "administrator"],
+        logo: "fa-user-shield",
+        description: "系統安全認證從業人員，專注於操作層面的安全技術，是CISSP的入門級認證。",
+        skills: ["存取控制", "安全操作與管理", "風險識別與分析", "事件響應與恢復", "密碼學", "網路與通訊安全", "系統與應用安全"],
+        details: {
+            cost: "約 $249 USD",
+            duration: "3小時",
+            questions: "125題",
+            passingScore: "700/1000分",
+            renewal: "每年需獲得60 CPE學分，每3年繳交維護費",
+            officialLink: "https://www.isc2.org/Certifications/SSCP"
+        },
+        tags: ["操作安全", "技術層面", "國際認證", "企業需求"],
+        popularity: 3
+    },
+    {
+        id: 10,
+        name: "CompTIA CySA+",
+        org: "CompTIA",
+        domain: "incident",
+        level: "intermediate",
+        jobRoles: ["analyst", "engineer", "threat hunter"],
+        logo: "fa-binoculars",
+        description: "網路安全分析師認證，專注於威脅偵測與分析，使用安全工具進行漏洞管理。",
+        skills: ["威脅管理", "漏洞管理", "網路安全監控", "事件響應", "合規與評估", "安全架構"],
+        details: {
+            cost: "約 $370 USD",
+            duration: "165分鐘",
+            questions: "最多85題",
+            passingScore: "750/900分",
+            renewal: "每3年需獲得60 CEU學分",
+            officialLink: "https://www.comptia.org/certifications/cybersecurity-analyst"
+        },
+        tags: ["威脅分析", "安全監控", "企業需求", "政府認可"],
+        popularity: 4
+    },
+    {
+        id: 11,
+        name: "CompTIA PenTest+",
+        org: "CompTIA",
+        domain: "pentest",
+        level: "intermediate",
+        jobRoles: ["pentester", "vulnerability tester", "security analyst"],
+        logo: "fa-crosshairs",
+        description: "滲透測試認證，涵蓋滲透測試與漏洞管理的完整流程，強調實務技能。",
+        skills: ["規劃與範圍界定", "資訊收集", "漏洞掃描", "攻擊與利用", "滲透測試工具", "報告與溝通"],
+        details: {
+            cost: "約 $370 USD",
+            duration: "165分鐘",
+            questions: "最多85題",
+            passingScore: "750/900分",
+            renewal: "每3年需獲得60 CEU學分",
+            officialLink: "https://www.comptia.org/certifications/pentest"
+        },
+        tags: ["滲透測試", "漏洞管理", "實務技能", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 12,
+        name: "CompTIA CASP+",
+        org: "CompTIA",
+        domain: "architecture",
+        level: "advanced",
+        jobRoles: ["architect", "engineer", "technical lead"],
+        logo: "fa-chess-queen",
+        description: "高級安全從業人員認證，專注於企業安全架構與工程技術，是CompTIA最高級別認證。",
+        skills: ["安全架構", "安全工程", "密碼學與PKI", "組織安全", "風險管理", "整合運算"],
+        details: {
+            cost: "約 $466 USD",
+            duration: "165分鐘",
+            questions: "最多90題",
+            passingScore: "通過/不通過",
+            renewal: "每3年需獲得75 CEU學分",
+            officialLink: "https://www.comptia.org/certifications/comptia-advanced-security-practitioner"
+        },
+        tags: ["安全架構", "高級認證", "技術領導", "企業需求"],
+        popularity: 3
+    },
+    {
+        id: 14,
+        name: "CRISC",
+        org: "ISACA",
+        domain: "governance",
+        level: "advanced",
+        jobRoles: ["risk manager", "compliance officer", "business analyst"],
+        logo: "fa-chart-bar",
+        description: "風險與資訊系統控制認證，專注於企業風險管理與控制實施。",
+        skills: ["風險識別與評估", "風險回應與緩解", "風險監控與報告", "資訊系統控制設計與實施"],
+        details: {
+            cost: "會員 $575 USD, 非會員 $760 USD",
+            duration: "4小時",
+            questions: "150題",
+            passingScore: "450/800分",
+            renewal: "每年需獲得20 CPE學分，每年繳交維護費",
+            officialLink: "https://www.isaca.org/credentialing/crisc"
+        },
+        tags: ["風險管理", "治理", "企業需求", "國際認證"],
+        popularity: 4
+    },
+    {
+        id: 15,
+        name: "CDPSE",
+        org: "ISACA",
+        domain: "governance",
+        level: "intermediate",
+        jobRoles: ["privacy officer", "compliance manager", "data protection officer"],
+        logo: "fa-database",
+        description: "資料隱私技術專家認證，專注於資料隱私技術的設計、實施與管理。",
+        skills: ["資料隱私治理", "資料隱私架構", "資料生命週期管理", "合規與評估"],
+        details: {
+            cost: "會員 $575 USD, 非會員 $760 USD",
+            duration: "3.5小時",
+            questions: "120題",
+            passingScore: "450/800分",
+            renewal: "每年需獲得20 CPE學分，每年繳交維護費",
+            officialLink: "https://www.isaca.org/credentialing/cdpse"
+        },
+        tags: ["資料隱私", "GDPR", "合規", "新興領域"],
+        popularity: 3
+    },
+    {
+        id: 16,
+        name: "GPEN",
+        org: "SANS",
+        domain: "pentest",
+        level: "intermediate",
+        jobRoles: ["pentester", "ethical hacker", "security analyst"],
+        logo: "fa-bug",
+        description: "滲透測試員認證，專注於合法的滲透測試技術與方法論。",
+        skills: ["滲透測試方法論", "偵察與掃描", "漏洞利用", "後滲透技術", "報告撰寫"],
+        details: {
+            cost: "約 $2,499 USD (含培訓)",
+            duration: "3小時",
+            questions: "75-82題",
+            passingScore: "71%",
+            renewal: "每4年需獲得36 CPE學分",
+            officialLink: "https://www.giac.org/certifications/penetration-tester-gpen"
+        },
+        tags: ["滲透測試", "實務技能", "SANS認證", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 17,
+        name: "GCIH",
+        org: "SANS",
+        domain: "incident",
+        level: "intermediate",
+        jobRoles: ["incident handler", "security analyst", "forensics investigator"],
+        logo: "fa-first-aid",
+        description: "事件處理員認證，專注於安全事件偵測、回應與處理技術。",
+        skills: ["事件處理流程", "惡意程式分析", "網路協定分析", "Windows與Linux調查", "法律與道德考量"],
+        details: {
+            cost: "約 $2,499 USD (含培訓)",
+            duration: "3小時",
+            questions: "75-82題",
+            passingScore: "71%",
+            renewal: "每4年需獲得36 CPE學分",
+            officialLink: "https://www.giac.org/certifications/incident-handler-gcih"
+        },
+        tags: ["事件處理", "應急響應", "實務技能", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 18,
+        name: "GCFA",
+        org: "SANS",
+        domain: "forensics",
+        level: "advanced",
+        jobRoles: ["forensics analyst", "incident responder", "malware analyst"],
+        logo: "fa-microscope",
+        description: "進階鑑識分析師認證，專注於進階的數位鑑識與事件響應技術。",
+        skills: ["進階檔案系統分析", "記憶體取證", "時間線分析", "惡意程式逆向工程", "進階事件響應"],
+        details: {
+            cost: "約 $2,499 USD (含培訓)",
+            duration: "3小時",
+            questions: "82-115題",
+            passingScore: "68%",
+            renewal: "每4年需獲得36 CPE學分",
+            officialLink: "https://www.giac.org/certifications/forensic-analyst-gcfa"
+        },
+        tags: ["數位鑑識", "進階技術", "事件調查", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 19,
+        name: "GWAPT",
+        org: "SANS",
+        domain: "pentest",
+        level: "intermediate",
+        jobRoles: ["web app pentester", "security analyst", "application security engineer"],
+        logo: "fa-globe",
+        description: "網頁應用程式滲透測試員認證，專注於網頁應用程式的安全測試與漏洞發現。",
+        skills: ["網頁應用程式架構", "OWASP Top 10", "SQL注入", "XSS攻擊", "CSRF攻擊", "會話管理漏洞"],
+        details: {
+            cost: "約 $2,499 USD (含培訓)",
+            duration: "3小時",
+            questions: "75-82題",
+            passingScore: "71%",
+            renewal: "每4年需獲得36 CPE學分",
+            officialLink: "https://www.giac.org/certifications/web-app-penetration-tester-gwapt"
+        },
+        tags: ["網頁安全", "應用程式安全", "OWASP", "實務技能"],
+        popularity: 4
+    },
+    {
+        id: 20,
+        name: "OSCE",
+        org: "Offensive Security",
+        domain: "pentest",
+        level: "expert",
+        jobRoles: ["advanced pentester", "security researcher", "red team member"],
+        logo: "fa-skull",
+        description: "進攻性安全認證專家，是OSCP的進階版本，專注於進階的漏洞開發與利用技術。",
+        skills: ["進階緩衝區溢出", "SEH覆寫", "ROP鏈開發", "進階shellcode編寫", "繞過安全機制"],
+        details: {
+            cost: "約 $1,500 USD",
+            duration: "48小時實戰考試",
+            questions: "實際漏洞開發與利用",
+            passingScore: "成功開發並利用多個漏洞",
+            renewal: "無需續證",
+            officialLink: "https://www.offensive-security.com/ctp-osce/"
+        },
+        tags: ["進階滲透測試", "漏洞開發", "專家級", "實戰技能"],
+        popularity: 5
+    },
+    {
+        id: 21,
+        name: "OSWE",
+        org: "Offensive Security",
+        domain: "pentest",
+        level: "expert",
+        jobRoles: ["web app security expert", "security researcher", "application security engineer"],
+        logo: "fa-code",
+        description: "網頁應用程式開發專家認證，專注於網頁應用程式的進階安全測試與漏洞發現。",
+        skills: ["進階網頁應用程式測試", "白盒測試", "原始碼審計", "自訂漏洞利用開發", "複雜漏洞鏈利用"],
+        details: {
+            cost: "約 $1,500 USD",
+            duration: "48小時實戰考試",
+            questions: "實際網頁應用程式測試",
+            passingScore: "成功發現並利用多個複雜漏洞",
+            renewal: "無需續證",
+            officialLink: "https://www.offensive-security.com/awae-oswe/"
+        },
+        tags: ["網頁安全", "白盒測試", "專家級", "實戰技能"],
+        popularity: 4
+    },
+    {
+        id: 22,
+        name: "CCNA Security",
+        org: "Cisco",
+        domain: "network",
+        level: "intermediate",
+        jobRoles: ["network security engineer", "security administrator", "network analyst"],
+        logo: "fa-network-wired",
+        description: "思科認證網路安全工程師，專注於網路安全基礎設施的設計、實施與故障排除。",
+        skills: ["網路安全概念", "安全基礎設施", "VPN技術", "防火牆配置", "入侵防禦系統", "端點安全"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "60-70題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna-security.html"
+        },
+        tags: ["網路安全", "Cisco", "基礎設施", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 23,
+        name: "CCNP Security",
+        org: "Cisco",
+        domain: "network",
+        level: "advanced",
+        jobRoles: ["network security architect", "senior security engineer", "security consultant"],
+        logo: "fa-shield-virus",
+        description: "思科認證資深網路安全專家，專注於複雜網路安全解決方案的設計與實施。",
+        skills: ["進階網路安全", "安全解決方案架構", "雲端安全整合", "自動化與編程", "威脅防禦", "安全網路訪問"],
+        details: {
+            cost: "約 $1,200 USD (多個考試)",
+            duration: "各考試90-120分鐘",
+            questions: "多個核心與選修考試",
+            passingScore: "依各考試而定",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/ccnp-security.html"
+        },
+        tags: ["網路安全", "Cisco", "進階認證", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 24,
+        name: "Microsoft SC-900",
+        org: "Microsoft",
+        domain: "cloud",
+        level: "beginner",
+        jobRoles: ["security analyst", "compliance officer", "cloud administrator"],
+        logo: "fa-cloud",
+        description: "Microsoft Security, Compliance, and Identity Fundamentals，微軟安全合規與身份基礎認證。",
+        skills: ["雲端安全概念", "身份與訪問管理", "合規管理", "Microsoft 365安全", "Azure安全"],
+        details: {
+            cost: "約 $99 USD",
+            duration: "45分鐘",
+            questions: "40-60題",
+            passingScore: "700/1000分",
+            renewal: "無需續證",
+            officialLink: "https://docs.microsoft.com/en-us/learn/certifications/sc-900"
+        },
+        tags: ["雲端安全", "Microsoft", "入門級", "新手友善"],
+        popularity: 3
+    },
+    {
+        id: 25,
+        name: "Microsoft SC-200",
+        org: "Microsoft",
+        domain: "cloud",
+        level: "intermediate",
+        jobRoles: ["security operations analyst", "cloud security engineer", "threat hunter"],
+        logo: "fa-bolt",
+        description: "Microsoft Security Operations Analyst，專注於Microsoft安全解決方案的操作與管理。",
+        skills: ["Microsoft Sentinel", "Microsoft Defender", "威脅偵測", "事件響應", "安全監控"],
+        details: {
+            cost: "約 $165 USD",
+            duration: "120分鐘",
+            questions: "40-60題",
+            passingScore: "700/1000分",
+            renewal: "無需續證",
+            officialLink: "https://docs.microsoft.com/en-us/learn/certifications/sc-200"
+        },
+        tags: ["雲端安全", "Microsoft", "安全操作", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 26,
+        name: "AWS Certified Security - Specialty",
+        org: "Amazon",
+        domain: "cloud",
+        level: "advanced",
+        jobRoles: ["cloud security architect", "DevSecOps engineer", "cloud security specialist"],
+        logo: "fa-cloud",
+        description: "AWS安全專業認證，專注於AWS雲端環境的安全設計與實施。",
+        skills: ["AWS身份與訪問管理", "資料保護", "基礎設施安全", "事件響應", "合規與治理"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "170分鐘",
+            questions: "65題",
+            passingScore: "750/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://aws.amazon.com/certification/certified-security-specialty/"
+        },
+        tags: ["雲端安全", "AWS", "專業級", "企業需求"],
+        popularity: 5
+    },
+    {
+        id: 27,
+        name: "Google Professional Cloud Security Engineer",
+        org: "Google",
+        domain: "cloud",
+        level: "advanced",
+        jobRoles: ["cloud security engineer", "security architect", "DevSecOps engineer"],
+        logo: "fa-google",
+        description: "Google專業雲端安全工程師認證，專注於Google Cloud Platform的安全設計與管理。",
+        skills: ["GCP身份與訪問管理", "網路安全配置", "資料保護", "安全監控", "合規與審計"],
+        details: {
+            cost: "約 $200 USD",
+            duration: "120分鐘",
+            questions: "50-60題",
+            passingScore: "通過/不通過",
+            renewal: "每2年需重新認證",
+            officialLink: "https://cloud.google.com/certification/cloud-security-engineer"
+        },
+        tags: ["雲端安全", "Google Cloud", "專業級", "企業需求"],
+        popularity: 4
+    },
+    {
+        id: 28,
+        name: "Certified Cloud Security Professional (CCSP)",
+        org: "(ISC)²",
+        domain: "cloud",
+        level: "advanced",
+        jobRoles: ["cloud security architect", "cloud security manager", "security consultant"],
+        logo: "fa-cloud",
+        description: "雲端安全專家認證，專注於雲端運算環境的安全設計、實施與管理。",
+        skills: ["雲端概念、架構與設計", "雲端數據安全", "雲端平台與基礎設施安全", "雲端應用安全", "雲端安全運營", "法律、風險與合規"],
+        details: {
+            cost: "約 $599 USD",
+            duration: "4小時",
+            questions: "125題",
+            passingScore: "700/1000分",
+            renewal: "每年需獲得90 CPE學分，每3年繳交維護費",
+            officialLink: "https://www.isc2.org/Certifications/CCSP"
+        },
+        tags: ["雲端安全", "架構", "企業需求", "國際認證"],
+        popularity: 4
+    },
+    {
+    id: 29,
+    name: "C|EH Master",
+    org: "EC-Council",
+    domain: "pentest",
+    level: "expert",
+    jobRoles: ["senior pentester", "red team lead", "security researcher"],
+    logo: "fa-crown",
+    description: "道德駭客大師認證，是CEH的進階版本，需要通過多個實戰挑戰來證明進階駭客技能。",
+    skills: ["進階滲透測試", "漏洞研究", "惡意程式分析", "APT攻擊模擬", "紅隊演練", "安全研究"],
+    details: {
+        cost: "約 $1,899 USD",
+        duration: "6小時實戰考試",
+        questions: "多個實戰挑戰",
+        passingScore: "完成所有挑戰任務",
+        renewal: "每年需獲得120 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/ceh-master/"
+    },
+    tags: ["進階滲透測試", "紅隊", "專家級", "實戰技能"],
+    popularity: 4
+},
+{
+    id: 30,
+    name: "C|ND",
+    org: "EC-Council",
+    domain: "network",
+    level: "beginner",
+    jobRoles: ["network defender", "security analyst", "SOC analyst"],
+    logo: "fa-shield-alt",
+    description: "網路防禦者認證，專注於網路安全防禦技術與威脅偵測。",
+    skills: ["網路安全基礎", "威脅偵測", "防火牆管理", "入侵偵測", "網路監控", "事件響應"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "100題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-network-defender-cnd/"
+    },
+    tags: ["網路防禦", "藍隊", "入門級", "SOC"],
+    popularity: 3
+},
+{
+    id: 31,
+    name: "C|CT",
+    org: "EC-Council",
+    domain: "management",
+    level: "beginner",
+    jobRoles: ["security technician", "IT support", "entry-level analyst"],
+    logo: "fa-tools",
+    description: "網路安全技術員認證，提供網路安全的基礎技術訓練，適合初學者入門。",
+    skills: ["網路基礎", "安全基礎", "端點安全", "滲透測試基礎", "數位鑑識基礎"],
+    details: {
+        cost: "約 $499 USD",
+        duration: "3小時",
+        questions: "60題",
+        passingScore: "70%",
+        renewal: "無需續證",
+        officialLink: "https://www.eccouncil.org/programs/certified-cybersecurity-technician-cct/"
+    },
+    tags: ["入門級", "基礎技能", "新手友善", "技術員"],
+    popularity: 3
+},
+{
+    id: 32,
+    name: "C|PENT",
+    org: "EC-Council",
+    domain: "pentest",
+    level: "expert",
+    jobRoles: ["senior pentester", "penetration testing lead", "security consultant"],
+    logo: "fa-bullseye",
+    description: "滲透測試專家認證，專注於真實環境的進階滲透測試技術與方法論。",
+    skills: ["進階滲透測試", "網路分段測試", "雲端環境測試", "OT/IoT測試", "報告撰寫與溝通"],
+    details: {
+        cost: "約 $1,199 USD",
+        duration: "24小時實戰考試",
+        questions: "真實環境滲透測試",
+        passingScore: "成功滲透多個目標",
+        renewal: "每年需獲得120 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-penetration-testing-professional-cpent/"
+    },
+    tags: ["滲透測試", "專家級", "實戰環境", "企業級"],
+    popularity: 4
+},
+{
+    id: 33,
+    name: "GCFE",
+    org: "SANS",
+    domain: "forensics",
+    level: "intermediate",
+    jobRoles: ["digital forensics analyst", "incident responder", "evidence collector"],
+    logo: "fa-hdd",
+    description: "數位鑑識從業人員認證，專注於Windows系統的數位證據收集與分析。",
+    skills: ["Windows檔案系統分析", "註冊表分析", "事件日誌分析", "瀏覽器取證", "電子郵件取證"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "82-115題",
+        passingScore: "68%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/forensic-examiner-gcfe"
+    },
+    tags: ["數位鑑識", "Windows取證", "事件響應", "企業需求"],
+    popularity: 4
+},
+{
+    id: 34,
+    name: "GNFA",
+    org: "SANS",
+    domain: "forensics",
+    level: "advanced",
+    jobRoles: ["network forensics analyst", "threat hunter", "incident investigator"],
+    logo: "fa-network-wired",
+    description: "網路鑑識分析師認證，專注於網路流量分析與網路安全事件調查。",
+    skills: ["網路協定分析", "封包分析", "網路流量取證", "惡意流量識別", "網路事件重建"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "82-115題",
+        passingScore: "68%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/forensic-analyst-gnfa"
+    },
+    tags: ["網路鑑識", "流量分析", "進階技術", "威脅追獵"],
+    popularity: 4
+},
+{
+    id: 35,
+    name: "GXPN",
+    org: "SANS",
+    domain: "pentest",
+    level: "expert",
+    jobRoles: ["exploit developer", "security researcher", "vulnerability analyst"],
+    logo: "fa-biohazard",
+    description: "漏洞開發專家認證，專注於進階的漏洞發現、分析與利用開發技術。",
+    skills: ["進階逆向工程", "漏洞分析", "shellcode開發", "繞過技術", "自訂利用開發"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "82-115題",
+        passingScore: "68%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/exploit-researcher-gxpn"
+    },
+    tags: ["漏洞研究", "逆向工程", "專家級", "安全研究"],
+    popularity: 4
+},
+{
+    id: 36,
+    name: "GSLC",
+    org: "SANS",
+    domain: "management",
+    level: "intermediate",
+    jobRoles: ["security manager", "team lead", "security consultant"],
+    logo: "fa-user-tie",
+    description: "安全領導認證，專注於技術安全管理與團隊領導技能。",
+    skills: ["安全治理", "風險管理", "安全架構", "團隊管理", "專案管理", "溝通技巧"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/security-leadership-gslc"
+    },
+    tags: ["安全領導", "管理技能", "技術管理", "企業需求"],
+    popularity: 4
+},
+{
+    id: 37,
+    name: "GISP",
+    org: "SANS",
+    domain: "management",
+    level: "advanced",
+    jobRoles: ["security architect", "CISO", "security director"],
+    logo: "fa-chess-knight",
+    description: "資訊安全專家認證，專注於企業級安全架構與策略規劃。",
+    skills: ["企業安全架構", "安全策略規劃", "風險治理", "合規管理", "安全度量"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/security-professional-gisp"
+    },
+    tags: ["安全架構", "策略規劃", "高階管理", "企業級"],
+    popularity: 4
+},
+{
+    id: 38,
+    name: "OSWP",
+    org: "Offensive Security",
+    domain: "pentest",
+    level: "intermediate",
+    jobRoles: ["wireless pentester", "security analyst", "network auditor"],
+    logo: "fa-wifi",
+    description: "無線專業滲透測試員認證，專注於無線網路安全測試與評估。",
+    skills: ["無線網路安全", "WEP/WPA/WPA2破解", "無線偵察", "無線攻擊技術", "無線防禦"],
+    details: {
+        cost: "約 $800 USD",
+        duration: "4小時實戰考試",
+        questions: "實際無線網路測試",
+        passingScore: "成功破解並取得訪問權限",
+        renewal: "無需續證",
+        officialLink: "https://www.offensive-security.com/wifu-oswp/"
+    },
+    tags: ["無線安全", "實戰技能", "中階認證", "網路測試"],
+    popularity: 3
+},
+{
+    id: 39,
+    name: "OSEE",
+    org: "Offensive Security",
+    domain: "pentest",
+    level: "expert",
+    jobRoles: ["exploit developer", "security researcher", "vulnerability analyst"],
+    logo: "fa-microchip",
+    description: "漏洞開發專家認證，專注於進階的漏洞發現與利用開發技術。",
+    skills: ["進階逆向工程", "漏洞分析", "利用開發", "繞過技術", "研究技能"],
+    details: {
+        cost: "約 $1,500 USD",
+        duration: "48小時實戰考試",
+        questions: "實際漏洞開發挑戰",
+        passingScore: "成功開發多個漏洞利用",
+        renewal: "無需續證",
+        officialLink: "https://www.offensive-security.com/awe-osee/"
+    },
+    tags: ["漏洞開發", "逆向工程", "專家級", "研究導向"],
+    popularity: 5
+},
+{
+    id: 40,
+    name: "CISSP-ISSAP",
+    org: "(ISC)²",
+    domain: "architecture",
+    level: "expert",
+    jobRoles: ["security architect", "solution architect", "technical lead"],
+    logo: "fa-chess-board",
+    description: "資訊系統安全架構專家，是CISSP的架構專精認證，專注於安全架構設計。",
+    skills: ["安全架構設計", "存取控制系統", "密碼學應用", "物理安全整合", "通訊安全"],
+    details: {
+        cost: "約 $599 USD",
+        duration: "3小時",
+        questions: "125題",
+        passingScore: "700/1000分",
+        renewal: "每年需獲得120 CPE學分，每3年繳交維護費",
+        officialLink: "https://www.isc2.org/Certifications/ISSAP"
+    },
+    tags: ["安全架構", "專家級", "CISSP專精", "企業需求"],
+    popularity: 4
+},
+{
+    id: 41,
+    name: "CISSP-ISSEP",
+    org: "(ISC)²",
+    domain: "engineering",
+    level: "expert",
+    jobRoles: ["security engineer", "systems engineer", "compliance engineer"],
+    logo: "fa-cogs",
+    description: "資訊系統安全工程專家，是CISSP的工程專精認證，專注於安全工程實踐。",
+    skills: ["系統安全工程", "風險管理", "技術審計", "認證與認可", "系統開發安全"],
+    details: {
+        cost: "約 $599 USD",
+        duration: "3小時",
+        questions: "125題",
+        passingScore: "700/1000分",
+        renewal: "每年需獲得120 CPE學分，每3年繳交維護費",
+        officialLink: "https://www.isc2.org/Certifications/ISSEP"
+    },
+    tags: ["安全工程", "專家級", "CISSP專精", "政府需求"],
+    popularity: 4
+},
+{
+    id: 42,
+    name: "CISSP-ISSMP",
+    org: "(ISC)²",
+    domain: "management",
+    level: "expert",
+    jobRoles: ["CISO", "security director", "program manager"],
+    logo: "fa-chess-king",
+    description: "資訊系統安全管理專家，是CISSP的管理專精認證，專注於安全管理與治理。",
+    skills: ["安全治理", "風險管理", "安全計劃管理", "法律與合規", "企業連續性"],
+    details: {
+        cost: "約 $599 USD",
+        duration: "3小時",
+        questions: "125題",
+        passingScore: "700/1000分",
+        renewal: "每年需獲得120 CPE學分，每3年繳交維護費",
+        officialLink: "https://www.isc2.org/Certifications/ISSMP"
+    },
+    tags: ["安全管理", "專家級", "CISSP專精", "高階管理"],
+    popularity: 4
+},
+{
+    id: 43,
+    name: "HCISPP",
+    org: "(ISC)²",
+    domain: "governance",
+    level: "intermediate",
+    jobRoles: ["healthcare security", "privacy officer", "compliance manager"],
+    logo: "fa-heartbeat",
+    description: "醫療保健資訊安全與隱私從業人員認證，專注於醫療行業的安全與隱私要求。",
+    skills: ["醫療資訊安全", "患者隱私保護", "HIPAA合規", "醫療系統安全", "風險管理"],
+    details: {
+        cost: "約 $599 USD",
+        duration: "3小時",
+        questions: "125題",
+        passingScore: "700/1000分",
+        renewal: "每年需獲得60 CPE學分，每3年繳交維護費",
+        officialLink: "https://www.isc2.org/Certifications/HCISPP"
+    },
+    tags: ["醫療安全", "隱私保護", "行業專精", "合規"],
+    popularity: 3
+},
+{
+    id: 44,
+    name: "CSSLP",
+    org: "(ISC)²",
+    domain: "development",
+    level: "advanced",
+    jobRoles: ["application security", "DevSecOps", "software developer"],
+    logo: "fa-code",
+    description: "安全軟體開發生命週期專家認證，專注於安全軟體開發實踐與方法論。",
+    skills: ["安全軟體概念", "安全設計", "安全實現", "安全測試", "軟體接受與部署"],
+    details: {
+        cost: "約 $599 USD",
+        duration: "4小時",
+        questions: "175題",
+        passingScore: "700/1000分",
+        renewal: "每年需獲得90 CPE學分，每3年繳交維護費",
+        officialLink: "https://www.isc2.org/Certifications/CSSLP"
+    },
+    tags: ["應用安全", "DevSecOps", "開發安全", "企業需求"],
+    popularity: 4
+},
+{
+    id: 45,
+    name: "CCISO",
+    org: "EC-Council",
+    domain: "management",
+    level: "expert",
+    jobRoles: ["CISO", "security director", "executive management"],
+    logo: "fa-user-tie",
+    description: "認證首席資訊安全官認證，專注於資安高階管理與企業治理技能。",
+    skills: ["治理與風險管理", "資訊安全控制", "安全計劃管理", "財務管理", "戰略規劃"],
+    details: {
+        cost: "約 $1,299 USD",
+        duration: "2.5小時",
+        questions: "150題",
+        passingScore: "72%",
+        renewal: "每年需獲得120 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-chief-information-security-officer-cciso/"
+    },
+    tags: ["CISO", "高階管理", "企業治理", "策略規劃"],
+    popularity: 4
+},
+{
+    id: 46,
+    name: "ECES",
+    org: "EC-Council",
+    domain: "cryptography",
+    level: "intermediate",
+    jobRoles: ["cryptography specialist", "security engineer", "PKI administrator"],
+    logo: "fa-lock",
+    description: "加密專家認證，專注於密碼學原理、應用與實務技術。",
+    skills: ["對稱加密", "非對稱加密", "雜湊函數", "數位簽章", "PKI管理", "密碼分析"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "100題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/encryption-specialist-eces/"
+    },
+    tags: ["密碼學", "加密技術", "PKI", "技術專精"],
+    popularity: 3
+},
+{
+    id: 47,
+    name: "C|HFI",
+    org: "EC-Council",
+    domain: "forensics",
+    level: "intermediate",
+    jobRoles: ["digital forensics investigator", "incident responder", "evidence analyst"],
+    logo: "fa-search",
+    description: "電腦駭客鑑識調查員認證，專注於數位證據收集與電腦犯罪調查。",
+    skills: ["數位證據處理", "檔案系統分析", "作業系統取證", "網路取證", "調查報告"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "150題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/computer-hacking-forensic-investigator-chfi/"
+    },
+    tags: ["數位鑑識", "犯罪調查", "證據收集", "法律合規"],
+    popularity: 4
+},
+{
+    id: 48,
+    name: "C|SA",
+    org: "EC-Council",
+    domain: "architecture",
+    level: "advanced",
+    jobRoles: ["security architect", "solution architect", "technical consultant"],
+    logo: "fa-chess-rook",
+    description: "安全分析師認證，專注於安全架構設計與安全解決方案實施。",
+    skills: ["安全架構設計", "網路安全", "應用安全", "雲端安全", "安全評估"],
+    details: {
+        cost: "約 $1,099 USD",
+        duration: "12小時實戰考試",
+        questions: "多個實戰挑戰",
+        passingScore: "完成所有架構設計挑戰",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/cyber-security-analyst-csa/"
+    },
+    tags: ["安全架構", "解決方案設計", "進階認證", "企業級"],
+    popularity: 4
+},
+{
+    id: 49,
+    name: "C|TIA",
+    org: "EC-Council",
+    domain: "audit",
+    level: "intermediate",
+    jobRoles: ["IT auditor", "compliance officer", "risk assessor"],
+    logo: "fa-clipboard-check",
+    description: "資訊科技審計員認證，專注於IT系統審計、控制評估與合規驗證。",
+    skills: ["IT審計流程", "控制評估", "合規驗證", "風險評估", "審計報告"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "150題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/ec-council-certified-threat-intelligence-analyst-ctia/"
+    },
+    tags: ["IT審計", "合規", "控制評估", "企業需求"],
+    popularity: 3
+},
+{
+    id: 50,
+    name: "C|VAT",
+    org: "EC-Council",
+    domain: "audit",
+    level: "intermediate",
+    jobRoles: ["vulnerability assessor", "security analyst", "compliance auditor"],
+    logo: "fa-shield-alt",
+    description: "漏洞評估員認證，專注於系統漏洞評估與弱點管理流程。",
+    skills: ["漏洞評估方法論", "弱點掃描", "風險評級", "修復建議", "評估報告"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "50題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-vulnerability-assessor-cva/"
+    },
+    tags: ["漏洞評估", "弱點管理", "風險評級", "藍隊"],
+    popularity: 3
+},
+        ];
+
+        // DOM 元素
+        const certContainer = document.getElementById('certContainer');
+        const resultCount = document.getElementById('resultCount');
+        const compareCount = document.getElementById('compareCount');
+        const compareBtn = document.getElementById('compareBtn');
+        const domainFilter = document.getElementById('domainFilter');
+        const levelFilter = document.getElementById('levelFilter');
+        const orgFilter = document.getElementById('orgFilter');
+        const jobRoleFilter = document.getElementById('jobRoleFilter');
+        const resetFiltersBtn = document.getElementById('resetFilters');
+        const certModal = new bootstrap.Modal(document.getElementById('certModal'));
+        const certModalTitle = document.getElementById('certModalTitle');
+        const certModalBody = document.getElementById('certModalBody');
+        const officialLink = document.getElementById('officialLink');
+        const compareModal = new bootstrap.Modal(document.getElementById('compareModal'));
+        const compareTableBody = document.getElementById('compareTableBody');
+        const clearCompareBtn = document.getElementById('clearCompare');
+
+        // 狀態變數
+        let filteredCerts = [...certifications];
+        let compareList = JSON.parse(localStorage.getItem('compareList')) || [];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let currentTagFilter = 'all';
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCertifications();
+            updateCompareCount();
+            initDynamicBackground();
+            initEventListeners();
+            initTagFilters();
+        });
+
+        // 初始化事件監聽
+        function initEventListeners() {
+            domainFilter.addEventListener('change', filterCerts);
+            levelFilter.addEventListener('change', filterCerts);
+            orgFilter.addEventListener('change', filterCerts);
+            jobRoleFilter.addEventListener('change', filterCerts);
+            resetFiltersBtn.addEventListener('click', resetFilters);
+            clearCompareBtn.addEventListener('click', clearCompare);
+            
+            // 導航欄滾動效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.style.padding = '10px 0';
+                    navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+                } else {
+                    navbar.style.padding = '15px 0';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+        }
+
+        // 初始化標籤篩選
+        function initTagFilters() {
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // 移除所有標籤的 active 類
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    // 添加當前標籤的 active 類
+                    this.classList.add('active');
+                    // 更新當前標籤篩選
+                    currentTagFilter = this.getAttribute('data-filter');
+                    filterCerts();
+                });
+            });
+        }
+
+        // 渲染證照卡片
+        function renderCertifications() {
+            certContainer.innerHTML = '';
+            
+            if (filteredCerts.length === 0) {
+                certContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x text-secondary mb-3"></i>
+                        <h4 class="text-secondary">沒有找到符合條件的證照</h4>
+                        <p class="text-secondary">請嘗試調整篩選條件</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredCerts.forEach(cert => {
+                const isCompared = compareList.includes(cert.id);
+                const isFavorite = favorites.includes(cert.id);
+                
+                const card = document.createElement('div');
+                card.className = 'col-lg-6 mb-4 fade-in';
+                card.innerHTML = `
+                    <div class="cert-card">
+                        <div class="cert-header">
+                            <div class="d-flex">
+                                <div class="cert-icon">
+                                    <i class="fas ${cert.logo}"></i>
+                                </div>
+                                <div class="cert-basic-info">
+                                    <h3 class="cert-title">${cert.name}</h3>
+                                    <p class="cert-org">${cert.org}</p>
+                                </div>
+                            </div>
+                            <div class="cert-level">${getLevelText(cert.level)}</div>
+                        </div>
+                        
+                        <div class="cert-body">
+                            <p class="cert-description">${cert.description}</p>
+                            
+                            <div class="skills-section">
+                                <h6><i class="fas fa-tools me-2"></i>核心技能</h6>
+                                <div class="skill-tags">
+                                    ${cert.skills.slice(0, 5).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                                    ${cert.skills.length > 5 ? `<span class="skill-tag">+${cert.skills.length - 5} 更多</span>` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="cert-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-dollar-sign meta-icon"></i>
+                                    <span class="meta-text">${cert.details.cost}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-clock meta-icon"></i>
+                                    <span class="meta-text">${cert.details.duration}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-tasks meta-icon"></i>
+                                    <span class="meta-text">${cert.details.questions}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-bullseye meta-icon"></i>
+                                    <span class="meta-text">${cert.details.passingScore}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-footer">
+                            <div class="form-check">
+                                <input class="form-check-input compare-checkbox" type="checkbox" 
+                                    ${isCompared ? 'checked' : ''} 
+                                    onchange="toggleCompare(${cert.id})">
+                                <label class="form-check-label text-small">加入比較</label>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-cyber btn-secondary ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${cert.id})">
+                                    <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i> 收藏
+                                </button>
+                                <button class="btn btn-cyber" onclick="showCertDetails(${cert.id})">
+                                    <i class="fas fa-info-circle"></i> 詳細資訊
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                certContainer.appendChild(card);
+            });
+            
+            resultCount.textContent = filteredCerts.length;
+        }
+
+        // 篩選證照
+function filterCerts() {
+    const domainValue = domainFilter.value;
+    const levelValue = levelFilter.value;
+    const orgValue = orgFilter.value;
+    const jobRoleValue = jobRoleFilter.value;
+    
+    filteredCerts = certifications.filter(cert => {
+        const domainMatch = domainValue === 'all' || cert.domain === domainValue;
+        const levelMatch = levelValue === 'all' || cert.level === levelValue;
+        const jobRoleMatch = jobRoleValue === 'all' || cert.jobRoles.includes(jobRoleValue);
+        
+        // 修正機構篩選邏輯
+        let orgMatch = false;
+        if (orgValue === 'all') {
+            orgMatch = true;
+        } else if (orgValue === 'isc2') {
+            orgMatch = cert.org === '(ISC)²';
+        } else if (orgValue === 'ecouncil') {
+            orgMatch = cert.org === 'EC-Council';
+        } else if (orgValue === 'offsec') {
+            orgMatch = cert.org === 'Offensive Security';
+        } else {
+            orgMatch = cert.org.toLowerCase().includes(orgValue);
+        }
+        
+        // 標籤篩選
+        let tagMatch = true;
+        if (currentTagFilter !== 'all') {
+            if (currentTagFilter === 'popular') {
+                tagMatch = cert.popularity >= 4;
+            } else if (currentTagFilter === 'enterprise') {
+                tagMatch = cert.tags.includes('企業需求');
+            } else if (currentTagFilter === 'government') {
+                tagMatch = cert.tags.includes('政府認可');
+            } else if (currentTagFilter === 'beginner') {
+                tagMatch = cert.level === 'beginner';
+            } else if (currentTagFilter === 'international') {
+                tagMatch = cert.tags.includes('國際認證');
+            }
+        }
+        
+        return domainMatch && levelMatch && orgMatch && jobRoleMatch && tagMatch;
+    });
+    
+    renderCertifications();
+}
+
+        // 重設篩選
+        function resetFilters() {
+            domainFilter.value = 'all';
+            levelFilter.value = 'all';
+            orgFilter.value = 'all';
+            jobRoleFilter.value = 'all';
+            
+            // 重設標籤篩選
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => tag.classList.remove('active'));
+            document.querySelector('.filter-tag[data-filter="all"]').classList.add('active');
+            currentTagFilter = 'all';
+            
+            filterCerts();
+        }
+
+        // 顯示證照詳細資訊
+        function showCertDetails(certId) {
+            const cert = certifications.find(c => c.id === certId);
+            if (!cert) return;
+            
+            certModalTitle.textContent = `${cert.name} - ${cert.org}`;
+            officialLink.href = cert.details.officialLink;
+            
+            certModalBody.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>考試費用:</strong> ${cert.details.cost}</p>
+                        <p><strong>考試時間:</strong> ${cert.details.duration}</p>
+                        <p><strong>題數:</strong> ${cert.details.questions}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>及格分數:</strong> ${cert.details.passingScore}</p>
+                        <p><strong>續證要求:</strong> ${cert.details.renewal}</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h6>核心技能:</h6>
+                    <div class="skill-tags">
+                        ${cert.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>適合職位:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${cert.jobRoles.map(role => `<span class="cert-badge">${getJobRoleText(role)}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>簡介:</h6>
+                    <p>${cert.description}</p>
+                </div>
+            `;
+            
+            certModal.show();
+        }
+
+        // 切換比較清單
+        function toggleCompare(certId) {
+            const index = compareList.indexOf(certId);
+            if (index === -1) {
+                if (compareList.length < 4) {
+                    compareList.push(certId);
+                } else {
+                    alert('最多只能比較4張證照');
+                    // 取消勾選
+                    document.querySelector(`.compare-checkbox[onchange="toggleCompare(${certId})"]`).checked = false;
+                    return;
+                }
+            } else {
+                compareList.splice(index, 1);
+            }
+            
+            updateCompareCount();
+            saveCompareList();
+        }
+
+        // 更新比較數量
+        function updateCompareCount() {
+            compareCount.textContent = compareList.length;
+            
+            // 如果沒有選擇任何證照，禁用比較按鈕
+            if (compareList.length === 0) {
+                compareBtn.disabled = true;
+            } else {
+                compareBtn.disabled = false;
+            }
+        }
+
+        // 儲存比較清單到 localStorage
+        function saveCompareList() {
+            localStorage.setItem('compareList', JSON.stringify(compareList));
+        }
+
+        // 清空比較清單
+        function clearCompare() {
+            compareList = [];
+            updateCompareCount();
+            saveCompareList();
+            renderCertifications();
+            compareModal.hide();
+        }
+
+        // 切換收藏
+        function toggleFavorite(certId) {
+            const index = favorites.indexOf(certId);
+            if (index === -1) {
+                favorites.push(certId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderCertifications();
+        }
+
+        // 獲取等級文字
+        function getLevelText(level) {
+            const levels = {
+                'beginner': '初學者',
+                'intermediate': '中階',
+                'advanced': '進階', 
+                'expert': '專家'
+            };
+            return levels[level] || level;
+        }
+
+        // 獲取職位文字
+        function getJobRoleText(role) {
+            const roles = {
+                'analyst': '資安分析師',
+                'pentester': '滲透測試員',
+                'auditor': '資安稽核員',
+                'engineer': '資安工程師',
+                'manager': '資安經理',
+                'consultant': '資安顧問',
+                'architect': '資安架構師'
+            };
+            return roles[role] || role;
+        }
+
+        // 滾動到指定區域
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 當比較模態框顯示時，生成比較表格
+        document.getElementById('compareModal').addEventListener('show.bs.modal', function() {
+            if (compareList.length === 0) return;
+            
+            // 獲取要比較的證照
+            const compareCerts = certifications.filter(cert => compareList.includes(cert.id));
+            
+            // 清空表格
+            compareTableBody.innerHTML = '';
+            
+            // 表頭
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th scope="col">項目</th>';
+            compareCerts.forEach(cert => {
+                headerRow.innerHTML += `<th scope="col">${cert.name}</th>`;
+            });
+            compareTableBody.appendChild(headerRow);
+            
+            // 機構列
+            const orgRow = document.createElement('tr');
+            orgRow.innerHTML = '<th scope="row">發證機構</th>';
+            compareCerts.forEach(cert => {
+                orgRow.innerHTML += `<td>${cert.org}</td>`;
+            });
+            compareTableBody.appendChild(orgRow);
+            
+            // 等級列
+            const levelRow = document.createElement('tr');
+            levelRow.innerHTML = '<th scope="row">難度等級</th>';
+            compareCerts.forEach(cert => {
+                levelRow.innerHTML += `<td>${getLevelText(cert.level)}</td>`;
+            });
+            compareTableBody.appendChild(levelRow);
+            
+            // 費用列
+            const costRow = document.createElement('tr');
+            costRow.innerHTML = '<th scope="row">考試費用</th>';
+            compareCerts.forEach(cert => {
+                costRow.innerHTML += `<td>${cert.details.cost}</td>`;
+            });
+            compareTableBody.appendChild(costRow);
+            
+            // 考試時間列
+            const durationRow = document.createElement('tr');
+            durationRow.innerHTML = '<th scope="row">考試時間</th>';
+            compareCerts.forEach(cert => {
+                durationRow.innerHTML += `<td>${cert.details.duration}</td>`;
+            });
+            compareTableBody.appendChild(durationRow);
+            
+            // 及格分數列
+            const scoreRow = document.createElement('tr');
+            scoreRow.innerHTML = '<th scope="row">及格分數</th>';
+            compareCerts.forEach(cert => {
+                scoreRow.innerHTML += `<td>${cert.details.passingScore}</td>`;
+            });
+            compareTableBody.appendChild(scoreRow);
+            
+            // 續證要求列
+            const renewalRow = document.createElement('tr');
+            renewalRow.innerHTML = '<th scope="row">續證要求</th>';
+            compareCerts.forEach(cert => {
+                renewalRow.innerHTML += `<td>${cert.details.renewal}</td>`;
+            });
+            compareTableBody.appendChild(renewalRow);
+            
+            // 核心技能列
+            const skillsRow = document.createElement('tr');
+            skillsRow.innerHTML = '<th scope="row">核心技能</th>';
+            compareCerts.forEach(cert => {
+                skillsRow.innerHTML += `<td><div class="skill-tags">${cert.skills.slice(0, 3).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}</div></td>`;
+            });
+            compareTableBody.appendChild(skillsRow);
+        });
+
+        // 動態背景初始化
+        function initDynamicBackground() {
+            const canvas = document.getElementById('dynamic-bg');
+            const ctx = canvas.getContext('2d');
+            
+            // 設置畫布大小
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 粒子系統
+            const particles = [];
+            const particleCount = 50;
+            
+            // 粒子類
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = `rgba(59, 130, 246, ${Math.random() * 0.5 + 0.1})`;
+                }
+                
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    
+                    if (this.x > canvas.width) this.x = 0;
+                    else if (this.x < 0) this.x = canvas.width;
+                    
+                    if (this.y > canvas.height) this.y = 0;
+                    else if (this.y < 0) this.y = canvas.height;
+                }
+                
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // 創建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            // 連接粒子
+            function connectParticles() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.strokeStyle = `rgba(59, 130, 246, ${0.2 * (1 - distance/100)})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 動畫循環
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                
+                connectParticles();
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+    </script>
+</body>
+</html>
