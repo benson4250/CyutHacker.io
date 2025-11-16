@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SET 社交工程攻擊完全指南 | 滲透測試與防禦</title>
+    <style>
+        .attack-cycle-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cycle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-size: 24px;
+    border: 3px solid;
+    transition: all 0.3s ease;
+}
+
+.icon-circle:hover {
+    transform: scale(1.1);
+}
+
+.icon-circle.research {
+    border-color: #ff2d55;
+    color: #ff2d55;
+    background: rgba(255, 45, 85, 0.1);
+}
+
+.icon-circle.relationship {
+    border-color: #ff6b35;
+    color: #ff6b35;
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.icon-circle.exploit {
+    border-color: #ffab00;
+    color: #ffab00;
+    background: rgba(255, 171, 0, 0.1);
+}
+
+.icon-circle.attack {
+    border-color: #29c4ff;
+    color: #29c4ff;
+    background: rgba(41, 196, 255, 0.1);
+}
+
+.cycle-arrow {
+    color: #ffab00;
+    font-size: 24px;
+    font-weight: bold;
+    animation: blink 2s infinite;
+}
+
+.cycle-item span {
+    color: #e0e0e0;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+    .attack-cycle-icons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .cycle-arrow {
+        transform: rotate(90deg);
+    }
+}
+        /* 基礎樣式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0d1117;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 資安風格動態背景 */
+        .cyber-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 171, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 45, 85, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(76, 0, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 171, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 171, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+            50% { background-position: 100% 100%, 0% 0%, 80% 80%; }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* 掃描線效果 */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 171, 0, 0.8), transparent);
+            animation: scan 3s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* 容器 */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 頁首 */
+        header {
+            background: rgba(13, 17, 23, 0.9);
+            color: #ffffff;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 171, 0, 0.2), transparent);
+            animation: headerShine 3s infinite;
+        }
+
+        @keyframes headerShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffab00, #ff2d55);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #8b949e;
+        }
+
+        /* 導覽列 */
+        nav {
+            background: rgba(13, 17, 23, 0.95);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin: 0 1rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #8b949e;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover {
+            background-color: #1c2128;
+            color: #ffab00;
+            border-color: #ffab00;
+        }
+
+        /* 主要內容區 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 文章區 */
+        article {
+            background: rgba(13, 17, 23, 0.9);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            color: #ffab00;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #30363d;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #ffab00, transparent);
+        }
+
+        h3 {
+            color: #ff2d55;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #e0e0e0;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        /* 圖片樣式 */
+        .img-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 4px;
+        }
+
+        .img-caption {
+            font-style: italic;
+            color: #8b949e;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* 程式碼區塊 */
+        pre {
+            background: #1c2128;
+            color: #e0e0e0;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            border: 1px solid #30363d;
+            border-left: 4px solid #ffab00;
+        }
+
+        code {
+            background: #1c2128;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ff2d55;
+            border: 1px solid #30363d;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border: none;
+            color: inherit;
+        }
+
+        /* 側邊欄 */
+        aside {
+            background: rgba(13, 17, 23, 0.9);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-box {
+            background: rgba(255, 171, 0, 0.1);
+            border-left: 4px solid #ffab00;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 171, 0, 0.1);
+            border-left: 4px solid #ffab00;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .danger-box {
+            background: rgba(255, 45, 85, 0.1);
+            border-left: 4px solid #ff2d55;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* 步驟樣式 */
+        .step {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ffab00;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffab00, #ff2d55);
+            color: white;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* 攻擊向量展示區 */
+        .attack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .attack-card {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+
+        .attack-card:hover {
+            border-color: #ffab00;
+            transform: translateY(-2px);
+        }
+
+        .attack-card.critical {
+            border-left: 4px solid #ff2d55;
+        }
+
+        .attack-card.high {
+            border-left: 4px solid #ff6b35;
+        }
+
+        .attack-card.medium {
+            border-left: 4px solid #ffab00;
+        }
+
+        .attack-card.low {
+            border-left: 4px solid #29c4ff;
+        }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+        }
+
+        /* 互動元素 */
+        .interactive-demo {
+            background: rgba(28, 33, 40, 0.8);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #30363d;
+        }
+
+        .demo-btn {
+            background: linear-gradient(135deg, #ffab00, #ff2d55);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 171, 0, 0.3);
+        }
+        
+        /* 表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        th {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: #ffab00;
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 171, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- 資安風格動態背景 -->
+    <div class="cyber-background"></div>
+    <div class="grid-lines"></div>
+    <div class="scan-line"></div>
+
+    <!-- 頁首 -->
+    <header>
+        <div class="container">
+            <h1>SET 社交工程攻擊完全指南</h1>
+            <p>掌握社交工程工具包的攻擊與防禦技術，提升組織安全意識</p>
+        </div>
+    </header>
+
+    <!-- 導覽列 -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#intro">SET 簡介</a></li>
+                <li><a href="#concepts">核心概念</a></li>
+                <li><a href="#setup">環境設定</a></li>
+                <li><a href="#phishing">釣魚攻擊</a></li>
+                <li><a href="#web-attacks">網站攻擊</a></li>
+                <li><a href="#attack-vectors">攻擊向量</a></li>
+                <li><a href="#defense">防禦措施</a></li>
+                <li><a href="#advanced">進階技巧</a></li>
+                <li><a href="#ethics">道德規範</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- 主要文章內容 -->
+            <article>
+                <!-- 簡介 -->
+                <section id="intro">
+                    <h2>什麼是 SET？</h2>
+                    <p><strong>SET (Social-Engineer Toolkit)</strong> 是一個專為社交工程攻擊設計的開源滲透測試框架。它由 TrustedSec 開發，預裝在 Kali Linux 中，是進行安全意識測試和紅隊演練的重要工具。</p>
+                    
+                    <h3>為什麼要學習 SET？</h3>
+                    <ul>
+                        <li><strong>專業工具</strong> - 專門為社交工程攻擊設計的完整框架</li>
+                        <li><strong>高度自動化</strong> - 簡化複雜的攻擊流程</li>
+                        <li><strong>多向量攻擊</strong> - 支援多種攻擊方式和載荷</li>
+                        <li><strong>業界標準</strong> - 被全球安全專業人士廣泛使用</li>
+                        <li><strong>持續更新</strong> - 擁有活躍的社群支持和持續開發</li>
+                    </ul>
+
+                    <h3>SET 的歷史與發展</h3>
+                    <p>SET 最初由 David Kennedy (ReL1K) 創建，旨在提供一個統一的框架來模擬真實世界的社交工程攻擊。隨著時間的推移，它已經發展成為功能完整的社交工程測試平台，成為滲透測試人員的標準工具之一。</p>
+                </section>
+
+                <!-- 核心概念 -->
+                <section id="concepts">
+                    <h2>核心概念</h2>
+                    <p>在開始使用 SET 之前，了解幾個基本概念會讓學習過程更加順利。</p>
+                    
+                    <h3>什麼是「社交工程」？</h3>
+                    <p>社交工程是利用人類心理弱點而非技術漏洞來獲取敏感資訊或訪問權限的攻擊方法。SET 專門設計用來模擬這些攻擊，幫助組織測試和提升安全意識。</p>
+                    
+                <div class="img-container">
+                    <div style="background:#1c2128;height:300px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:1px solid #30363d;position:relative;">
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+                        
+                        <div class="attack-cycle-icons">
+                            <div class="cycle-item">
+                                <div class="icon-circle research">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <span>資訊收集</span>
+                            </div>
+                            
+                            <div class="cycle-arrow">→</div>
+                            
+                            <div class="cycle-item">
+                                <div class="icon-circle relationship">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <span>建立關係</span>
+                            </div>
+                            
+                            <div class="cycle-arrow">→</div>
+                            
+                            <div class="cycle-item">
+                                <div class="icon-circle exploit">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <span>利用信任</span>
+                            </div>
+                            
+                            <div class="cycle-arrow">→</div>
+                            
+                            <div class="cycle-item">
+                                <div class="icon-circle attack">
+                                    <i class="fas fa-bug"></i>
+                                </div>
+                                <span>執行攻擊</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="img-caption">社交工程攻擊通常遵循特定的心理操縱循環</p>
+                </div>
+
+                    
+                    <h3>攻擊分類</h3>
+                    <ul>
+                        <li><strong>魚叉式釣魚</strong>：針對特定個人或組織的定制化釣魚攻擊</li>
+                        <li><strong>網站克隆</strong>：複製合法網站以竊取憑證</li>
+                        <li><strong>惡意文件</strong>：帶有惡意負載的文件，如PDF或Word文檔</li>
+                        <li><strong>多媒體攻擊</strong>：利用音頻、視頻等媒體進行攻擊</li>
+                    </ul>
+
+                    <h3>SET 工作流程</h3>
+                    <p>SET 遵循標準化的攻擊流程：目標選擇 → 攻擊向量選擇 → 負載生成 → 交付機制 → 結果收集。</p>
+                </section>
+
+                <!-- 環境設定 -->
+                <section id="setup">
+                    <h2>環境設定</h2>
+                    <p>我們假設您已經有一個準備好的 Kali Linux 環境。讓我們開始設定 SET 進行第一次測試。</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>啟動 SET</h3>
+                        <p>在 Kali Linux 中，您可以通過以下方式啟動 SET：</p>
+                        <ul>
+                            <li>在終端機中輸入：<code>setoolkit</code></li>
+                            <li>或者通過應用程式選單：Applications → 08 - Exploitation Tools → social engineering toolkit</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>接受條款</h3>
+                        <p>首次啟動時，SET 會顯示使用條款。閱讀後輸入 <code>y</code> 接受條款並繼續。</p>
+                        <pre><code>Do you accept the terms of service [y/n]: y</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>主選單導航</h3>
+                        <p>成功啟動後，您將看到 SET 主選單：</p>
+                        <pre><code>Select from the menu:
+
+    1) Social-Engineering Attacks
+    2) Penetration Testing (Fast-Track)
+    3) Third Party Modules
+    4) Update the Social-Engineer Toolkit
+    5) Update SET configuration
+    6) Help, Credits, and About
+
+99) Exit the Social-Engineer Toolkit</code></pre>
+                    </div>
+
+                    <h3>基本配置</h3>
+                    <p>在開始攻擊前，建議檢查和更新 SET 配置：</p>
+                    <pre><code>setoolkit
+5) Update SET configuration
+1) APACHE Server Port (Default:80)
+2) APACHE Server SSL Port (Default:443)
+3) Metasploit Listening Port (Default:443)</code></pre>
+                </section>
+
+                <!-- 釣魚攻擊 -->
+                <section id="phishing">
+                    <h2>釣魚攻擊實戰</h2>
+                    <p>釣魚攻擊是 SET 最常用的功能之一。讓我們從基本的魚叉式釣魚開始。</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>選擇攻擊類型</h3>
+                        <p>從主選單選擇社交工程攻擊：</p>
+                        <pre><code>1) Social-Engineering Attacks</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>選擇魚叉式釣魚</h3>
+                        <p>選擇魚叉式釣魚攻擊向量：</p>
+                        <pre><code>1) Spear-Phishing Attack Vectors</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>設置釣魚郵件</h3>
+                        <p>按照提示設置發件人、主題、內容和附件：</p>
+                        <pre><code>1) Perform a Mass Email Attack
+2) Create a FileFormat Payload
+3) Create a Social-Engineering Template</code></pre>
+                    </div>
+
+                    <h3>釣魚模板範例</h3>
+                    <p>SET 提供多種預設模板，也可以創建自定義模板：</p>
+                    <pre><code>1) HTML Email Template
+2) Professional Company Template
+3) PDF Attachment Template
+4) IT Security Alert Template
+5) Custom Template</code></pre>
+                </section>
+
+                <!-- 網站攻擊 -->
+                <section id="web-attacks">
+                    <h2>網站攻擊向量</h2>
+                    <p>SET 提供多種網站攻擊方法，用於模擬真實的網絡釣魚攻擊。</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>選擇網站攻擊</h3>
+                        <p>從社交工程攻擊選單選擇網站攻擊向量：</p>
+                        <pre><code>2) Website Attack Vectors</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>憑證收集攻擊</h3>
+                        <p>選擇憑證收集攻擊方法：</p>
+                        <pre><code>3) Credential Harvester Attack Method</code></pre>
+                        <p>這種方法會克隆一個合法網站並收集用戶輸入的憑證。</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>網站克隆</h3>
+                        <p>選擇網站克隆選項並輸入目標網站：</p>
+                        <pre><code>2) Site Cloner
+Enter the url to clone: https://www.facebook.com</code></pre>
+                    </div>
+
+                    <h3>其他網站攻擊方法</h3>
+                    <p>SET 還提供多種其他攻擊方式：</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>攻擊方法</th>
+                                <th>描述</th>
+                                <th>風險等級</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Java Applet 攻擊</td>
+                                <td>利用Java小程式漏洞</td>
+                                <td><strong style="color:#ff2d55;">高</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Metasploit 瀏覽器攻擊</td>
+                                <td>利用瀏覽器漏洞</td>
+                                <td><strong style="color:#ff2d55;">高</strong></td>
+                            </tr>
+                            <tr>
+                                <td>標籤綁架攻擊</td>
+                                <td>利用瀏覽器標籤行為</td>
+                                <td><strong style="color:#ff6b35;">中</strong></td>
+                            </tr>
+                            <tr>
+                                <td>HTA 攻擊</td>
+                                <td>使用HTML應用程式</td>
+                                <td><strong style="color:#ff6b35;">中</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 攻擊向量 -->
+                <section id="attack-vectors">
+                    <h2>攻擊向量詳解</h2>
+                    <p>了解 SET 提供的各種攻擊向量對於有效使用工具至關重要。</p>
+
+                    <div class="attack-grid">
+                        <div class="attack-card critical">
+                            <h3>魚叉式釣魚</h3>
+                            <p><strong>風險等級：嚴重</strong></p>
+                            <p>針對特定目標的定制化釣魚郵件攻擊，成功率最高。</p>
+                            <code>適用場景: 內部安全測試</code>
+                        </div>
+
+                        <div class="attack-card high">
+                            <h3>網站憑證收集</h3>
+                            <p><strong>風險等級：高</strong></p>
+                            <p>克隆合法網站並收集用戶輸入的登錄憑證。</p>
+                            <code>示例: Facebook, Gmail 克隆</code>
+                        </div>
+
+                        <div class="attack-card high">
+                            <h3>惡意文件生成</h3>
+                            <p><strong>風險等級：高</strong></p>
+                            <p>創建帶有惡意負載的PDF、Word或Excel文件。</p>
+                        </div>
+
+                        <div class="attack-card medium">
+                            <h3>QRCode 攻擊</h3>
+                            <p><strong>風險等級：中</strong></p>
+                            <p>生成惡意QRCode，引導用戶訪問釣魚網站。</p>
+                        </div>
+
+                        <div class="attack-card medium">
+                            <h3>SMS 釣魚</h3>
+                            <p><strong>風險等級：中</strong></p>
+                            <p>通過短信發送釣魚連結，針對移動設備用戶。</p>
+                        </div>
+
+                        <div class="attack-card low">
+                            <h3>資訊收集</h3>
+                            <p><strong>風險等級：低</strong></p>
+                            <p>收集目標公開資訊，為攻擊做準備。</p>
+                        </div>
+                    </div>
+
+                    <h3>攻擊成功率統計</h3>
+                    <p>根據實際測試數據，不同攻擊向量的成功率：</p>
+                    <ul>
+                        <li>魚叉式釣魚：23-28% 點擊率</li>
+                        <li>網站憑證收集：15-20% 提交率</li>
+                        <li>惡意文件附件：5-10% 執行率</li>
+                        <li>SMS 釣魚：3-7% 回應率</li>
+                    </ul>
+                </section>
+
+                <!-- 防禦措施 -->
+                <section id="defense">
+                    <h2>防禦措施與檢測</h2>
+                    <p>了解攻擊技術的同時，學習如何防禦和檢測這些攻擊同樣重要。</p>
+                    
+                    <h3>技術防禦</h3>
+                    <p>組織可以實施的技術控制措施：</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>電子郵件安全</h3>
+                        <p>實施SPF、DKIM和DMARC協議，檢測和阻止釣魚郵件。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>Web 過濾</h3>
+                        <p>使用Web內容過濾解決方案，阻止對惡意網站的訪問。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>端點保護</h3>
+                        <p>部署先進的端點檢測和響應(EDR)解決方案。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h3>多因素認證</h3>
+                        <p>實施MFA，即使憑證被竊取也能提供保護。</p>
+                    </div>
+
+                    <h3>檢測 SET 攻擊</h3>
+                    <p>SET 攻擊的一些特徵指標：</p>
+                    <ul>
+                        <li>異常的電子郵件發送模式</li>
+                        <li>證書不匹配的網站</li>
+                        <li>可疑的URL結構和重定向</li>
+                        <li>已知的SET用戶代理字串</li>
+                    </ul>
+
+                    <h3>安全意識培訓</h3>
+                    <p>人員是防禦社交工程攻擊的最後一道防線：</p>
+                    <ul>
+                        <li>定期進行釣魚模擬測試</li>
+                        <li>教育員工識別釣魚跡象</li>
+                        <li>建立明確的事件報告流程</li>
+                        <li>獎勵安全行為</li>
+                    </ul>
+                </section>
+
+                <!-- 進階技巧 -->
+                <section id="advanced">
+                    <h2>進階使用技巧</h2>
+                    
+                    <h3>自定義模板</h3>
+                    <p>創建自定義釣魚模板以提高成功率：</p>
+                    <pre><code># 編輯模板文件
+nano /usr/share/set/config/templates/template.html</code></pre>
+
+                    <h3>API 整合</h3>
+                    <p>SET 可以與其他工具整合實現自動化：</p>
+                    <pre><code># 使用SET API進行自動化攻擊
+python set_automation.py --target company.com --attack spearphishing</code></pre>
+
+                    <h3>逃避檢測技術</h3>
+                    <p>進階技巧幫助逃避安全檢測：</p>
+                    <ul>
+                        <li>域名混淆技術</li>
+                        <li>內容動態生成</li>
+                        <li>時間分散攻擊</li>
+                        <li>地理分散攻擊</li>
+                    </ul>
+
+                    <h3>報告生成</h3>
+                    <p>SET 可以生成專業的測試報告：</p>
+                    <pre><code># 生成HTML報告
+setoolkit --report-format html --output /root/reports/</code></pre>
+                </section>
+
+                <!-- 道德規範 -->
+                <section id="ethics">
+                    <h2>道德與法律規範</h2>
+                    <p>使用 SET 和其他滲透測試工具時，必須遵守嚴格的道德和法律規範。</p>
+                    
+                    <h3>合法授權</h3>
+                    <p>在進行任何測試之前，必須獲得明確的書面授權：</p>
+                    <ul>
+                        <li><strong style="color:#ff2d55;">高</strong> - 需要立即關注的嚴重漏洞</li>
+                        <li><strong style="color:#ff6b35;">中</strong> - 重要的安全問題，應該盡快修復</li>
+                        <li><strong style="color:#ffab00;">低</strong> - 潛在的安全問題，建議修復</li>
+                        <li><strong style="color:#29c4ff;">資訊</strong> - 僅供參考的資訊，不一定是安全問題</li>
+                    </ul>
+                    
+                    <h3>測試範圍界定</h3>
+                    <p>明確界定測試的範圍和限制：</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h3>目標系統</h3>
+                        <p>明確列出允許測試的系統和應用程式。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h3>測試時間</h3>
+                        <p>規定測試的具體時間範圍。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h3>攻擊方法</h3>
+                        <p>明確允許使用的攻擊技術和方法。</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h3>聯絡方式</h3>
+                        <p>提供緊急情況下中斷測試的聯絡方式。</p>
+                    </div>
+
+                    <h3>負責任披露</h3>
+                    <p>發現漏洞後的處理流程：</p>
+                    <ul>
+                        <li>立即向適當的管理層報告</li>
+                        <li>提供詳細的技術資訊和修復建議</li>
+                        <li>協助驗證修復效果</li>
+                        <li>遵守組織的披露政策</li>
+                    </ul>
+
+                    <div class="danger-box">
+                        <h3>重要法律提醒</h3>
+                        <p>請僅在您擁有或已獲得明確授權的系統上使用 SET 進行測試。未經授權的測試可能違反：</p>
+                        <ul>
+                            <li>電腦詐騙和濫用法案 (CFAA)</li>
+                            <li>歐盟一般資料保護規範 (GDPR)</li>
+                            <li>當地電腦犯罪相關法律</li>
+                        </ul>
+                        <p><strong>道德黑客守則：</strong></p>
+                        <ul>
+                            <li>始終獲得適當的書面授權</li>
+                            <li>尊重隱私和資料保護</li>
+                            <li>負責任地披露發現的漏洞</li>
+                            <li>使用技能來改善安全性，而不是破壞它</li>
+                        </ul>
+                    </div>
+                    
+                    <p>遵循這些準則，確保您的安全測試活動既有效又合法！</p>
+                </section>
+            </article>
+
+            <!-- 側邊欄 -->
+            <aside>
+                <div class="info-box">
+                    <h3>快速提醒</h3>
+                    <p>SET 預裝在 Kali Linux 中，可直接使用。確保系統已更新到最新版本。</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h3>測試目標</h3>
+                    <p>僅使用授權的測試環境：</p>
+                    <p><code>自家實驗環境</code></p>
+                    <p><code>獲得授權的客戶系統</code></p>
+                    <p>專門的測試平台</p>
+                </div>
+                
+                <div class="danger-box">
+                    <h3>法律須知</h3>
+                    <p>未經授權使用 SET 可能構成犯罪。始終獲得明確的書面授權。</p>
+                </div>
+                
+                <h3>教學大綱</h3>
+                <ul>
+                    <li><a href="#intro" style="color:#ffab00;">SET 簡介</a></li>
+                    <li><a href="#concepts" style="color:#ffab00;">核心概念</a></li>
+                    <li><a href="#setup" style="color:#ffab00;">環境設定</a></li>
+                    <li><a href="#phishing" style="color:#ffab00;">釣魚攻擊</a></li>
+                    <li><a href="#web-attacks" style="color:#ffab00;">網站攻擊</a></li>
+                    <li><a href="#attack-vectors" style="color:#ffab00;">攻擊向量</a></li>
+                    <li><a href="#defense" style="color:#ffab00;">防禦措施</a></li>
+                    <li><a href="#advanced" style="color:#ffab00;">進階技巧</a></li>
+                    <li><a href="#ethics" style="color:#ffab00;">道德規範</a></li>
+                </ul>
+                
+                <h3>攻擊風險等級</h3>
+                <ul>
+                    <li><strong style="color:#ff2d55;">高</strong> - 嚴重風險</li>
+                    <li><strong style="color:#ff6b35;">中</strong> - 中等風險</li>
+                    <li><strong style="color:#ffab00;">低</strong> - 低度風險</li>
+                    <li><strong style="color:#29c4ff;">資訊</strong> - 參考資訊</li>
+                </ul>
+
+                <h3>快捷指令</h3>
+                <pre style="font-size:0.8rem;"><code>啟動 SET: setoolkit
+更新 SET: git clone https://github.com/trustedsec/social-engineer-toolkit/
+快速測試: setoolkit --quick</code></pre>
+                
+                <h3>有用資源</h3>
+                <ul>
+                    <li><a href="https://github.com/trustedsec/social-engineer-toolkit" style="color:#ffab00;">SET GitHub</a></li>
+                    <li><a href="https://www.trustedsec.com/tools/social-engineer-toolkit/" style="color:#ffab00;">官方網站</a></li>
+                    <li><a href="https://www.social-engineer.org/" style="color:#ffab00;">社交工程資源</a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 網路安全技術專題 | 社交工程攻擊與防禦研究</p>
+            <p>本專題致力於推廣網路安全教育與道德黑客精神</p>
+        </div>
+    </footer>
+
+    <script>
+        // 簡單的滾動效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+
+            // 掃描線效果
+            const scanLine = document.querySelector('.scan-line');
+            setInterval(() => {
+                scanLine.style.animation = 'none';
+                setTimeout(() => {
+                    scanLine.style.animation = 'scan 3s linear infinite';
+                }, 10);
+            }, 3000);
+            
+            // 平滑滾動
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
