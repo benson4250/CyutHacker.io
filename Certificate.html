@@ -31,6 +31,33 @@
             overflow-x: hidden;
             position: relative;
         }
+        /* 證照圖片樣式 */
+        #certImage {
+            border: 2px solid var(--accent-primary);
+            padding: 10px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #certImageFallback {
+            color: var(--accent-primary);
+            opacity: 0.7;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            #certImage {
+                max-height: 150px !important;
+            }
+            
+            .modal-body .row {
+                flex-direction: column;
+            }
+            
+            .modal-body .col-md-4 {
+                margin-bottom: 20px;
+            }
+        }
 
         /* 動態背景 */
         #dynamic-bg {
@@ -963,7 +990,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="certModalBody">
-                    <!-- 內容由 JavaScript 動態生成 -->
+                    <!-- 圖片區域 -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 text-center">
+                            <div id="certImageContainer">
+                                <img id="certImage" src="" alt="證照圖片" class="img-fluid rounded" style="max-height: 200px;">
+                                <div id="certImageFallback" class="d-none">
+                                    <i class="fas fa-certificate fa-5x text-primary"></i>
+                                    <p class="mt-2 text-muted">暫無圖片</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="certBasicInfo">
+                                <!-- 基本資訊會動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 詳細內容區域 -->
+                    <div id="certDetailedContent">
+                        <!-- 詳細內容會動態生成 -->
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cyber" data-bs-dismiss="modal">關閉</button>
@@ -1064,6 +1112,7 @@
                 level: "expert",
                 jobRoles: ["manager", "consultant", "architect"],
                 logo: "fa-shield-alt",
+                image: "https://ainetwork-training.com/wp-content/uploads/2024/03/%E6%96%B0%E7%B6%B2%E7%AB%99%E8%AA%B2%E7%A8%8B%E5%B0%81%E9%9D%A2-59.png", // 新增圖片URL
                 description: "針對資安領導者的頂級認證，涵蓋八個資安領域，是全球公認的資訊安全領導認證。",
                 skills: ["安全與風險管理", "資產安全", "安全架構與工程", "通訊與網路安全", "身份與存取管理", "安全評估與測試", "安全運營", "軟體開發安全"],
                 details: {
@@ -1085,6 +1134,7 @@
                 level: "intermediate",
                 jobRoles: ["pentester", "analyst", "engineer"],
                 logo: "fa-user-secret",
+                image: "https://www.eccouncil.org/wp-content/uploads/2024/09/CEH-black.png", // 新增圖片URL
                 description: "道德駭客認證，教授駭客工具與技術以進行滲透測試，是進攻性安全領域的入門認證。",
                 skills: ["Footprinting 和偵察", "掃描網絡", "枚舉", "漏洞分析", "系統入侵", "惡意軟體威脅", "嗅探", "社交工程", "拒絕服務", "會期劫持", "繞過入侵檢測系統", "防火牆和蜜罐", "黑客網站服務器", "黑客網站應用程序", "SQL注入", "黑客無線網絡", "黑客移動平台", "雲計算", "加密"],
                 details: {
@@ -1492,30 +1542,9 @@
             questions: "60-70題",
             passingScore: "825/1000分",
             renewal: "每3年需重新認證",
-            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna-security.html"
+            officialLink: "https://www.cisco.com/site/us/en/learn/training-certifications/training/courses/ccna.html"
         },
         tags: ["網路安全", "Cisco", "基礎設施", "企業需求"],
-        popularity: 4
-    },
-    {
-        id: 23,
-        name: "CCNP Security",
-        org: "Cisco",
-        domain: "network",
-        level: "advanced",
-        jobRoles: ["network security architect", "senior security engineer", "security consultant"],
-        logo: "fa-shield-virus",
-        description: "思科認證資深網路安全專家，專注於複雜網路安全解決方案的設計與實施。",
-        skills: ["進階網路安全", "安全解決方案架構", "雲端安全整合", "自動化與編程", "威脅防禦", "安全網路訪問"],
-        details: {
-            cost: "約 $1,200 USD (多個考試)",
-            duration: "各考試90-120分鐘",
-            questions: "多個核心與選修考試",
-            passingScore: "依各考試而定",
-            renewal: "每3年需重新認證",
-            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/ccnp-security.html"
-        },
-        tags: ["網路安全", "Cisco", "進階認證", "企業需求"],
         popularity: 4
     },
     {
@@ -2085,6 +2114,888 @@
     tags: ["漏洞評估", "弱點管理", "風險評級", "藍隊"],
     popularity: 3
 },
+{
+    id: 51,
+    name: "C|BLA",
+    org: "EC-Council",
+    domain: "management",
+    level: "intermediate",
+    jobRoles: ["blue team lead", "SOC manager", "security operations"],
+    logo: "fa-shield-alt",
+    description: "藍隊領導認證，專注於防禦性安全操作、團隊管理與安全監控策略。",
+    skills: ["藍隊策略", "SOC運營", "威脅偵測", "事件響應管理", "團隊領導", "安全指標"],
+    details: {
+        cost: "約 $950 USD",
+        duration: "4小時",
+        questions: "100題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-blue-team-leader-cbla/"
+    },
+    tags: ["藍隊", "防禦安全", "SOC管理", "團隊領導"],
+    popularity: 3
+},
+{
+    id: 52,
+    name: "C|VA",
+    org: "EC-Council",
+    domain: "audit",
+    level: "intermediate",
+    jobRoles: ["vulnerability analyst", "security assessor", "compliance auditor"],
+    logo: "fa-search",
+    description: "漏洞分析師認證，專注於漏洞評估、風險分析與修復建議。",
+    skills: ["漏洞掃描", "風險評估", "修復優先級", "評估報告", "合規檢查"],
+    details: {
+        cost: "約 $850 USD",
+        duration: "4小時",
+        questions: "100題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-vulnerability-assessor-cva/"
+    },
+    tags: ["漏洞評估", "風險分析", "藍隊", "合規"],
+    popularity: 3
+},
+{
+    id: 53,
+    name: "C|EI",
+    org: "EC-Council",
+    domain: "incident",
+    level: "intermediate",
+    jobRoles: ["incident responder", "SOC analyst", "forensics investigator"],
+    logo: "fa-ambulance",
+    description: "事件響應員認證，專注於安全事件偵測、分析與響應流程。",
+    skills: ["事件分類", "事件遏制", "證據收集", "根因分析", "事後報告"],
+    details: {
+        cost: "約 $950 USD",
+        duration: "4小時",
+        questions: "100題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-incident-handler-ecih/"
+    },
+    tags: ["事件響應", "SOC", "應急處理", "藍隊"],
+    popularity: 4
+},
+{
+    id: 54,
+    name: "C|SCU",
+    org: "EC-Council",
+    domain: "securecoding",
+    level: "intermediate",
+    jobRoles: ["secure developer", "application security", "code reviewer"],
+    logo: "fa-code",
+    description: "安全編碼員認證，專注於安全編碼實踐與常見漏洞防範。",
+    skills: ["安全編碼原則", "輸入驗證", "身份驗證", "會話管理", "錯誤處理"],
+    details: {
+        cost: "約 $750 USD",
+        duration: "3小時",
+        questions: "75題",
+        passingScore: "70%",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-secure-computer-user-cscu/"
+    },
+    tags: ["安全編碼", "應用安全", "開發安全", "OWASP"],
+    popularity: 3
+},
+{
+    id: 55,
+    name: "C|DRE",
+    org: "EC-Council",
+    domain: "forensics",
+    level: "advanced",
+    jobRoles: ["digital forensics expert", "incident responder", "evidence analyst"],
+    logo: "fa-microscope",
+    description: "數位證據回應專家認證，專注於進階的數位證據收集與分析技術。",
+    skills: ["進階取證技術", "記憶體分析", "惡意程式分析", "雲端取證", "移動設備取證"],
+    details: {
+        cost: "約 $1,199 USD",
+        duration: "6小時實戰考試",
+        questions: "多個實戰挑戰",
+        passingScore: "完成所有取證挑戰",
+        renewal: "每年需獲得60 ECE學分",
+        officialLink: "https://www.eccouncil.org/programs/certified-digital-forensics-examiner-cdfe/"
+    },
+    tags: ["數位鑑識", "進階技術", "證據分析", "專家級"],
+    popularity: 4
+},
+{
+    id: 56,
+    name: "GMOB",
+    org: "SANS",
+    domain: "pentest",
+    level: "intermediate",
+    jobRoles: ["mobile pentester", "app security analyst", "mobile developer"],
+    logo: "fa-mobile-alt",
+    description: "移動設備滲透測試員認證，專注於iOS和Android平台的安全測試。",
+    skills: ["iOS安全測試", "Android安全測試", "移動應用逆向", "移動設備取證", "無線安全"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/mobile-device-security-analyst-gmob"
+    },
+    tags: ["移動安全", "iOS/Android", "應用測試", "新興領域"],
+    popularity: 4
+},
+{
+    id: 57,
+    name: "GCCC",
+    org: "SANS",
+    domain: "cloud",
+    level: "intermediate",
+    jobRoles: ["cloud security engineer", "cloud architect", "DevSecOps"],
+    logo: "fa-cloud",
+    description: "雲端安全認證，專注於多雲環境的安全配置與管理。",
+    skills: ["AWS安全", "Azure安全", "GCP安全", "雲端架構", "容器安全"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/cloud-security-automation-gcca"
+    },
+    tags: ["雲端安全", "多雲環境", "自動化", "企業需求"],
+    popularity: 4
+},
+{
+    id: 58,
+    name: "GDSA",
+    org: "SANS",
+    domain: "architecture",
+    level: "advanced",
+    jobRoles: ["security architect", "solution architect", "technical lead"],
+    logo: "fa-chess-board",
+    description: "防禦性安全架構師認證，專注於企業級安全架構設計與實施。",
+    skills: ["安全架構設計", "零信任架構", "網路分段", "身份管理", "安全控制"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/defense-security-architecture-gdsa"
+    },
+    tags: ["安全架構", "防禦設計", "企業級", "零信任"],
+    popularity: 4
+},
+{
+    id: 59,
+    name: "GOSI",
+    org: "SANS",
+    domain: "incident",
+    level: "intermediate",
+    jobRoles: ["open source investigator", "threat intelligence", "SOC analyst"],
+    logo: "fa-search",
+    description: "開源情報調查員認證，專注於公開來源情報收集與分析。",
+    skills: ["OSINT技術", "社交媒體調查", "域名分析", "圖像分析", "情報報告"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/open-source-intelligence-gosi"
+    },
+    tags: ["OSINT", "威脅情報", "調查技能", "新興領域"],
+    popularity: 3
+},
+{
+    id: 60,
+    name: "GICSP",
+    org: "SANS",
+    domain: "ICS",
+    level: "intermediate",
+    jobRoles: ["ICS security", "OT security", "industrial security"],
+    logo: "fa-industry",
+    description: "工業控制系統安全認證，專注於工控系統與操作技術安全。",
+    skills: ["ICS架構", "SCADA安全", "PLC安全", "工業協議", "OT風險管理"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/industrial-control-systems-security-gicsp"
+    },
+    tags: ["工控安全", "OT安全", "關鍵基礎設施", "專業領域"],
+    popularity: 4
+},
+{
+    id: 61,
+    name: "GRID",
+    org: "SANS",
+    domain: "incident",
+    level: "advanced",
+    jobRoles: ["incident responder", "forensics expert", "malware analyst"],
+    logo: "fa-biohazard",
+    description: "事件響應與鑑識專家認證，專注於複雜安全事件的深度調查。",
+    skills: ["進階事件響應", "記憶體取證", "惡意程式分析", "網路取證", "高級調查技術"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "82-115題",
+        passingScore: "68%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/incident-response-forensics-grid"
+    },
+    tags: ["事件響應", "進階鑑識", "惡意程式分析", "專家級"],
+    popularity: 4
+},
+{
+    id: 62,
+    name: "GASF",
+    org: "SANS",
+    domain: "forensics",
+    level: "advanced",
+    jobRoles: ["advanced forensics", "security researcher", "incident investigator"],
+    logo: "fa-user-secret",
+    description: "進階安全鑑識專家認證，專注於反取證技術與進階調查方法。",
+    skills: ["反取證技術", "進階檔案系統", "加密數據取證", "隱寫術檢測", "深度取證"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "82-115題",
+        passingScore: "68%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/advanced-security-forensics-gasf"
+    },
+    tags: ["進階鑑識", "反取證", "深度調查", "專家級"],
+    popularity: 4
+},
+{
+    id: 63,
+    name: "GPCS",
+    org: "SANS",
+    domain: "cloud",
+    level: "advanced",
+    jobRoles: ["cloud security specialist", "cloud architect", "DevSecOps"],
+    logo: "fa-cloud",
+    description: "雲端安全專家認證，專注於雲端環境的進階安全配置與管理。",
+    skills: ["雲端安全架構", "容器安全", "無伺服器安全", "雲端監控", "雲端合規"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/cloud-security-expert-gpcss"
+    },
+    tags: ["雲端安全", "進階技術", "容器化", "企業需求"],
+    popularity: 4
+},
+{
+    id: 64,
+    name: "GWEB",
+    org: "SANS",
+    domain: "pentest",
+    level: "intermediate",
+    jobRoles: ["web app pentester", "bug bounty hunter", "app security engineer"],
+    logo: "fa-globe",
+    description: "網頁應用程式安全專家認證，專注於現代網頁應用程式的安全測試。",
+    skills: ["現代Web框架", "API安全", "單頁應用安全", "OWASP Top 10", "自動化測試"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/web-application-penetration-tester-gweb"
+    },
+    tags: ["網頁安全", "現代應用", "API測試", "實務技能"],
+    popularity: 4
+},
+{
+    id: 65,
+    name: "GSNA",
+    org: "SANS",
+    domain: "audit",
+    level: "intermediate",
+    jobRoles: ["security auditor", "compliance officer", "risk assessor"],
+    logo: "fa-clipboard-list",
+    description: "安全與網路審計員認證，專注於安全控制審計與合規驗證。",
+    skills: ["安全審計", "控制評估", "合規檢查", "風險評估", "審計報告"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/security-audit-gsna"
+    },
+    tags: ["安全審計", "合規", "控制評估", "企業需求"],
+    popularity: 4
+},
+{
+    id: 66,
+    name: "GCPM",
+    org: "SANS",
+    domain: "management",
+    level: "intermediate",
+    jobRoles: ["security manager", "project manager", "team lead"],
+    logo: "fa-tasks",
+    description: "網路安全專案管理認證，專注於安全專案的規劃、執行與管理。",
+    skills: ["專案規劃", "資源管理", "時程控制", "風險管理", "專案溝通"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/cybersecurity-project-management-gcpm"
+    },
+    tags: ["專案管理", "安全專案", "管理技能", "企業需求"],
+    popularity: 3
+},
+{
+    id: 67,
+    name: "GSTRT",
+    org: "SANS",
+    domain: "management",
+    level: "advanced",
+    jobRoles: ["threat intelligence", "SOC manager", "security director"],
+    logo: "fa-chess",
+    description: "威脅追獵團隊領導認證，專注於威脅追獵計畫的建立與管理。",
+    skills: ["威脅追獵方法論", "團隊建設", "指標開發", "威脅情報", "計畫管理"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/threat-hunting-team-lead-gstrt"
+    },
+    tags: ["威脅追獵", "團隊領導", "威脅情報", "進階管理"],
+    popularity: 4
+},
+{
+    id: 68,
+    name: "GCTI",
+    org: "SANS",
+    domain: "threatintel",
+    level: "intermediate",
+    jobRoles: ["threat intelligence", "SOC analyst", "security researcher"],
+    logo: "fa-brain",
+    description: "網路威脅情報認證，專注於威脅情報收集、分析與應用。",
+    skills: ["情報收集", "威脅分析", "指標提取", "情報報告", "戰術應用"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/cyber-threat-intelligence-gcti"
+    },
+    tags: ["威脅情報", "情報分析", "SOC支援", "新興領域"],
+    popularity: 4
+},
+{
+    id: 69,
+    name: "GDAT",
+    org: "SANS",
+    domain: "analytics",
+    level: "advanced",
+    jobRoles: ["security data analyst", "threat hunter", "SOC analyst"],
+    logo: "fa-chart-line",
+    description: "防禦性安全分析與威脅追獵認證，專注於安全數據分析技術。",
+    skills: ["安全分析", "數據可視化", "異常檢測", "威脅追獵", "機器學習應用"],
+    details: {
+        cost: "約 $2,499 USD (含培訓)",
+        duration: "3小時",
+        questions: "75-82題",
+        passingScore: "71%",
+        renewal: "每4年需獲得36 CPE學分",
+        officialLink: "https://www.giac.org/certifications/defensive-security-analysis-gdat"
+    },
+    tags: ["安全分析", "數據科學", "威脅追獵", "進階技術"],
+    popularity: 4
+},
+{
+    id: 70,
+    name: "GSE",
+    org: "SANS",
+    domain: "management",
+    level: "expert",
+    jobRoles: ["security expert", "CISO", "security consultant"],
+    logo: "fa-gem",
+    description: "SANS安全專家認證，是SANS最高級別的認證，需要通過多個考試與實戰挑戰。",
+    skills: ["全面安全知識", "技術深度", "管理廣度", "實戰能力", "溝通技巧"],
+    details: {
+        cost: "約 $7,500 USD (含所有要求)",
+        duration: "多個考試與實戰挑戰",
+        questions: "綜合評估",
+        passingScore: "通過所有評估環節",
+        renewal: "每4年需重新認證",
+        officialLink: "https://www.giac.org/certifications/security-expert-gse"
+    },
+    tags: ["專家級", "綜合能力", "SANS最高認證", "業界認可"],
+    popularity: 5
+},
+    {
+        id: 71,
+        name: "Cisco Certified CyberOps Associate",
+        org: "Cisco",
+        domain: "incident",
+        level: "beginner",
+        jobRoles: ["SOC analyst", "security operations", "incident responder"],
+        logo: "fa-shield-alt",
+        description: "思科網路安全操作助理認證，專注於安全操作中心(SOC)的基礎技能與事件響應。",
+        skills: ["安全監控", "事件分析", "網路取證", "安全事件響應", "日誌分析"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "120分鐘",
+            questions: "95-105題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/cyberops-associate.html"
+        },
+        tags: ["SOC", "安全操作", "入門級", "事件響應"],
+        popularity: 4
+    },
+    {
+        id: 72,
+        name: "Cisco CCNP Security",
+        org: "Cisco",
+        domain: "network",
+        level: "advanced",
+        jobRoles: ["security engineer", "network security architect", "security consultant"],
+        logo: "fa-chess-knight",
+        description: "思科認證資深網路安全專家，專注於企業級安全解決方案的設計、實施與運維。",
+        skills: ["安全解決方案架構", "網路安全", "雲端安全", "自動化", "零信任架構"],
+        details: {
+            cost: "約 $400 USD (核心考試)",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/ccnp-security.html"
+        },
+        tags: ["進階認證", "企業安全", "網路安全", "業界認可"],
+        popularity: 5
+    },
+    {
+        id: 73,
+        name: "Cisco CCIE Security",
+        org: "Cisco",
+        domain: "network",
+        level: "expert",
+        jobRoles: ["security architect", "principal engineer", "security consultant"],
+        logo: "fa-crown",
+        description: "思科認證網路安全專家，是Cisco最高級別的網路安全認證，需要通過筆試與實戰實驗考試。",
+        skills: ["企業安全架構", "複雜威脅防禦", "安全自動化", "零信任架構", "雲端安全整合"],
+        details: {
+            cost: "$400 (筆試) + $1,600 (實驗)",
+            duration: "筆試2小時 + 實驗8小時",
+            questions: "筆試+實戰實驗",
+            passingScore: "通過筆試與實驗考試",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/expert/ccie-security.html"
+        },
+        tags: ["專家級", "最高認證", "業界認可", "技術巔峰"],
+        popularity: 5
+    },
+    {
+        id: 74,
+        name: "Cisco Certified DevNet Associate - Security Focus",
+        org: "Cisco",
+        domain: "automation",
+        level: "intermediate",
+        jobRoles: ["security automation engineer", "DevSecOps", "network programmer"],
+        logo: "fa-robot",
+        description: "思科開發者網路安全專注認證，專注於安全自動化、API集成與DevSecOps實踐。",
+        skills: ["Python編程", "REST API", "安全自動化", "CI/CD安全", "基礎設施即代碼"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/devnet-associate.html"
+        },
+        tags: ["自動化", "DevSecOps", "編程", "新興技術"],
+        popularity: 4
+    },
+    {
+        id: 75,
+        name: "Cisco Security Core Specialist",
+        org: "Cisco",
+        domain: "network",
+        level: "intermediate",
+        jobRoles: ["security engineer", "network security", "security administrator"],
+        logo: "fa-certificate",
+        description: "思科安全核心專家認證，專注於核心網路安全技術與Cisco安全解決方案。",
+        skills: ["網路安全基礎", "Cisco安全產品", "威脅防護", "安全架構", "實施技能"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-core.html"
+        },
+        tags: ["核心技能", "專家認證", "Cisco生態", "技術深度"],
+        popularity: 4
+    },
+    {
+        id: 76,
+        name: "Cisco Secure Firewall Specialist",
+        org: "Cisco",
+        domain: "network",
+        level: "intermediate",
+        jobRoles: ["firewall administrator", "network security", "security engineer"],
+        logo: "fa-fire",
+        description: "思科安全防火牆專家認證，專注於Cisco防火牆技術的深度知識與實務技能。",
+        skills: ["防火牆配置", "威脅防護", "VPN設置", "策略管理", "故障排除"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-firewall.html"
+        },
+        tags: ["防火牆", "網路安全", "專家認證", "Cisco產品"],
+        popularity: 4
+    },
+    {
+        id: 77,
+        name: "Cisco Identity Services Engine Specialist",
+        org: "Cisco",
+        domain: "identity",
+        level: "intermediate",
+        jobRoles: ["identity management", "network security", "access control"],
+        logo: "fa-user-lock",
+        description: "思科身份服務引擎專家認證，專注於網路訪問控制與身份管理解決方案。",
+        skills: ["ISE部署", "身份驗證", "授權策略", "端點合規", "訪客訪問"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-ise.html"
+        },
+        tags: ["身份管理", "訪問控制", "零信任", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 78,
+        name: "Cisco Secure Network Analytics Specialist",
+        org: "Cisco",
+        domain: "network",
+        level: "intermediate",
+        jobRoles: ["network analyst", "security monitor", "threat hunter"],
+        logo: "fa-chart-line",
+        description: "思科安全網路分析專家認證，專注於網路流量分析與異常檢測技術。",
+        skills: ["網路可視性", "異常檢測", "威脅追獵", "流量分析", "Stealthwatch操作"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-stealthwatch.html"
+        },
+        tags: ["網路監控", "流量分析", "威脅偵測", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 79,
+        name: "Cisco Secure Cloud Analytics Specialist",
+        org: "Cisco",
+        domain: "cloud",
+        level: "intermediate",
+        jobRoles: ["cloud security", "threat detection", "security analyst"],
+        logo: "fa-cloud",
+        description: "思科安全雲端分析專家認證，專注於雲端工作負載的可視性與威脅檢測。",
+        skills: ["雲端工作負載保護", "異常檢測", "雲端取證", "合規監控", "多雲安全"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-cloud-analytics.html"
+        },
+        tags: ["雲端安全", "工作負載保護", "威脅檢測", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 80,
+        name: "Cisco Zero Trust Specialist",
+        org: "Cisco",
+        domain: "architecture",
+        level: "advanced",
+        jobRoles: ["security architect", "zero trust engineer", "security consultant"],
+        logo: "fa-user-shield",
+        description: "思科零信任專家認證，專注於零信任架構的設計與實施。",
+        skills: ["零信任原則", "微分段", "身份驗證", "持續驗證", "策略實施"],
+        details: {
+            cost: "約 $400 USD",
+            duration: "120分鐘",
+            questions: "65-75題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/zero-trust.html"
+        },
+        tags: ["零信任", "安全架構", "進階認證", "現代安全"],
+        popularity: 4
+    },
+    {
+        id: 71,
+        name: "Cybersecurity Associate",
+        org: "Cisco",
+        domain: "security",
+        level: "beginner",
+        jobRoles: ["SOC analyst", "security operations", "cybersecurity technician"],
+        logo: "fa-shield-alt",
+        description: "網路安全助理認證，專注於基礎網路安全概念、安全操作與監控技能。",
+        skills: ["安全基礎概念", "網路監控", "威脅識別", "安全操作", "事件響應基礎"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "120分鐘",
+            questions: "95-105題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/cybersecurity-associate.html"
+        },
+        tags: ["入門級", "安全基礎", "SOC", "新手友善"],
+        popularity: 4
+    },
+    {
+        id: 72,
+        name: "Cybersecurity Professional",
+        org: "Cisco",
+        domain: "security",
+        level: "advanced",
+        jobRoles: ["security engineer", "cybersecurity analyst", "security consultant"],
+        logo: "fa-chess-knight",
+        description: "網路安全專業認證，專注於進階威脅防護、安全基礎設施與安全操作。",
+        skills: ["威脅防護", "安全基礎設施", "安全操作", "漏洞管理", "安全策略"],
+        details: {
+            cost: "約 $400 USD",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/cybersecurity-professional.html"
+        },
+        tags: ["進階認證", "威脅防護", "安全基礎設施", "業界認可"],
+        popularity: 5
+    },
+    {
+        id: 73,
+        name: "CCNP Security",
+        org: "Cisco",
+        domain: "security",
+        level: "advanced",
+        jobRoles: ["security engineer", "network security architect", "security consultant"],
+        logo: "fa-certificate",
+        description: "思科認證資深網路安全專家，專注於企業級安全解決方案的設計與實施。",
+        skills: ["安全解決方案架構", "網路安全", "雲端安全", "自動化", "零信任架構"],
+        details: {
+            cost: "約 $400 USD (核心考試)",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/ccnp-security.html"
+        },
+        tags: ["專業級", "企業安全", "解決方案架構", "核心認證"],
+        popularity: 5
+    },
+    {
+        id: 74,
+        name: "Cisco Certified Specialist - Security Core",
+        org: "Cisco",
+        domain: "security",
+        level: "intermediate",
+        jobRoles: ["security engineer", "network security", "security administrator"],
+        logo: "fa-shield-alt",
+        description: "思科安全核心專家認證，驗證核心安全技術與解決方案實施能力。",
+        skills: ["安全核心技術", "網路安全", "威脅防護", "安全實施", "故障排除"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-core.html"
+        },
+        tags: ["專家認證", "核心技術", "安全實施", "技術深度"],
+        popularity: 4
+    },
+    {
+        id: 75,
+        name: "Cisco Certified Specialist - Security Identity Management Implementation",
+        org: "Cisco",
+        domain: "security",
+        level: "intermediate",
+        jobRoles: ["identity management", "security engineer", "access control specialist"],
+        logo: "fa-user-lock",
+        description: "安全身份管理實施專家認證，專注於身份服務引擎(ISE)與訪問控制解決方案。",
+        skills: ["身份服務引擎", "訪問控制", "身份驗證", "授權策略", "端點合規"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/security-identity-management.html"
+        },
+        tags: ["身份管理", "訪問控制", "零信任", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 76,
+        name: "Cisco Certified Specialist - Network Security Firepower",
+        org: "Cisco",
+        domain: "security",
+        level: "intermediate",
+        jobRoles: ["firewall administrator", "security engineer", "network security"],
+        logo: "fa-fire",
+        description: "網路安全Firepower專家認證，專注於Firepower次世代防火牆的配置與管理。",
+        skills: ["Firepower管理", "威脅防護", "入侵防禦", "URL過濾", "AMP配置"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/network-security-firepower.html"
+        },
+        tags: ["防火牆", "威脅防護", "Firepower", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 77,
+        name: "Cisco Certified Specialist - Enterprise Advanced Infrastructure",
+        org: "Cisco",
+        domain: "enterprise",
+        level: "intermediate",
+        jobRoles: ["network engineer", "enterprise security", "infrastructure engineer"],
+        logo: "fa-network-wired",
+        description: "企業進階基礎設施專家認證，包含企業網路中的安全設計與實施。",
+        skills: ["企業網路設計", "安全基礎設施", "SD-WAN安全", "無線安全", "自動化"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/enterprise-advanced-infrastructure.html"
+        },
+        tags: ["企業網路", "基礎設施", "SD-WAN", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 78,
+        name: "Cisco Certified Specialist - Data Center Security",
+        org: "Cisco",
+        domain: "data-center",
+        level: "intermediate",
+        jobRoles: ["data center security", "cloud security", "infrastructure security"],
+        logo: "fa-database",
+        description: "數據中心安全專家認證，專注於數據中心環境的安全設計與實施。",
+        skills: ["數據中心安全", "ACI安全", "虛擬化安全", "存儲安全", "合規"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/data-center-security.html"
+        },
+        tags: ["數據中心", "雲端安全", "基礎設施", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 79,
+        name: "DevNet Associate",
+        org: "Cisco",
+        domain: "devnet",
+        level: "intermediate",
+        jobRoles: ["security automation", "DevSecOps", "network programmer"],
+        logo: "fa-code",
+        description: "開發者網路助理認證，專注於網路自動化、API與軟體開發基礎。",
+        skills: ["Python編程", "REST API", "自動化腳本", "版本控制", "CI/CD基礎"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/devnet-associate.html"
+        },
+        tags: ["自動化", "編程", "DevNet", "新興技術"],
+        popularity: 4
+    },
+    {
+        id: 80,
+        name: "DevNet Professional - Security Automation",
+        org: "Cisco",
+        domain: "devnet",
+        level: "advanced",
+        jobRoles: ["security automation engineer", "DevSecOps", "software developer"],
+        logo: "fa-robot",
+        description: "開發者網路安全自動化專業認證，專注於安全自動化與DevSecOps實踐。",
+        skills: ["安全自動化", "API集成", "CI/CD安全", "基礎設施即代碼", "安全編程"],
+        details: {
+            cost: "約 $400 USD",
+            duration: "120分鐘",
+            questions: "90-110題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/devnet-professional.html"
+        },
+        tags: ["安全自動化", "DevSecOps", "專業級", "現代技能"],
+        popularity: 4
+    },
+    {
+        id: 81,
+        name: "Cisco Meraki Solutions Specialist",
+        org: "Cisco",
+        domain: "meraki",
+        level: "intermediate",
+        jobRoles: ["network administrator", "cloud security", "Meraki specialist"],
+        logo: "fa-cloud",
+        description: "思科Meraki解決方案專家認證，專注於雲端管理網路與安全解決方案。",
+        skills: ["Meraki管理", "雲端安全", "SD-WAN", "無線安全", "安全策略"],
+        details: {
+            cost: "約 $300 USD",
+            duration: "90分鐘",
+            questions: "55-65題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/specialist/meraki-solutions-specialist.html"
+        },
+        tags: ["雲端管理", "Meraki", "SD-WAN", "專家認證"],
+        popularity: 4
+    },
+    {
+        id: 82,
+        name: "Cisco Certified Support Technician - Cybersecurity",
+        org: "Cisco",
+        domain: "security",
+        level: "beginner",
+        jobRoles: ["support technician", "help desk", "security assistant"],
+        logo: "fa-headset",
+        description: "思科認證支援技術員 - 網路安全，專注於基礎安全支援與故障排除技能。",
+        skills: ["安全基礎", "故障排除", "客戶支援", "安全工具", "文檔記錄"],
+        details: {
+            cost: "約 $200 USD",
+            duration: "60分鐘",
+            questions: "40-50題",
+            passingScore: "825/1000分",
+            renewal: "每3年需重新認證",
+            officialLink: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/technician/support-technician-cybersecurity.html"
+        },
+        tags: ["支援技術", "入門級", "客戶支援", "基礎技能"],
+        popularity: 3
+    },
         ];
 
         // DOM 元素
@@ -2313,46 +3224,82 @@ function filterCerts() {
             filterCerts();
         }
 
-        // 顯示證照詳細資訊
-        function showCertDetails(certId) {
-            const cert = certifications.find(c => c.id === certId);
-            if (!cert) return;
-            
-            certModalTitle.textContent = `${cert.name} - ${cert.org}`;
-            officialLink.href = cert.details.officialLink;
-            
-            certModalBody.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>考試費用:</strong> ${cert.details.cost}</p>
-                        <p><strong>考試時間:</strong> ${cert.details.duration}</p>
-                        <p><strong>題數:</strong> ${cert.details.questions}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>及格分數:</strong> ${cert.details.passingScore}</p>
-                        <p><strong>續證要求:</strong> ${cert.details.renewal}</p>
-                    </div>
+// 顯示證照詳細資訊
+function showCertDetails(certId) {
+    const cert = certifications.find(c => c.id === certId);
+    if (!cert) return;
+    
+    certModalTitle.textContent = `${cert.name} - ${cert.org}`;
+    officialLink.href = cert.details.officialLink;
+    
+    // 設置證照圖片
+    const certImage = document.getElementById('certImage');
+    const certImageFallback = document.getElementById('certImageFallback');
+    
+    if (cert.image) {
+        certImage.src = cert.image;
+        certImage.classList.remove('d-none');
+        certImageFallback.classList.add('d-none');
+    } else {
+        certImage.classList.add('d-none');
+        certImageFallback.classList.remove('d-none');
+    }
+    
+    // 基本資訊區域
+    document.getElementById('certBasicInfo').innerHTML = `
+        <h4 class="text-primary">${cert.name}</h4>
+        <p class="text-secondary mb-2">${cert.org}</p>
+        <span class="cert-level">${getLevelText(cert.level)}</span>
+        <p class="mt-3">${cert.description}</p>
+    `;
+    
+    // 詳細內容區域
+    document.getElementById('certDetailedContent').innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <h6><i class="fas fa-info-circle me-2"></i>考試資訊</h6>
+                <div class="mb-3">
+                    <small class="text-muted">考試費用</small>
+                    <p class="mb-1">${cert.details.cost}</p>
+                    
+                    <small class="text-muted">考試時間</small>
+                    <p class="mb-1">${cert.details.duration}</p>
+                    
+                    <small class="text-muted">題數</small>
+                    <p class="mb-1">${cert.details.questions}</p>
+                    
+                    <small class="text-muted">及格分數</small>
+                    <p class="mb-1">${cert.details.passingScore}</p>
                 </div>
-                <div class="mt-3">
-                    <h6>核心技能:</h6>
-                    <div class="skill-tags">
-                        ${cert.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                    </div>
+            </div>
+            <div class="col-md-6">
+                <h6><i class="fas fa-sync-alt me-2"></i>續證要求</h6>
+                <p class="mb-3">${cert.details.renewal}</p>
+                
+                <h6><i class="fas fa-briefcase me-2"></i>適合職位</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    ${cert.jobRoles.map(role => `<span class="cert-badge">${getJobRoleText(role)}</span>`).join('')}
                 </div>
-                <div class="mt-4">
-                    <h6>適合職位:</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        ${cert.jobRoles.map(role => `<span class="cert-badge">${getJobRoleText(role)}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <h6>簡介:</h6>
-                    <p>${cert.description}</p>
-                </div>
-            `;
-            
-            certModal.show();
-        }
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h6><i class="fas fa-tools me-2"></i>核心技能</h6>
+            <div class="skill-tags">
+                ${cert.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h6><i class="fas fa-tags me-2"></i>標籤</h6>
+            <div class="d-flex flex-wrap gap-2">
+                ${cert.tags.map(tag => `<span class="filter-tag">${tag}</span>`).join('')}
+            </div>
+        </div>
+    `;
+    
+    certModal.show();
+}
 
         // 切換比較清單
         function toggleCompare(certId) {
