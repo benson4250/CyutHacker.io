@@ -333,211 +333,335 @@
             });
         }
         const securityTools = [
+    // === 網路掃描工具 ===
     {
-        name: 'Netcat',
-        icon: 'ri-terminal-line',
+        name: 'Nmap',
+        icon: 'ri-radar-line',
         category: '網路掃描',
         difficulty: 'medium',
-        description: '功能強大的網路工具，可進行端口掃描、監聽和數據傳輸',
+        description: '功能強大的網路探測與安全審計工具',
         purposes: {
-            legitimate: '網路偵錯 · 端口掃描 · 傳輸測試 · 簡易伺服器模擬',
-            abuse: '建立反向 Shell · 構建後門 · 靜默資料滲出'
+            legitimate: '網路發現 · 端口掃描 · 服務識別 · 主機偵測',
+            abuse: '目標偵察 · 漏洞掃描 · 網路足跡蒐集'
         },
         teachable: true,
-        tutorialUrl: 'https://blog.gtwang.org/linux/nmap-command-examples-tutorials/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Nmap.html',
         features: [
-            '支援TCP和UDP協議',
-            '可建立端口監聽',
-            '實現網路通信和數據傳輸',
-            '滲透測試和網路調試'
+            '主機發現與存活檢測',
+            'TCP/UDP端口掃描',
+            '服務版本偵測',
+            '作業系統指紋識別',
+            'NSE腳本擴充功能'
         ],
         resources: [
-            { name: 'Netcat教學', url: 'https://www.computerhope.com/unix/nc.htm' },
-            { name: '網路工具實戰', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
+            { name: 'Nmap官方指南', url: 'https://nmap.org/book/man.html' },
+            { name: '實戰掃描技巧', url: 'https://www.cybrary.it/course/nmap' }
         ]
     },
     {
         name: 'Masscan',
-        icon: 'ri-search-eye-line',
-        category: '網路掃描',
-        difficulty: 'hard',
-        description: '高速大規模IP端口掃描工具，可快速探測大型網路',
-        purposes: {
-            legitimate: '大規模資產掃描 · 快速網段分析 · 安全檢測自動化',
-            abuse: '大規模端口偵查 · 構建目標清單 · DDoS 攻擊前期準備'
-        },
-        teachable: true,
-        tutorialUrl: 'https://github.com/robertdavidgraham/masscan',
-        features: [
-            '每秒可掃描數百萬個IP',
-            '支援多種掃描技術',
-            '可自定義掃描範圍',
-            '輸出多種格式報告'
-        ],
-        resources: [
-            { name: 'Masscan官方文檔', url: 'https://github.com/robertdavidgraham/masscan' },
-            { name: '大規模網路掃描課程', url: 'https://www.coursera.org/learn/network-security' }
-        ]
-    },
-    {
-        name: 'Nessus',
-        icon: 'ri-radar-line',
+        icon: 'ri-speed-line',
         category: '網路掃描',
         difficulty: 'medium',
-        description: '世界最廣泛使用的漏洞掃描與評估工具',
+        description: '高速大規模端口掃描工具',
         purposes: {
-            legitimate: '漏洞掃描 · 安全稽核 · 弱點評估',
-            abuse: '分析系統漏洞用於滲透攻擊 · 漏洞資訊外洩'
+            legitimate: '大型網路掃描 · 快速端口檢測 · 網路資產盤點',
+            abuse: '大規模目標偵察 · 快速漏洞發現'
         },
         teachable: true,
-        tutorialUrl: 'https://www.tenable.com/products/nessus',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Masscan.html',
         features: [
-            '全面的漏洞掃描',
-            '支援多種作業系統',
-            '生成詳細安全報告',
-            '可自訂掃描策略'
+            '極高速掃描（每秒數百萬封包）',
+            '非同步傳輸',
+            '隨機化掃描順序',
+            '與Nmap相容的輸出格式'
         ],
         resources: [
-            { name: 'Nessus官網', url: 'https://www.tenable.com/products/nessus' },
-            { name: '漏洞評估實務', url: 'https://www.sans.org/course/auditing-networks-perimeters-and-systems' }
+            { name: 'Masscan使用指南', url: 'https://github.com/robertdavidgraham/masscan' },
+            { name: '大規模掃描實戰', url: 'https://www.cybrary.it/course/advanced-network-scanning' }
         ]
     },
     {
-        name: 'Ettercap',
-        icon: 'ri-group-2-line',
-        category: '封包分析',
-        difficulty: 'hard',
-        description: '綜合的中間人攻擊和網路嗅探工具',
+        name: 'Netdiscover',
+        icon: 'ri-wifi-line',
+        category: '網路掃描',
+        difficulty: 'easy',
+        description: 'ARP掃描工具，用於本地網路主機發現',
         purposes: {
-            legitimate: '中間人攻擊模擬 · 網路封包分析 · 網路安全教育',
-            abuse: '密碼竊取 · 封包竄改 · 會話劫持'
+            legitimate: '區域網路偵測 · ARP掃描 · 主機發現',
+            abuse: '內部網路偵察 · 目標識別'
         },
         teachable: true,
-        tutorialUrl: 'https://www.ettercap-project.org/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Netdiscover.html',
         features: [
-            '即時網路流量攔截',
-            '支援多種協議',
-            '密碼嗅探和重放攻擊',
-            '圖形化和命令行介面'
+            '主動/被動ARP偵測',
+            '網路設備識別',
+            'MAC地址廠商識別',
+            '圖形化介面支援'
         ],
         resources: [
-            { name: 'Ettercap官方文檔', url: 'https://www.ettercap-project.org/' },
-            { name: '網路攻擊技術', url: 'https://www.offensive-security.com/metasploit-unleashed/' }
+            { name: 'Netdiscover教學', url: 'https://www.kali.org/tools/netdiscover/' },
+            { name: 'ARP掃描實戰', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
         ]
     },
     {
-        name: 'Scapy',
-        icon: 'ri-code-line',
-        category: '封包分析',
-        difficulty: 'hard',
-        description: '強大的Python數據包處理庫，用於網路掃描和數據包操作',
+        name: 'Hping3',
+        icon: 'ri-ping-pong-line',
+        category: '網路掃描',
+        difficulty: 'advanced',
+        description: '多功能TCP/IP封包組裝與分析工具',
         purposes: {
-            legitimate: '封包製作與解析 · 協定測試 · 網路模擬',
-            abuse: '製作惡意封包 · 發動 DoS 攻擊 · 偽裝流量'
+            legitimate: '防火牆測試 · 端口掃描 · 流量分析 · 網路壓力測試',
+            abuse: 'DoS測試 · 封包偽造 · 網路探測'
         },
         teachable: true,
-        tutorialUrl: 'https://scapy.net/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Hping3.html',
         features: [
-            '數據包製作和發送',
-            '支援複雜的網路協議',
-            '可進行數據包嗅探',
-            '自定義封包行為'
+            '自訂封包組裝',
+            'TCP/IP協定測試',
+            '路由追蹤功能',
+            '防火牆規則測試'
         ],
         resources: [
-            { name: 'Scapy官方文檔', url: 'https://scapy.net/' },
-            { name: 'Python網路編程', url: 'https://docs.python.org/3/library/socket.html' }
+            { name: 'Hping3手冊', url: 'http://www.hping.org/manpage.html' },
+            { name: '進階封包操作', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
         ]
     },
+
+    // === 封包分析工具 ===
     {
-        name: 'Cain & Abel',
-        icon: 'ri-window-line',
+        name: 'Tcpdump',
+        icon: 'ri-terminal-line',
         category: '封包分析',
         difficulty: 'medium',
-        description: 'Windows平台上著名的網路嗅探和密碼破解工具',
+        description: '命令列網路封包擷取與分析工具',
         purposes: {
-            legitimate: '密碼恢復 · 加密分析 · 安全教育示範',
-            abuse: '憑證破解 · ARP 欺騙 · 嗅探使用者資訊'
+            legitimate: '網路監控 · 故障排除 · 封包分析 · 安全監測',
+            abuse: '網路監聽 · 敏感數據擷取'
         },
         teachable: true,
-        tutorialUrl: 'https://sectools.org/tool/cain/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Tcpdump.html',
         features: [
-            '密碼恢復',
-            '網路嗅探',
-            '路由協議分析',
-            '應用層密碼破解'
+            '命令列操作',
+            '強大的過濾表達式',
+            '多種輸出格式',
+            '輕量級高效能'
         ],
         resources: [
-            { name: 'Cain & Abel教學', url: 'https://sectools.org/tool/cain/' },
-            { name: '密碼安全課程', url: 'https://www.sans.org/course/windows-security-fundamentals' }
+            { name: 'Tcpdump手冊', url: 'https://www.tcpdump.org/manpages/tcpdump.1.html' },
+            { name: '命令列封包分析', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
         ]
     },
     {
-        name: 'Social-Engineer Toolkit',
-        icon: 'ri-user-voice-line',
-        category: '滲透測試',
-        difficulty: 'hard',
-        description: '社交工程攻擊框架，模擬真實社交工程滲透',
+        name: 'Tshark',
+        icon: 'ri-terminal-line',
+        category: '封包分析',
+        difficulty: 'medium',
+        description: 'Wireshark的命令列版本',
         purposes: {
-            legitimate: '社交工程模擬 · 安全意識訓練 · 駭客攻擊演練',
-            abuse: '釣魚網站製作 · 假冒郵件發送 · 操控目標行為'
+            legitimate: '自動化封包分析 · 遠端擷取 · 腳本整合 · 批次處理',
+            abuse: '自動化監聽 · 大量流量分析'
         },
         teachable: true,
-        tutorialUrl: 'https://benson4250.github.io/CyutHacker.io/SETools.html',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Tshark.html',
         features: [
-            '網路釣魚頁面生成',
-            '偽造網站攻擊',
-            '多種社交工程模式',
-            '跨平台支持'
+            'Wireshark核心功能命令列化',
+            '支援腳本自動化',
+            '豐富的輸出格式',
+            '高效能封包處理'
         ],
         resources: [
-            { name: 'SET官方文檔', url: 'https://github.com/trustedsec/social-engineer-toolkit' },
-            { name: '社交工程實戰', url: 'https://www.social-engineer.org/framework/se-tools/computer-based/social-engineer-toolkit-set/' }
+            { name: 'Tshark手冊', url: 'https://www.wireshark.org/docs/man-pages/tshark.html' },
+            { name: '自動化封包分析', url: 'https://www.cybrary.it/course/wireshark' }
         ]
     },
     {
-        name: 'BeEF',
-        icon: 'ri-skull-2-line',
-        category: '滲透測試',
-        difficulty: 'hard',
-        description: '瀏覽器滲透框架，用於測試瀏覽器安全',
+        name: 'Ngrep',
+        icon: 'ri-search-line',
+        category: '封包分析',
+        difficulty: 'medium',
+        description: '網路層級的grep工具',
         purposes: {
-            legitimate: 'Web 客戶端弱點分析 · 瀏覽器安全測試',
-            abuse: '遠端瀏覽器控制 · 用戶操控與資料竊取'
+            legitimate: '流量搜尋 · 模式匹配 · 網路監控 · 異常檢測',
+            abuse: '敏感資訊搜尋 · 憑證嗅探'
         },
         teachable: true,
-        tutorialUrl: 'https://beefproject.com/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Ngrep.html',
         features: [
-            '跨瀏覽器攻擊',
+            '正則表達式匹配',
+            '多種協定支援',
+            '即時流量過濾',
+            'PCAP格式輸出'
+        ],
+        resources: [
+            { name: 'Ngrep指南', url: 'https://github.com/jpr5/ngrep' },
+            { name: '網路流量搜索技巧', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
+        ]
+    },
+
+    // === 滲透測試工具 ===
+    {
+        name: 'Searchsploit',
+        icon: 'ri-search-line', // 改為搜索圖標
+        category: '滲透測試',
+        difficulty: 'easy',
+        description: 'Exploit-DB的命令列搜索工具',
+        purposes: {
+            legitimate: '漏洞研究 · POC查找 · 安全評估',
+            abuse: '攻擊向量查找 · 漏洞利用'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Searchsploit.html',
+        features: [
+            '本地Exploit-DB搜索',
+            '多條件過濾',
+            '複製漏洞代碼',
+            '詳細漏洞資訊'
+        ],
+        resources: [
+            { name: 'Searchsploit手冊', url: 'https://www.exploit-db.com/searchsploit' },
+            { name: '漏洞研究指南', url: 'https://www.cybrary.it/course/ethical-hacking' }
+        ]
+    },
+    {
+        name: 'Hydra',
+        icon: 'ri-key-line',
+        category: '滲透測試',
+        difficulty: 'medium',
+        description: '快速的網路登入破解工具',
+        purposes: {
+            legitimate: '安全測試 · 密碼強度驗證 · 滲透測試',
+            abuse: '暴力破解 · 帳號入侵'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Hydra.html',
+        features: [
+            '支援多種協定',
+            '平行化攻擊',
+            '字典攻擊',
+            '恢復中斷會話'
+        ],
+        resources: [
+            { name: 'Hydra官方文檔', url: 'https://github.com/vanhauser-thc/thc-hydra' },
+            { name: '密碼破解實戰', url: 'https://www.cybrary.it/course/password-cracking' }
+        ]
+    },
+    {
+        name: 'Metasploit',
+        icon: 'ri-code-box-line',
+        category: '滲透測試',
+        difficulty: 'medium',
+        description: '滲透測試框架，提供完整的攻擊鏈工具',
+        purposes: {
+            legitimate: '漏洞驗證 · 滲透測試 · 安全評估 · 紅隊演練',
+            abuse: '系統入侵 · 後門安裝 · 權限提升'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Metasploit.html',
+        features: [
             '模組化攻擊框架',
-            '客戶端側滲透',
-            'JavaScript攻擊向量'
+            '漏洞利用數據庫',
+            'Payload生成',
+            '後滲透模組',
+            'Meterpreter會話管理'
         ],
         resources: [
-            { name: 'BeEF官方文檔', url: 'https://beefproject.com/' },
-            { name: '瀏覽器安全測試', url: 'https://owasp.org/www-project-web-security-testing-guide/' }
+            { name: 'Metasploit Unleashed', url: 'https://www.offensive-security.com/metasploit-unleashed/' },
+            { name: '滲透測試框架', url: 'https://www.cybrary.it/course/metasploit' }
         ]
     },
     {
-        name: 'Powersploit',
-        icon: 'ri-command-line',
+        name: 'SET',
+        icon: 'ri-user-shared-line',
         category: '滲透測試',
-        difficulty: 'hard',
-        description: 'PowerShell滲透測試框架，用於Windows環境',
+        difficulty: 'medium',
+        description: 'Social-Engineer Toolkit，社交工程攻擊工具包',
         purposes: {
-            legitimate: 'Windows 安全測試 · 權限檢測 · 滲透模組研究',
-            abuse: '權限提升 · 系統植入後門 · 密碼竊取'
+            legitimate: '社交工程測試 · 安全意識訓練',
+            abuse: '釣魚攻擊 · 憑證竊取'
         },
         teachable: true,
-        tutorialUrl: 'https://github.com/PowerShellMafia/PowerSploit',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/SET.html',
         features: [
-            'Windows滲透模組',
-            '繞過安全防護',
-            '遠程命令執行',
-            '滲透後利用'
+            '釣魚網站生成',
+            '郵件釣魚攻擊',
+            'QR碼攻擊',
+            '網站攻擊向量'
         ],
         resources: [
-            { name: 'Powersploit文檔', url: 'https://github.com/PowerShellMafia/PowerSploit' },
-            { name: 'Windows安全測試', url: 'https://docs.microsoft.com/en-us/powershell/' }
+            { name: 'SET官方指南', url: 'https://github.com/trustedsec/social-engineer-toolkit' },
+            { name: '社交工程防禦', url: 'https://www.cybrary.it/course/social-engineering' }
+        ]
+    },
+    {
+        name: 'WhatWeb',
+        icon: 'ri-globe-line',
+        category: '滲透測試',
+        difficulty: 'easy',
+        description: '網站指紋識別工具',
+        purposes: {
+            legitimate: '網站技術識別 · 安全掃描 · 資產管理',
+            abuse: '目標偵察 · 漏洞識別'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/WhatWeb.html',
+        features: [
+            '超過1800個插件',
+            '識別CMS與框架',
+            'JavaScript分析',
+            '批量掃描支援'
+        ],
+        resources: [
+            { name: 'WhatWeb文檔', url: 'https://www.morningstarsecurity.com/research/whatweb' },
+            { name: '網站偵察技術', url: 'https://www.cybrary.it/course/web-application-penetration-testing' }
+        ]
+    },
+
+    // === 無線攻擊工具 ===
+    {
+        name: 'Aircrack-ng',
+        icon: 'ri-wifi-off-line',
+        category: '無線攻擊',
+        difficulty: 'medium',
+        description: '完整的無線網路安全評估套件',
+        purposes: {
+            legitimate: '無線安全測試 · WEP/WPA破解 · 網路監控',
+            abuse: '無線網路入侵 · 密碼破解'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Aircrack-ng.html',
+        features: [
+            'WEP/WPA/WPA2破解',
+            '封包擷取與注入',
+            '無線網卡監控模式',
+            '字典攻擊'
+        ],
+        resources: [
+            { name: 'Aircrack-ng官方指南', url: 'https://www.aircrack-ng.org/documentation.html' },
+            { name: '無線安全實戰', url: 'https://www.cybrary.it/course/wireless-network-security' }
+        ]
+    },
+    {
+        name: 'Reaver-WPS',
+        icon: 'ri-router-line',
+        category: '無線攻擊',
+        difficulty: 'medium',
+        description: 'WPS PIN碼暴力破解工具',
+        purposes: {
+            legitimate: 'WPS安全測試 · 路由器安全評估',
+            abuse: 'WPS漏洞利用 · 無線網路入侵'
+        },
+        teachable: true,
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Reaver.html',
+        features: [
+            'WPS PIN暴力破解',
+            '路由器鎖定繞過',
+            '會話恢復功能',
+            '自動化攻擊流程'
+        ],
+        resources: [
+            { name: 'Reaver文檔', url: 'https://github.com/t6x/reaver-wps-fork-t6x' },
+            { name: 'WPS安全分析', url: 'https://www.cybrary.it/course/wireless-network-security' }
         ]
     },
     {
@@ -545,486 +669,97 @@
         icon: 'ri-wifi-line',
         category: '無線攻擊',
         difficulty: 'medium',
-        description: '自動化無線網路破解工具，簡化WiFi安全測試',
+        description: '自動化無線網路攻擊工具',
         purposes: {
-            legitimate: '無線網路弱點檢測 · 自動化 Wi-Fi 安全測試',
-            abuse: '非法破解 Wi-Fi 密碼 · 未授權網路入侵'
+            legitimate: '無線安全審計 · 自動化測試',
+            abuse: '自動化無線入侵'
         },
         teachable: true,
-        tutorialUrl: 'https://github.com/derv82/wifite2',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/Wifite.html',
         features: [
-            '自動破解WEP/WPA',
-            '支援多種無線攻擊',
-            '篩選和排序網路',
-            '多線程破解'
+            '自動目標選擇',
+            '多種攻擊模式',
+            '會話管理',
+            '簡化操作介面'
         ],
         resources: [
-            { name: 'Wifite文檔', url: 'https://github.com/derv82/wifite2' },
-            { name: '無線網路安全', url: 'https://www.aircrack-ng.org/doku.php' }
+            { name: 'Wifite指南', url: 'https://github.com/kimocoder/wifite2' },
+            { name: '自動化無線測試', url: 'https://www.cybrary.it/course/wireless-network-security' }
         ]
     },
+
+    // === 資料庫滲透工具 ===
     {
-        name: 'WiFi-Pumpkin',
-        icon: 'ri-wifi-fill',
-        category: '無線攻擊',
-        difficulty: 'hard',
-        description: '無線攻擊和社交工程框架，模擬惡意熱點',
-        purposes: {
-            legitimate: '偽造 Wi-Fi 熱點測試 · 使用者行為分析',
-            abuse: '中間人釣魚攻擊 · 憑證攔截 · 欺騙使用者連線'
-        },
-        teachable: true,
-        tutorialUrl: 'https://github.com/P0cL4bs/WiFi-Pumpkin',
-        features: [
-            '建立惡意熱點',
-            '流量攔截',
-            '憑證竊取',
-            '遠程控制'
-        ],
-        resources: [
-            { name: 'WiFi-Pumpkin項目', url: 'https://github.com/P0cL4bs/WiFi-Pumpkin' },
-            { name: '無線攻擊技術', url: 'https://www.kali.org/tools/wifite/' }
-        ]
-    },
-    {
-        name: 'Reaver',
-        icon: 'ri-lock-unlock-line',
-        category: '無線攻擊',
+        name: 'BBQSQL',
+        icon: 'ri-database-2-line',
+        category: '資料庫滲透',
         difficulty: 'medium',
-        description: 'WPS PIN暴力破解工具，針對無線路由器安全',
+        description: '盲注SQL注入漏洞利用工具',
         purposes: {
-            legitimate: 'WPS 安全測試 · 無線設備弱點檢查',
-            abuse: '利用 WPS 破解 Wi-Fi 密碼 · 未授權存取無線網路'
+            legitimate: 'SQL注入測試 · 資料庫安全評估',
+            abuse: '資料庫入侵 · 敏感資料竊取'
         },
         teachable: true,
-        tutorialUrl: 'https://github.com/t6x/reaver-wps-fork-t6x',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/BBQSQL.html',
         features: [
-            'WPS破解',
-            '暴力破解PIN碼',
-            '支援多種無線協議',
-            '詳細破解日誌'
+            '盲注SQL注入',
+            'HTTP請求操縱',
+            '編碼支援',
+            'Python API'
         ],
         resources: [
-            { name: 'Reaver文檔', url: 'https://github.com/t6x/reaver-wps-fork-t6x' },
-            { name: '無線安全實踐', url: 'https://null-byte.wonderhowto.com/how-to/use-reaver-hack-wps-wifi-passwords-0194205/' }
+            { name: 'BBQSQL文檔', url: 'https://github.com/Neohapsis/bbqsql' },
+            { name: 'SQL注入防禦', url: 'https://www.cybrary.it/course/sql-injection' }
         ]
     },
     {
-        name: 'John the Ripper',
-        icon: 'ri-key-2-line',
-        category: '密碼破解',
-        difficulty: 'hard',
-        description: '開源密碼破解工具，支持多種加密算法',
-        purposes: {
-            legitimate: '密碼強度檢測 · 安全政策檢驗 · 雜湊演算法測試',
-            abuse: '暴力破解密碼 · 破解被竊取的密碼雜湊'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.openwall.com/john/',
-        features: [
-            '多種密碼破解模式',
-            '支援多種加密類型',
-            '高性能破解引擎',
-            '自定義破解規則'
-        ],
-        resources: [
-            { name: 'John官方文檔', url: 'https://www.openwall.com/john/' },
-            { name: '密碼安全實戰', url: 'https://www.offensive-security.com/pwk-online/' }
-        ]
-    },
-    {
-        name: 'Hashcat',
-        icon: 'ri-lock-password-line',
-        category: '密碼破解',
-        difficulty: 'hard',
-        description: '世界上最快的密碼破解工具，支持GPU加速',
-        purposes: {
-            legitimate: '高效密碼分析 · 雜湊加密測試 · 安全審計',
-            abuse: '加速密碼破解 · 對已竊 hash 進行大規模還原'
-        },
-        teachable: true,
-        tutorialUrl: 'https://hashcat.net/hashcat/',
-        features: [
-            '支援600多種雜湊類型',
-            'GPU/CPU並行破解',
-            '高度可定製',
-            '大規模破解'
-        ],
-        resources: [
-            { name: 'Hashcat官網', url: 'https://hashcat.net/hashcat/' },
-            { name: '密碼安全課程', url: 'https://hashcat.net/wiki/' }
-        ]
-    },
-    {
-        name: 'Hydra',
-        icon: 'ri-skull-line',
-        category: '密碼破解',
-        difficulty: 'hard',
-        description: '支持多協議的網路登錄破解工具',
-        purposes: {
-            legitimate: '登入驗證壓力測試 · 密碼強度評估 · 多協定驗證測試',
-            abuse: '暴力破解 SSH/FTP/HTTP 登入 · 密碼猜測攻擊'
-        },
-        teachable: true,
-        tutorialUrl: 'https://github.com/vanhauser-thc/thc-hydra',
-        features: [
-            '支援多種協議',
-            '並行登錄嘗試',
-            '可自定義攻擊模式',
-            '豐富的驗證模組'
-        ],
-        resources: [
-            { name: 'Hydra文檔', url: 'https://github.com/vanhauser-thc/thc-hydra' },
-            { name: '網路安全滲透', url: 'https://www.hackingarticles.in/hydra-a-beginners-tutorial/' }
-        ]
-    },
-    {
-        name: 'Nmap',
-        icon: 'ri-search-line',
-        category: '網路掃描',
-        difficulty: 'medium',
-        description: '全球最著名的網路掃描和偵測工具，用於識別網路架構和安全評估',
-        purposes: {
-            legitimate: '網路資產盤點、安全評估、服務監控',
-            abuse: '未授權網路偵查、漏洞探測、踩點(Footprinting)'
-        },
-        teachable: true,
-        tutorialUrl: 'https://nmap.org/docs.html',
-        features: [
-            '識別網路上的主機和開放端埠',
-            '偵測作業系統類型',
-            '執行服務版本偵測',
-            '支援多種掃描技術和腳本'
-        ],
-        resources: [
-            { name: 'Nmap官方教學', url: 'https://nmap.org/docs.html' },
-            { name: '網路安全入門課程', url: 'https://www.cybrary.it/course/network-security-fundamentals' }
-        ]
-    },
-    {
-        name: 'Wireshark',
-        icon: 'ri-mac-line',
-        category: '封包分析',
-        difficulty: 'hard',
-        description: '全球最廣泛使用的網路協定分析器，提供深入的網路流量洞察',
-        purposes: {
-            legitimate: '封包分析 · 錯誤排查 · 協定教學 · 網路監控',
-            abuse: '攔截敏感資訊 · 瀏覽登入資料 · 分析私密通訊'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.wireshark.org/docs/',
-        features: [
-            '即時封包擷取和分析',
-            '支援超過2,000種協定',
-            '提供深入的網路流量視覺化',
-            '匯出和儲存分析結果'
-        ],
-        resources: [
-            { name: 'Wireshark官方教學', url: 'https://www.wireshark.org/docs/' },
-            { name: '封包分析實務課程', url: 'https://www.wireshark.org/#learnWS' }
-        ]
-    },
-    {
-        name: 'Metasploit',
-        icon: 'ri-bug-line',
-        category: '滲透測試',
-        difficulty: 'hard',
-        description: '最強大的滲透測試框架，協助安全專業人員評估系統弱點',
-        purposes: {
-            legitimate: '漏洞驗證 · 滲透測試框架 · 模擬攻擊演練',
-            abuse: '漏洞利用 · 控制遠端主機 · 系統滲透'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.metasploit.com/docs/',
-        features: [
-            '包含大量滲透利用模組',
-            '可自動化滲透測試流程',
-            '支援弱點驗證',
-            '可生成後滲透腳本'
-        ],
-        resources: [
-            { name: 'Metasploit教學', url: 'https://www.metasploit.com/docs/' },
-            { name: '滲透測試實戰課程', url: 'https://www.offensive-security.com/metasploit-unleashed/' }
-        ]
-    },
-    {
-        name: 'Aircrack-ng',
-        icon: 'ri-wifi-line',
-        category: '無線攻擊',
-        difficulty: 'medium',
-        description: '無線網路安全評估套件，專門用於測試無線網路安全性',
-        purposes: {
-            legitimate: '無線加密強度測試 · 無線網路弱點分析',
-            abuse: '破解 Wi-Fi 密碼 · 攔截封包後還原金鑰'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.aircrack-ng.org/doku.php',
-        features: [
-            '破解WEP/WPA無線加密',
-            '執行無線網路封包擷取',
-            '支援多種攻擊模式',
-            '可進行WiFi滲透測試'
-        ],
-        resources: [
-            { name: 'Aircrack-ng官方指南', url: 'https://www.aircrack-ng.org/doku.php' },
-            { name: '無線網路安全課程', url: 'https://www.aircrack-ng.org/doku.php?id=tutorial' }
-        ]
-    },
-    {
-        name: 'SQLMap',
+        name: 'SQLmap',
         icon: 'ri-database-line',
         category: '資料庫滲透',
         difficulty: 'medium',
-        description: '自動化SQL注入工具，幫助發現和利用資料庫安全弱點',
+        description: '自動化SQL注入與資料庫接管工具',
         purposes: {
-            legitimate: 'SQL 注入測試 · 資料庫弱點分析 · 安全稽核',
-            abuse: '未授權資料查詢 · 資料外洩 · 控制資料庫伺服器'
+            legitimate: 'SQL注入檢測 · 資料庫安全測試',
+            abuse: '自動化SQL注入 · 資料庫攻擊'
         },
         teachable: true,
-        tutorialUrl: 'http://sqlmap.org/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/SQLMap.html',
         features: [
-            '偵測SQL注入弱點',
-            '支援多種資料庫管理系統',
-            '可直接讀取和寫入資料庫',
-            '提供詳細的弱點報告'
+            '自動注入檢測',
+            '支援多種資料庫',
+            '資料庫指紋識別',
+            '檔案系統存取',
+            '命令執行'
         ],
         resources: [
-            { name: 'SQLMap官方文件', url: 'http://sqlmap.org/' },
-            { name: '資料庫安全課程', url: 'https://sqlmap.org/usage.html' }
-        ]
-    },
-    {
-        name: 'Zenmap',
-        icon: 'ri-computer-line',
-        category: '網路掃描',
-        difficulty: 'easy',
-        description: 'Nmap的官方圖形化介面，簡化網路探測和安全掃描',
-        purposes: {
-            legitimate: '圖形化網路掃描 · 可視化網路架構 · 初學者教學',
-            abuse: '協助入侵前資訊收集 · 自動化掃描漏洞'
-        },
-        teachable: true,
-        tutorialUrl: 'https://nmap.org/zenmap/',
-        features: [
-            '直觀的圖形使用者介面',
-            '支援複雜的網路拓撲掃描',
-            '結果可視覺化顯示',
-            '儲存和比較掃描結果'
-        ],
-        resources: [
-            { name: 'Zenmap官方文檔', url: 'https://nmap.org/zenmap/' },
-            { name: '網路映射教學', url: 'https://nmap.org/book/zenmap.html' }
-        ]
-    },
-    {
-        name: 'Angry IP Scanner',
-        icon: 'ri-radar-line',
-        category: '網路掃描',
-        difficulty: 'easy',
-        description: '快速、輕量的IP和端口掃描工具，支持多平台',
-        purposes: {
-            legitimate: 'IP 範圍掃描 · 網路設備存活檢查 · 網管工具',
-            abuse: '快速尋找可用目標 · 掃描非法設備'
-        },
-        teachable: true,
-        tutorialUrl: 'https://angryip.org/',
-        features: [
-            '快速掃描大型網段',
-            '多線程掃描技術',
-            '導出掃描結果',
-            '支援IP範圍和隨機掃描'
-        ],
-        resources: [
-            { name: 'Angry IP Scanner官網', url: 'https://angryip.org/' },
-            { name: '網路資產發現課程', url: 'https://angryip.org/documentation/' }
-        ]
-    },
-    {
-        name: 'tcpdump',
-        icon: 'ri-file-list-3-line',
-        category: '封包分析',
-        difficulty: 'hard',
-        description: '功能強大的命令行網路封包分析工具，用於網路除錯和安全分析',
-        purposes: {
-            legitimate: '命令列封包擷取 · 即時流量監控 · 系統除錯',
-            abuse: '封包內容竊取 · 密碼與憑證監控'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.tcpdump.org/',
-        features: [
-            '即時封包擷取',
-            '支援複雜的封包過濾規則',
-            '可儲存封包到文件',
-            '低系統資源佔用'
-        ],
-        resources: [
-            { name: 'tcpdump官方手冊', url: 'https://www.tcpdump.org/' },
-            { name: '網路協議分析實戰', url: 'https://www.tcpdump.org/manpages/tcpdump.1.html' }
-        ]
-    },
-    {
-        name: 'NetworkMiner',
-        icon: 'ri-file-warning-line',
-        category: '封包分析',
-        difficulty: 'medium',
-        description: '網路取證分析工具，提供圖形化介面的網路流量解析',
-        purposes: {
-            legitimate: '數位鑑識 · 被動封包分析 · 檔案復原',
-            abuse: '還原憑證與檔案 · 檢視使用者活動紀錄'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.netresec.com/',
-        features: [
-            '自動解析網路會話',
-            '提取檔案和憑證',
-            '支援離線PCAP分析',
-            '跨平台支援'
-        ],
-        resources: [
-            { name: 'NetworkMiner官網', url: 'https://www.netresec.com/' },
-            { name: '網路取證課程', url: 'https://www.netresec.com/?page=NetworkMiner' }
-        ]
-    },
-    {
-        name: 'Burp Suite',
-        icon: 'ri-key-line',
-        category: '滲透測試',
-        difficulty: 'hard',
-        description: 'Web應用安全測試的專業工具，被安全研究者廣泛使用',
-        purposes: {
-            legitimate: 'Web 應用漏洞掃描 · API 測試 · 攔截封包分析',
-            abuse: '竄改封包 · 發動登入攻擊 · 試探系統弱點'
-        },
-        teachable: true,
-        tutorialUrl: 'https://portswigger.net/burp',
-        features: [
-            '攔截和修改HTTP/HTTPS請求',
-            '自動化漏洞掃描',
-            '暴力破解密碼',
-            '豐富的擴展插件'
-        ],
-        resources: [
-            { name: 'Burp Suite教學', url: 'https://portswigger.net/burp' },
-            { name: 'Web安全實戰課程', url: 'https://portswigger.net/web-security' }
-        ]
-    },
-    {
-        name: 'OWASP ZAP',
-        icon: 'ri-shield-check-line',
-        category: '滲透測試',
-        difficulty: 'medium',
-        description: '開源的Web應用安全掃描器，由OWASP社群維護',
-        purposes: {
-            legitimate: '網站自動化漏洞掃描 · 教學工具 · 安全測試入門',
-            abuse: '針對未授權網站進行注入測試與漏洞探勘'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.zaproxy.org/',
-        features: [
-            '自動化安全漏洞掃描',
-            '支援爬蟲和被動掃描',
-            '可進行主動滲透測試',
-            '豐富的報告生成'
-        ],
-        resources: [
-            { name: 'OWASP ZAP官方文檔', url: 'https://www.zaproxy.org/' },
-            { name: 'Web應用安全測試', url: 'https://owasp.org/www-project-zap/' }
-        ]
-    },
-    {
-        name: 'Kismet',
-        icon: 'ri-signal-wifi-line',
-        category: '無線攻擊',
-        difficulty: 'medium',
-        description: '無線網路監控和偵測工具，可識別隱藏網路',
-        purposes: {
-            legitimate: '無線封包偵測 · 裝置追蹤 · 隱藏 SSID 分析',
-            abuse: '監控用戶行為 · 收集裝置信息 · 非法入侵前偵查'
-        },
-        teachable: true,
-        tutorialUrl: 'https://www.kismetwireless.net/',
-        features: [
-            '即時無線網路偵測',
-            'GPS定位無線設備',
-            '支援多種無線協議',
-            '詳細的網路流量分析'
-        ],
-        resources: [
-            { name: 'Kismet官方指南', url: 'https://www.kismetwireless.net/' },
-            { name: '無線網路安全進階', url: 'https://www.kismetwireless.net/documentation/' }
-        ]
-    },
-    {
-        name: 'WiFi Pineapple',
-        icon: 'ri-wifi-fill',
-        category: '無線攻擊',
-        difficulty: 'hard',
-        description: '專業的無線審計和社交工程滲透測試平台',
-        purposes: {
-            legitimate: '無線測試平台 · 中間人攻擊教學模擬 · Wi-Fi 安全訓練',
-            abuse: '誘捕連線 · 憑證竊取 · 用戶追蹤'
-        },
-        teachable: true,
-        tutorialUrl: 'https://shop.hak5.org/products/wifi-pineapple',
-        features: [
-            '輕鬆建立惡意熱點',
-            '攔截和分析無線流量',
-            '支援多種滲透模組',
-            '遠程控制'
-        ],
-        resources: [
-            { name: 'WiFi Pineapple官網', url: 'https://shop.hak5.org/products/wifi-pineapple' },
-            { name: '無線攻擊技術', url: 'https://docs.hak5.org/wifi-pineapple/' }
+            { name: 'SQLmap官方文檔', url: 'http://sqlmap.org/' },
+            { name: 'SQL注入實戰', url: 'https://www.cybrary.it/course/sql-injection' }
         ]
     },
     {
         name: 'SQLNinja',
-        icon: 'ri-database-2-line',
+        icon: 'ri-sword-line',
         category: '資料庫滲透',
-        difficulty: 'hard',
-        description: '專門針對Microsoft SQL Server的滲透測試工具',
+        difficulty: 'advanced',
+        description: '專注於Microsoft SQL Server的SQL注入工具',
         purposes: {
-            legitimate: 'SQL 注入測試 · MSSQL 伺服器安全檢測',
-            abuse: '入侵資料庫 · 執行系統指令 · 權限提升'
+            legitimate: 'MSSQL安全測試 · 資料庫滲透測試',
+            abuse: 'MSSQL入侵 · 權限提升'
         },
         teachable: true,
-        tutorialUrl: 'http://sqlninja.sourceforge.net/',
+        tutorialUrl: 'https://userggyy.github.io/kijimmyer/SQLNinja.html',
         features: [
-            '自動SQL伺服器滲透',
-            '支援命令執行',
-            '可建立反向shell',
-            '繞過安全限制'
+            'MSSQL專用',
+            '遠程命令執行',
+            '提權攻擊',
+            '後門安裝'
         ],
         resources: [
-            { name: 'SQLNinja項目', url: 'http://sqlninja.sourceforge.net/' },
-            { name: '資料庫安全實戰', url: 'http://sqlninja.sourceforge.net/sqlNinja-howto.html' }
-        ]
-    },
-    {
-        name: 'NoSQLMap',
-        icon: 'ri-server-line',
-        category: '資料庫滲透',
-        difficulty: 'medium',
-        description: '專門針對NoSQL資料庫的自動化滲透測試工具',
-        purposes: {
-            legitimate: 'NoSQL 資料庫安全測試 · 注入弱點分析',
-            abuse: '非結構化資料盜取 · 無授權存取資料庫'
-        },
-        teachable: true,
-        tutorialUrl: 'https://github.com/codingo/NoSQLMap',
-        features: [
-            '支援多種NoSQL資料庫',
-            '自動化漏洞掃描',
-            '可執行注入攻擊',
-            '生成滲透報告'
-        ],
-        resources: [
-            { name: 'NoSQLMap項目', url: 'https://github.com/codingo/NoSQLMap' },
-            { name: 'NoSQL安全課程', url: 'https://github.com/codingo/NoSQLMap/wiki' }
+            { name: 'SQLNinja指南', url: 'https://github.com/xxgrunge/sqlninja' },
+            { name: 'MSSQL安全防護', url: 'https://www.cybrary.it/course/sql-injection' }
         ]
     }
 ];
-
         // 初始化函數
         document.addEventListener('DOMContentLoaded', () => {
             createDigitalRain();
