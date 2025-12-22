@@ -525,6 +525,132 @@
             gap: 10px;
         }
         
+        /* 新增加：設置與整合區塊 */
+        .setup-card {
+            background: rgba(255, 45, 85, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 45, 85, 0.1);
+        }
+        
+        .setup-title {
+            color: var(--primary-red);
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .setup-title i {
+            font-size: 1.5rem;
+        }
+        
+        .setup-step {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 45, 85, 0.1);
+        }
+        
+        .setup-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .step-title {
+            color: var(--primary-red);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .step-title .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 45, 85, 0.2);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: rgba(10, 10, 20, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-left: 3px solid var(--primary-red);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            color: #E8EAED;
+            display: block;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #6C757D;
+        }
+        
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        
+        .client-item {
+            background: rgba(40, 40, 60, 0.6);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 45, 85, 0.1);
+        }
+        
+        .client-item:hover {
+            background: rgba(255, 45, 85, 0.1);
+            transform: translateY(-3px);
+            border-color: var(--primary-red);
+        }
+        
+        .client-name {
+            color: var(--light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .client-status {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.3rem;
+        }
+        
+        .recommended-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(45deg, var(--primary-red), var(--dark-red));
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
         /* 使用場景標籤 */
         .use-case-tags {
             display: flex;
@@ -674,17 +800,12 @@
     <!-- 熊頭背景圖案 -->
     <div class="bear-head">
         <svg class="bear-svg" viewBox="0 0 100 100">
-            <!-- 熊頭圖案 -->
             <path d="M50 20 C70 20, 80 30, 80 50 C80 70, 70 80, 50 80 C30 80, 20 70, 20 50 C20 30, 30 20, 50 20 Z" />
-            <!-- 耳朵 -->
             <ellipse cx="35" cy="30" rx="8" ry="10"/>
             <ellipse cx="65" cy="30" rx="8" ry="10"/>
-            <!-- 眼睛 -->
             <circle cx="40" cy="45" r="5"/>
             <circle cx="60" cy="45" r="5"/>
-            <!-- 鼻子 -->
             <ellipse cx="50" cy="60" rx="6" ry="4"/>
-            <!-- 嘴巴 -->
             <path d="M45 70 Q50 75, 55 70" stroke-width="3" fill="none"/>
         </svg>
     </div>
@@ -776,6 +897,10 @@
                     <i class="fas fa-star nav-icon"></i>
                     <span>高級功能</span>
                 </a>
+                <a href="#setup" class="nav-item">
+                    <i class="fas fa-terminal nav-icon"></i>
+                    <span>快速設置</span>
+                </a>
             </div>
         </nav>
         
@@ -816,7 +941,8 @@
                         
                         <div class="metric-card">
                             <div class="metric-value">98.7%</div>
-                            <div class="metric-label">檢測成功率</div>                        </div>
+                            <div class="metric-label">檢測成功率</div>
+                        </div>
                     </div>
                 </section>
                 
@@ -1056,6 +1182,102 @@
                     </div>
                 </section>
                 
+                <!-- 快速設置 -->
+                <section id="setup" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-terminal"></i>
+                        </div>
+                        <h2 class="card-title">快速設置與運行</h2>
+                    </div>
+                    
+                    <div class="setup-card">
+                        <h3 class="setup-title">
+                            <i class="fas fa-rocket"></i> Quick Setup to Run the HexStrike MCPs Server
+                        </h3>
+                        
+                        <div class="setup-step">
+                            <h4 class="step-title">
+                                <span class="step-number">1</span>
+                                克隆存儲庫
+                            </h4>
+                            <div class="code-block">
+<code>git clone https://github.com/0x4m4/hexstrike-ai.git
+cd hexstrike-ai</code>
+                            </div>
+                        </div>
+                        
+                        <div class="setup-step">
+                            <h4 class="step-title">
+                                <span class="step-number">2</span>
+                                創建虛擬環境
+                            </h4>
+                            <div class="code-block">
+<code>python3 -m venv hexstrike-env</code>
+                            </div>
+                            <div class="code-block">
+<code># Linux/Mac
+source hexstrike-env/bin/activate</code>
+                            </div>
+                            <div class="code-block">
+<code># Windows
+hexstrike-env\Scripts\activate</code>
+                            </div>
+                        </div>
+                        
+                        <div class="setup-step">
+                            <h4 class="step-title">
+                                <span class="step-number">3</span>
+                                安裝 Python 依賴
+                            </h4>
+                            <div class="code-block">
+<code>pip3 install -r requirements.txt</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-card">
+                        <h3 class="setup-title">
+                            <i class="fas fa-robot"></i> Supported AI Clients for Running & Integration
+                        </h3>
+                        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem;">
+                            您可以使用各種AI客戶端安裝和運行HexStrike AI MCPs：
+                        </p>
+                        
+                        <div class="client-grid">
+                            <div class="client-item">
+                                <div class="client-name">VS Code Copilot</div>
+                                <div class="client-status">推薦</div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-name">Claude Desktop</div>
+                                <div class="client-status">支援</div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-name">Cursor</div>
+                                <div class="client-status">支援</div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-name">Roo Code</div>
+                                <div class="client-status">支援</div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-name">5ire</div>
+                                <div class="client-status">v0.14.0暫不支援</div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-name">其他MCP代理</div>
+                                <div class="client-status">兼容</div>
+                            </div>
+                        </div>
+                        
+                        <div class="recommended-badge">
+                            <i class="fas fa-star"></i>
+                            個人推薦使用 VS Code Copilot
+                        </div>
+                    </div>
+                </section>
+                
                 <!-- 高級功能 -->
                 <section id="features" class="card">
                     <div class="card-header">
@@ -1279,6 +1501,43 @@
                     }, 150);
                 });
             });
+            
+            // 代碼區塊點擊複製功能
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    const text = this.querySelector('code').textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalBorder = this.style.borderLeft;
+                        this.style.borderLeft = '3px solid var(--success)';
+                        setTimeout(() => {
+                            this.style.borderLeft = originalBorder;
+                        }, 1000);
+                    }).catch(err => {
+                        console.error('複製失敗: ', err);
+                    });
+                });
+            });
+            
+            // AI客戶端卡片點擊效果
+            const clientItems = document.querySelectorAll('.client-item');
+            clientItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            // 性能優化：減少動畫對性能的影響
+            const style = document.createElement('style');
+            style.textContent = `
+                .bear-head, .hex-pattern, .scan-line {
+                    will-change: transform, opacity;
+                }
+            `;
+            document.head.appendChild(style);
         });
     </script>
 </body>
