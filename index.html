@@ -14,6 +14,25 @@
             margin: 0;
             overflow-x: hidden;
         }
+        .time-badge {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* 彈窗中的時間顯示樣式 */
+        #modal-difficulty .flex {
+            align-items: center;
+        }
+
+        #modal-difficulty .flex > div:last-child {
+            background: rgba(100, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border-left: 2px solid #00ffff;
+        }
         /* 正當用途 - 綠色樣式 */
         .purpose-item.legitimate {
         padding: 0.75rem;
@@ -249,6 +268,7 @@
                 <span class="category-filter" data-category="滲透測試">滲透測試</span>
                 <span class="category-filter" data-category="無線攻擊">無線攻擊</span>
                 <span class="category-filter" data-category="資料庫滲透">資料庫滲透</span>
+                <span class="category-filter" data-category="AI自動化工具">AI自動化工具</span> 
             </div>
         </div>
         
@@ -333,6 +353,82 @@
             });
         }
         const securityTools = [
+            // === AI自動化工具 ===
+{
+    name: 'AutoNmap AI',
+    icon: 'ri-robot-line',
+    category: 'AI自動化工具',
+    difficulty: 'medium',
+    estimatedTime: '10-20分鐘',
+    description: 'AI驅動的自動化網路掃描工具，智能分析目標並優化掃描策略',
+    purposes: {
+        legitimate: '智能網路評估 · 自動化安全掃描 · 風險預測',
+        abuse: '自動化目標偵察 · AI驅動攻擊'
+    },
+    teachable: true,
+    tutorialUrl: 'https://userggyy.github.io/kijimmyer/AutoNmap.html',
+    features: [
+        'AI目標識別與分類',
+        '自動掃描策略優化',
+        '風險評分系統',
+        '智能報告生成',
+        '學習型掃描模式'
+    ],
+    resources: [
+        { name: 'AutoNmap AI 官方文檔', url: 'https://github.com/example/autonmap-ai' },
+        { name: 'AI在網路安全中的應用', url: 'https://www.cybrary.it/course/ai-cybersecurity' }
+    ]
+},
+{
+    name: 'GPT-Pentest',
+    icon: 'ri-brain-line',
+    category: 'AI自動化工具',
+    difficulty: 'advanced',
+    estimatedTime: '15-30分鐘',
+    description: '基於GPT技術的智能滲透測試助手',
+    purposes: {
+        legitimate: '智能漏洞分析 · 自動化滲透測試 · 安全諮詢',
+        abuse: 'AI驅動攻擊鏈 · 自動化漏洞利用'
+    },
+    teachable: true,
+    tutorialUrl: 'https://userggyy.github.io/kijimmyer/GPT-Pentest.html',
+    features: [
+        '自然語言指令解析',
+        '自動攻擊向量生成',
+        '實時策略調整',
+        '多語言支援',
+        '學習型漏洞數據庫'
+    ],
+    resources: [
+        { name: 'GPT-Pentest 指南', url: 'https://github.com/example/gpt-pentest' },
+        { name: 'AI輔助安全測試', url: 'https://medium.com/ai-cybersecurity' }
+    ]
+},
+{
+    name: 'Sherlock AI',
+    icon: 'ri-spy-line',
+    category: 'AI自動化工具',
+    difficulty: 'medium',
+    estimatedTime: '5-15分鐘',
+    description: '智能OSINT（開源情報）收集工具',
+    purposes: {
+        legitimate: '智能情報收集 · 威脅分析 · 數位足跡追蹤',
+        abuse: '自動化目標監控 · 隱私侵犯'
+    },
+    teachable: true,
+    tutorialUrl: 'https://userggyy.github.io/kijimmyer/Sherlock-AI.html',
+    features: [
+        '多平台數據聚合',
+        '模式識別與分析',
+        '關聯圖生成',
+        '智能過濾與排序',
+        'API自動化整合'
+    ],
+    resources: [
+        { name: 'Sherlock AI 使用手冊', url: 'https://github.com/example/sherlock-ai' },
+        { name: 'OSINT最佳實踐', url: 'https://www.osintframework.com' }
+    ]
+},
     // === 網路掃描工具 ===
     {
         name: 'Nmap',
@@ -340,6 +436,7 @@
         category: '網路掃描',
         difficulty: 'medium',
         description: '功能強大的網路探測與安全審計工具',
+        estimatedTime: '30-60分鐘',
         purposes: {
             legitimate: '網路發現 · 端口掃描 · 服務識別 · 主機偵測',
             abuse: '目標偵察 · 漏洞掃描 · 網路足跡蒐集'
@@ -802,6 +899,12 @@
             <i class="${tool.icon} text-4xl mb-4 text-cyan-300 group-hover:text-white transition"></i>
             <h3 class="text-xl font-semibold text-cyan-300 mb-2">${tool.name}</h3>
             <p class="text-gray-400 mb-2">${tool.category}</p>
+            
+            <!-- 新增時間顯示 -->
+            <div class="time-badge mb-2 flex items-center justify-center">
+                <i class="ri-time-line text-sm mr-1 text-gray-400"></i>
+                <span class="text-xs text-gray-300">${tool.estimatedTime || '時間未定'}</span>
+            </div>
             <span class="difficulty-badge">
                 ${tool.difficulty === 'easy' ? '簡單' : 
                    tool.difficulty === 'medium' ? '中等' : '困難'}
@@ -832,12 +935,20 @@
             <strong>潛在濫用：</strong>
             ${tool.purposes.abuse || '未提供資訊'}
             `;
+            // 在顯示彈窗的程式碼中新增時間顯示
             const modalDifficulty = document.getElementById('modal-difficulty');
             modalDifficulty.innerHTML = `
-                <span class="difficulty-badge">
-                    ${tool.difficulty === 'easy' ? '簡單' : 
-                       tool.difficulty === 'medium' ? '中等' : '困難'}
-                </span>
+                <div class="flex items-center space-x-4">
+                    <span class="difficulty-badge">
+                        ${tool.difficulty === 'easy' ? '簡單' : 
+                        tool.difficulty === 'medium' ? '中等' : '困難'}
+                    </span>
+                    <!-- 新增時間顯示 -->
+                    <div class="flex items-center text-gray-300">
+                        <i class="ri-time-line mr-1"></i>
+                        <span>${tool.estimatedTime || '時間未定'}</span>
+                    </div>
+                </div>
             `;
 
             const modalResources = document.getElementById('modal-resources');
